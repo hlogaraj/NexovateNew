@@ -1,10 +1,10 @@
-import {StyleSheet, Title, Text, View, TextInput, Pressable, TouchableOpacity, Button, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Pressable, TouchableOpacity, Button, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useFonts} from 'expo-font';
 import {useNavigation} from '@react-navigation/native';
 import styles from './Styles.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Order from './Order.js';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
+//import Order from './Order.js';
 import storage from './Storage.js';
 
 const LogInPage = () => {
@@ -74,7 +74,7 @@ const LogInPage = () => {
     return (
         <View style={styles.pageContainer}>
             <View style={[styles.loginPage, styles.lightBackgroundColor]}>
-                <Title style={styles.darkBlueColor}></Title>
+                <Text style={[styles.title, styles.darkBlueColor]}>Nexovate Inc.</Text>
                 <View style={styles.loginForm}>
                     <View style={styles.loginFormRow}>
                         <View style={[styles.loginInputWrapper, styles.whiteBackground]}>
