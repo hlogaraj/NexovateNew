@@ -5,14 +5,17 @@ import {useNavigation} from '@react-navigation/native';
 import styles from './Styles.js';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import Order from './Order.js';
-import storage from './Storage.js';
+//import storage from './MMKVStorage.js';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const LogInPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
 
-
+    async function clearData() {
+        await AsyncStorage.clear();
+    }
     useEffect(() => {
         clearData();
     });
@@ -27,8 +30,8 @@ const LogInPage = () => {
         const stringifiedResponse = JSON.stringify(parsedResponse);
         const stringifiedToken = JSON.stringify(parsedToken);
 
-        storage.set('Response', stringifiedResponse);
-        storage.set('Token', parsedToken);
+        await AsyncStorage.setItem('Response', stringifiedResponse);
+        await AsyncStorage.setItem('Token', parsedToken);
     }
 
     function navigateToDashboard() {
@@ -72,46 +75,49 @@ const LogInPage = () => {
     }
 
     return (
-        <View style={styles.pageContainer}>
-            <View style={[styles.loginPage, styles.lightBackgroundColor]}>
-                <Text style={[styles.title, styles.darkBlueColor]}>Nexovate Inc.</Text>
-                <View style={styles.loginForm}>
-                    <View style={styles.loginFormRow}>
-                        <View style={[styles.loginInputWrapper, styles.whiteBackground]}>
-                            <TextInput
-                                style={styles.loginInput}
-                                placeholder="Username"
-                                placeholderTextColor={styles.lightGrayColor.color}
-                                default=''
-                                value={username}
-                                onChangeText={(username) => setUsername(username)}
-                            />
-                        </View>
+        <ScrollView>
+            <View style={styles.pageContainer}>
+                <View style={[styles.loginPage, styles.lightBackgroundColor]}>
+                    <Text style={[styles.title, styles.darkBlueColor]}>Nexovate Inc.</Text>
+                    <View style={styles.loginForm}>
+                        <View style={styles.loginFormRow}>
+                            <View style={[styles.loginInputWrapper, styles.whiteBackground]}>
+                                <TextInput
+                                    style={styles.loginInput}
+                                    placeholder="Username"
+                                    placeholderTextColor={styles.lightGrayColor.color}
+                                    default=''
+                                    value={username}
+                                    onChangeText={(username) => setUsername(username)}
+                                />
+                            </View>
 
-                    </View>
-                    <View style={styles.loginFormRow}>
-                        <View style={[styles.loginInputWrapper, styles.whiteBackground]}>
-                            <TextInput
-                                style={styles.loginInput}
-                                placeholder="Password"
-                                placeholderTextColor={styles.lightGrayColor.color}
-                                default=''
-                                value={password}
-                                onChangeText={(password) => setPassword(password)}
-                                secureTextEntry={true}
-                            />
                         </View>
-                    </View>
-                    <View style={styles.loginButtonWrapper}>
-                        <Pressable
-                            style={[styles.loginButton, styles.darkBlueBackgroundColor]}
-                            onPress={handleLogin}>
-                            <Text style={styles.loginButtonText}>Log In</Text>
-                        </Pressable>
+                        <View style={styles.loginFormRow}>
+                            <View style={[styles.loginInputWrapper, styles.whiteBackground]}>
+                                <TextInput
+                                    style={styles.loginInput}
+                                    placeholder="Password"
+                                    placeholderTextColor={styles.lightGrayColor.color}
+                                    default=''
+                                    value={password}
+                                    onChangeText={(password) => setPassword(password)}
+                                    secureTextEntry={true}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.loginButtonWrapper}>
+                            <Pressable
+                                style={[styles.loginButton, styles.darkBlueBackgroundColor]}
+                                onPress={handleLogin}>
+                                <Text style={styles.loginButtonText}>Log In</Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+        </ScrollView>
+
     )
 }
 

@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     standardPage: {
         flex: 1,
         //backgroundColor: '#f0f1f5',
-        alignItems: 'stretch',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'center',
         //position: 'relative',
         //paddingTop: '25%',
         width: '100%',

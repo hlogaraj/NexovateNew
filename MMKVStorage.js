@@ -1,9 +1,9 @@
 import { MMKV } from 'react-native-mmkv'
 
-const storage = new MMKV({
+const MMKVStorage = new MMKV({
     id: `nexovate-user-storage`,//*****************************************
     path: `/storage`,
     encryptionKey: 'hunter2'
 })
 
-export default storage;
+export default MMKVStorage;
