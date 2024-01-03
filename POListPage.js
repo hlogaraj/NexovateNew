@@ -1,4 +1,4 @@
-import {Text, View, Platform, SafeAreaView, TextInput, Animated, Pressable, FlatList, Button, ActivityIndicator} from 'react-native';
+import {Text, View, Platform, SafeAreaView, ScrollView, Dimensions, TextInput, Animated, Pressable, FlatList, Button, ActivityIndicator} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
 import styles from './Styles.js';
@@ -15,6 +15,8 @@ const POListPage = () => {
     const [allCompanies, setAllCompanies] = useState([]);
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
     const navigation = useNavigation();
+
+    const screenWidth = Dimensions.get('window').width;
 
     const retrieveData = async (key) => {
         try {
@@ -109,23 +111,22 @@ const POListPage = () => {
         }
     }
 
+    /*
     const renderApproveReject = (
         progress: Animated.AnimatedInterpolation,
-        dragAnimatedValue: Animated.Value
+        dragAnimatedValue: Animated.AnimatedInterpolation
     ) => {
 
-        const opacity = dragAnimatedValue.interpolate({
+        let opacity = dragAnimatedValue.interpolate({
             inputRange: [-150, 0],
             outputRange: [1,0],
-            //extrapolate: 'clamp',
+            extrapolate: 'clamp',
         });
-
-        console.log(opacity);
 
         return (
             //swiped row -> confirmation container, approve/reject buttons
             <View style={styles.approveRejectRow}>
-                <Pressable style={[styles.approveRejectButton, styles.greenBackground, {opacity, width: 100, height: '100%',}]}>
+                <Pressable style={[styles.approveRejectButton, styles.greenBackground, { width: 100, height: '100%',}]}>
                     <Animated.View>
                         <Text style={{color: 'black', fontWeight: 500,}}>APPROVE</Text>
                     </Animated.View>
@@ -139,6 +140,22 @@ const POListPage = () => {
         )
     }
 
+
+     */
+
+    const ApproveReject = () => {
+        return(
+            //swiped row -> confirmation container, approve/reject buttons
+            <View style={styles.approveRejectRow}>
+                <Pressable style={[styles.approveRejectButton, styles.greenBackground, { width: 100, height: '100%',}]}>
+                        <Text style={{color: 'black', fontWeight: 500,}}>APPROVE</Text>
+                </Pressable>
+                <Pressable style={[styles.approveRejectButton, styles.redBackground, {width: 100, height: '100%',}]}>
+                        <Text style={{color: 'white', fontWeight: 500,}}>REJECT</Text>
+                </Pressable>
+            </View>
+        )
+    }
     const renderOrderBox = ({ item }) => {
 
         const shadowStyle = Platform.select({
@@ -158,26 +175,44 @@ const POListPage = () => {
 
 
         return (
-            <Swipeable renderRightActions={renderApproveReject}>
-                <Pressable onPress={() => navigateToOrderPage(item)}>
+            <View style={{width: '100%', height: 140}}>
+                <ScrollView
+                    horizontal={true}
+                    decelerationRate={'fast'}
+                    snapToInterval={screenWidth - 60}
+                    snapToAlignment={'center'}
+                    contentInset={{
+                        top: 0,
+                        left: 10,
+                        bottom: 0,
+                        right: 10,
+                    }}
+                    showsHorizontalScrollIndicator={false}
+                >
                     <View style={[styles.orderBox, styles.standardBox]}>
-                        <View
-                            style = {{width: '50%',}}>
-                            <Text style={[styles.extraExtraLineHeight, styles.bigFont]}>{item.Originator}</Text>
-                            <Text style={[styles.lightGrayColor,styles.extraExtraLineHeight]}>{item.SupplierName}</Text>
-                            <Text style={[styles.extraExtraLineHeight, styles.bolder]}>{item.OrderNumber}-{item.OrTy}-{item.OrderCo}</Text>
+                        <Pressable onPress={() => navigateToOrderPage(item)} style={{width: '100%', flex: 1, flexDirection: 'row',}}>
 
-                        </View>
-                        <View
-                            style = {{width: '50%', alignItems: 'flex-end',}}>
-                            <Text style={[styles.extraExtraLineHeight, styles.bolder, styles.bigFont]}>{item.DaysOld} Days</Text>
-                            <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{item.OrderAmount} {item.CurCod}</Text>
-                            <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{item.OrderDate}</Text>
-                        </View>
+                            <View
+                                style = {{width: '50%',}}>
+                                <Text style={[styles.extraExtraLineHeight, styles.bigFont]}>{item.Originator}</Text>
+                                <Text style={[styles.lightGrayColor,styles.extraExtraLineHeight]}>{item.SupplierName}</Text>
+                                <Text style={[styles.extraExtraLineHeight, styles.bolder]}>{item.OrderNumber}-{item.OrTy}-{item.OrderCo}</Text>
 
+                            </View>
+                            <View
+                                style = {{width: '50%', alignItems: 'flex-end',}}>
+                                <Text style={[styles.extraExtraLineHeight, styles.bolder, styles.bigFont]}>{item.DaysOld} Days</Text>
+                                <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{item.OrderAmount} {item.CurCod}</Text>
+                                <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{item.OrderDate}</Text>
+                            </View>
+                        </Pressable>
                     </View>
-                </Pressable>
-            </Swipeable>
+                    <View style={styles.approveRejectBox}>
+                        <ApproveReject></ApproveReject>
+                    </View>
+                </ScrollView>
+            </View>
+
         )
     }
 

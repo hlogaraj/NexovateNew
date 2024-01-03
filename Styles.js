@@ -1,4 +1,4 @@
-import { StyleSheet, Platform} from 'react-native';
+import { StyleSheet, Dimensions, Platform} from 'react-native';
 
 const defaultFontSize = Platform.OS === 'ios' ? 17 : 14;
 
@@ -7,6 +7,8 @@ const color_lightBlue = '#f0f1f5';
 const color_lightGray = 'rgb(140, 140, 140)';
 const color_lightLightGray = 'rgb(220, 220, 220)';
 const color_brightBlue = '#4b6e8a';
+
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     lightBackgroundColor: {
@@ -231,13 +233,24 @@ const styles = StyleSheet.create({
     orderBox: {
         borderStyle: 'solid',
         flex: 1,
-        width: '100%',
+        width: screenWidth - 50,
+        marginLeft: 10,
+        marginRight: 10,
         borderWidth: 1,
         alignContent: 'stretch',
         justifyContent: 'center',
         paddingHorizontal: 15,
         paddingVertical: 5,
         marginVertical: 5,
+        borderRadius: 8,
+        flexDirection: 'row',
+    },
+    approveRejectBox: {
+        flex: 1,
+        width: '100%',
+        borderWidth: 0,
+        alignContent: 'stretch',
+        justifyContent: 'center',
         borderRadius: 8,
         flexDirection: 'row',
     },
