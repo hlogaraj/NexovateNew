@@ -8,10 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 
 
-const NoteEntry = () => {
+const NoteEntry = (props) => {
 
     const [notes, setNotes] = useState('');
 
+    function submitNote() {
+        props.onSubmitNote(notes);
+    }
     return(
         <View style={{flex: 1}}>
             <View style={[styles.standardBox, styles.orderBox, {flexGrow: 1}]}>
@@ -31,10 +34,7 @@ const NoteEntry = () => {
                     clearTextOnFocus={true}
                 />
             </View>
-            <Pressable style={[styles.attachNotesButton, styles.greenBackground, {}]} onPress={() => {
- //**************************************************Fix to submit the typed note
-            }
-            }>
+            <Pressable style={[styles.attachNotesButton, styles.greenBackground, {}]} onPress={submitNote}>
                 <Animated.View>
                     <Text style={{color: 'black', fontWeight: 500,}}>ATTACH NOTES</Text>
                 </Animated.View>

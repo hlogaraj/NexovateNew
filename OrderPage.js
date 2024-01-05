@@ -199,6 +199,7 @@ const OrderPage = () => {
                     }
                     if (response.ok) {
                         console.log(attachmentData);
+                        setNoteConfirmationVisible(true);
                     }
                 }
             })
@@ -619,7 +620,12 @@ const OrderPage = () => {
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <TabMenu/>
                     <SlideToggle/>
-                    {!isLoaded ? <LoadingMessage/> : currentTab === 'Order' ? <OrderInfo/> : (currentTab === 'Details' ? <OrderDetails/> : <OrderNotes/>)}
+                    {!isLoaded ? <LoadingMessage/> : currentTab === 'Order' ? <OrderInfo/> : (currentTab === 'Details' ? <OrderDetails/> :
+                        <View style={{flex: 1}}>
+                            <NoteConfirmationModal/>
+                            <NoteEntry onSubmitNote={addHeaderAttachment}/>
+                        </View>
+                        )}
                     {isLoaded ? <ApproveRejectBar/> : <Text/>}
                 </View>
             </View>
