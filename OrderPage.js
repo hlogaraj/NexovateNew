@@ -6,6 +6,7 @@ import styles from './Styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
+import NoteEntry from './NoteEntry.js';
 
 const OrderPage = () => {
 
@@ -14,7 +15,8 @@ const OrderPage = () => {
     const [orderDetail, setOrderDetail] = useState([]);
     const [currentTab, setCurrentTab] = useState('Order');
     const [isDomestic, setIsDomestic] = useState(false);
-    const [notes, setNotes] = React.useState('');
+    const [headerNotes, setHeaderNotes] = useState('');
+    const [itemNotes, setItemNotes] = useState('');
     const [isLoaded, setIsLoaded] = useState(false);
     const [noteModalVisible, setNoteModalVisible] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -28,9 +30,10 @@ const OrderPage = () => {
         navigation.navigate('MainApp');
     }
 
+
     useEffect(() => {
         retrieveOrder()
-    }, [])
+    }, [isLoaded])
 
     useEffect(() => {
         //console.log('storeOrder executed');
@@ -373,12 +376,12 @@ const OrderPage = () => {
                                 numberOfLines={3}
                                 maxLength={200}
                                 onBlur={(text) => {
-                                    setNotes(text);
+                                    setItemNotes(text);
                                 }}
                                 style={{padding: 10, width: '100%', height: 100}}
                                 placeholder='Type your notes here'
                                 placeholderTextColor={styles.lightGrayColor.color}
-                                value={notes}
+                                value={itemNotes}
                                 textAlign='left'
                                 textAlignVertical='top'
                                 autoFocus={true}
@@ -389,8 +392,8 @@ const OrderPage = () => {
                             setInlineNoteConfVisible(true);
                             setNoteModalVisible(false);
                             //console.log('setNoteConfirmationVisible');
-                            addItemAttachment(tempIndex,notes);
-                            setNotes(''); //**************************************************Fix to submit the typed note
+                            addItemAttachment(tempIndex,headerNotes);
+                            setHeaderNotes(''); //**************************************************Fix to submit the typed note
                         }
                         }>
                             <Animated.View>
@@ -463,11 +466,11 @@ const OrderPage = () => {
                         multiline={true}
                         numberOfLines={3}
                         maxLength={200}
-                        onChangeText={(text) => setNotes(text)}
+                        onChangeText={(text) => setHeaderNotes(text)}
                         style={{padding: 10, width: '100%', height: 200}}
                         placeholder='Type your notes here'
                         placeholderTextColor={styles.lightGrayColor.color}
-                        value={notes}
+                        value={headerNotes}
                         textAlign='left'
                         textAlignVertical='top'
                         autoFocus={true}
@@ -477,8 +480,8 @@ const OrderPage = () => {
                 <Pressable style={[styles.attachNotesButton, styles.greenBackground, {}]} onPress={() => {
                     setNoteConfirmationVisible(true);
                     //console.log('setNoteConfirmationVisible');
-                    addHeaderAttachment(notes);
-                    setNotes(''); //**************************************************Fix to submit the typed note
+                    addHeaderAttachment(headerNotes);
+                    setHeaderNotes(''); //**************************************************Fix to submit the typed note
                 }
                 }>
                     <Animated.View>
