@@ -187,11 +187,11 @@ const styles = StyleSheet.create({
     standardPage: {
         flex: 1,
         //backgroundColor: '#f0f1f5',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'center',
         //position: 'relative',
         //paddingTop: '25%',
-        width: '100%',
+        width: screenWidth,
         maxWidth: 500,
         padding: 15,
     },

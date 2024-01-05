@@ -54,7 +54,7 @@ const LogInPage = () => {
             })
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error('Request failed with status ' + response.status);
+                        console.log(response.json());
                     }
                     if (response.ok) {
                         navigateToDashboard();
@@ -68,6 +68,9 @@ const LogInPage = () => {
                         //console.log("Response Data: " + responseData);
                         //console.log("Token: " + token);
                     }
+                })
+                .catch ((error) => {
+                    console.log("Error logging in: ", error);
                 })
         } catch (error) {
             console.error('Login error: ', error);

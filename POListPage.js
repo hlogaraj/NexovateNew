@@ -1,4 +1,18 @@
-import {Text, View, Platform, SafeAreaView, ScrollView, Dimensions, TextInput, Animated, Pressable, FlatList, Button, ActivityIndicator} from 'react-native';
+import {
+    Text,
+    View,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    Dimensions,
+    TextInput,
+    Animated,
+    Pressable,
+    FlatList,
+    Button,
+    ActivityIndicator,
+    Modal
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
 import styles from './Styles.js';
@@ -15,6 +29,7 @@ const POListPage = () => {
     const [allCompanies, setAllCompanies] = useState([]);
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
     const navigation = useNavigation();
+    const [filterModalVisible, setFilterModalVisible] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
 
@@ -228,8 +243,6 @@ const POListPage = () => {
             //console.log(order._OrTy);
             //console.log(order);
             const body = {};
-
-            //console.log(orderData);
             const token = await retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_CompanyMasterSearch', {
@@ -244,21 +257,36 @@ const POListPage = () => {
                     //console.log('HandleFilterOrderCompanies');
                     if (response != undefined) {
                         if (!response.ok) {
-                            throw new Error('Request failed with status ' + response.status);
+                            console.log(response.json());
                         }
                         if (response.ok) {
                             //console.log('HandleFilterOrderCompanies');
-                            console.log(response.json().CompanyMaster);
+                            console.log(response.json());
                         }
                     }
                 })
                 .catch(error => {
+                    console.log(error);
                 })
 
         } catch (error) {
             console.error('Error retrieving selected order details: ', error);
         }
 
+    }
+
+    const FilterModal = () => {
+        return(
+            <Modal
+                animationType={'none'}
+                transparent={false}
+                visible={filterModalVisible}
+                onRequestClose={() => {
+                    setFilterModalVisible(!filterModalVisible);
+                }}
+            >
+            </Modal>
+        )
     }
 
 
@@ -277,12 +305,14 @@ const POListPage = () => {
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
 
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
-
-                <Pressable onPress={getAllFilters}>
-                    <Ionicons name="search" size={100} color="#555" style={styles.searchButton} />
-                </Pressable>
                 {isLoaded ?
                     <SafeAreaView style={{flex: 1}}>
+                        <View style={styles.loginButtonWrapper}>
+                            <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor]}>
+                                <Text style={styles.loginButtonText} onPress={getAllFilters}>Test Filter API</Text>
+                            </Pressable>
+                        </View>
+
                         {isLoaded ? <FlatList
                                 data={orders}
                                 renderItem={renderOrderBox}

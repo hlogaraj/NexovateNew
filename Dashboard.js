@@ -16,7 +16,7 @@ const Dashboard = () => {
         <ScrollView>
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
-                    <View style={[styles.loginButton, styles.darkBlueBackgroundColor, {margin: 10}]}>
+                    <View style={[styles.loginButton, styles.darkBlueBackgroundColor]}>
                         <Pressable onPress={navigateToPOListPage}>
                             <Text style={styles.loginButtonText}>Awaiting Approval</Text>
                         </Pressable>
