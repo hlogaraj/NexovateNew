@@ -358,13 +358,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
         flexShrink: 1,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'rgba(0,0,0,.7)',
-        borderRadius: 5,
-        padding: 10,
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -373,6 +366,33 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    inLineNoteCenteredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+        flexShrink: 1,
+        backgroundColor: 'rgba(0,0,0,.4)',
+        borderRadius: 5,
+    },
+    inLineModalView: {
+        margin: 20,
+
+
+        padding: 10,
+        alignItems: 'center',
+        elevation: 5,
+        flexShrink: 1,
+        alignSelf: 'center',
+        maxHeight: 200,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'rgba(0,0,0,.4)',
+        borderRadius: 5,
+        padding: 10,
+        alignItems: 'center',
         flexShrink: 1,
         alignSelf: 'center',
         maxHeight: 200,

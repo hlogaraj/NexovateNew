@@ -55,7 +55,7 @@ const POListPage = () => {
     };
 
     useEffect(() => {
-        retrieveOrders();
+        getPOList();
     }, [orders]);
 
     async function storePOResponse(response) {

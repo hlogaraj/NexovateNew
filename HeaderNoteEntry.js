@@ -8,12 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 
 
-const NoteEntry = (props) => {
+const HeaderNoteEntry = (props) => {
 
     const [notes, setNotes] = useState('');
 
     function submitNote() {
         props.onSubmitNote(notes);
+        setNotes('');
     }
     return(
         <View style={{flex: 1}}>
@@ -43,4 +44,4 @@ const NoteEntry = (props) => {
     )
 };
 
-export default NoteEntry;
+export default HeaderNoteEntry;

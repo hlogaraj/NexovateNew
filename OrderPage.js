@@ -6,7 +6,8 @@ import styles from './Styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
-import NoteEntry from './NoteEntry.js';
+import HeaderNoteEntry from './HeaderNoteEntry.js';
+import ItemNoteEntry from './ItemNoteEntry.js';
 
 const OrderPage = () => {
 
@@ -19,9 +20,13 @@ const OrderPage = () => {
     const [itemNotes, setItemNotes] = useState('');
     const [isLoaded, setIsLoaded] = useState(false);
     const [noteModalVisible, setNoteModalVisible] = useState(false);
+    const [emptyNoteModalVisible, setEmptyNoteModalVisible] = useState(false);
+    const [inLineEmptyNoteModalVisible, setInLineEmptyNoteModalVisible] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
+    const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [noteConfirmationVisible, setNoteConfirmationVisible] = useState(false);
     const [inlineNoteConfVisible, setInlineNoteConfVisible] = useState(false);
+    const [annotatedItemIndex, setAnnotatedItemIndex] = useState(-1);
 
 
     const navigation = useNavigation();
@@ -152,135 +157,179 @@ const OrderPage = () => {
     };
 
     async function addHeaderAttachment(text) {
-        const documentNo = '4915';//******************************************PLACEHOLDER
-        console.log(documentNo);
-        const orderType = order._OrTy;
-        console.log(orderType);
-        const orderCompany = order._OrderCo;
-        console.log(orderCompany);
-        const orderSuffix = orderInfo?.OrderDetail?.[0]?.OrdSuf;
-        if (orderSuffix !== undefined) {
-            // You can use orderSuf here
+        if(text.length===0) {
+            setEmptyNoteModalVisible(true);
+        }
+        else {
+            const documentNo = order._OrderNumber;
+            console.log(documentNo);
+            const orderType = order._OrTy;
+            console.log(orderType);
+            const orderCompany = order._OrderCo;
+            console.log(orderCompany);
+            const orderSuffix = orderInfo?.OrderDetail?.[0]?.OrdSuf;
+            if (orderSuffix !== undefined) {
+                // You can use orderSuf here
+                console.log(orderSuffix);
+            } else {
+                // Handle the case where "OrdSuf" or its parent properties are not found
+                console.error("OrdSuf is not found in the orderInfo object.");
+            }
+            const attachmentName = 'Attachment ORCH 3';//*****************************PLACEHOLDER
+            console.log(attachmentName);
+            const attachmentString = text;
             console.log(orderSuffix);
-        } else {
-            // Handle the case where "OrdSuf" or its parent properties are not found
-            console.error("OrdSuf is not found in the orderInfo object.");
-        }
-        const attachmentName = 'Attachment ORCH 3';//*****************************PLACEHOLDER
-        console.log(attachmentName);
-        const attachmentString = text;
-        console.log(orderSuffix);
-        console.log(text);
+            console.log(text);
 
-        const token = await retrieveData('Token');
+            const token = await retrieveData('Token');
 
-        const attachmentData = {
-            'DocumentNo' : documentNo,
-            'OrderType' : orderType,
-            'OrderCompany' : orderCompany,
-            'OrderSuffix' : orderSuffix,
-            'AttachmentName' : attachmentName,
-            'AttachmentString' : attachmentString,
-        }
+            const attachmentData = {
+                'DocumentNo' : documentNo,
+                'OrderType' : orderType,
+                'OrderCompany' : orderCompany,
+                'OrderSuffix' : orderSuffix,
+                'AttachmentName' : attachmentName,
+                'AttachmentString' : attachmentString,
+            }
 
-        await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddHeaderAttachment_Text', {
-            method: 'POST',
-            headers: {
-                'jde-AIS-Auth': token,
-                'Content-Type':'application/json',
-                'Access-Control-Allow-Credentials' : 'true',
-            },
-            body: JSON.stringify(attachmentData),
-        })
-            .then((response) => {
-                if (response != undefined) {
-                    if (!response.ok) {
-                        throw new Error('Request failed with status ' + response.status);
-                    }
-                    if (response.ok) {
-                        console.log(attachmentData);
-                        setNoteConfirmationVisible(true);
-                    }
-                }
+            await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddHeaderAttachment_Text', {
+                method: 'POST',
+                headers: {
+                    'jde-AIS-Auth': token,
+                    'Content-Type':'application/json',
+                    'Access-Control-Allow-Credentials' : 'true',
+                },
+                body: JSON.stringify(attachmentData),
             })
-            .catch(error => {
-            })
+                .then((response) => {
+                    if (response != undefined) {
+                        if (!response.ok) {
+                            throw new Error('Request failed with status ' + response.status);
+                        }
+                        if (response.ok) {
+                            setHeaderNotes(text);
+                            console.log(attachmentData);
+                            setNoteConfirmationVisible(true);
+                        }
+                    }
+                })
+                .catch(error => {
+                })
+        }
+
     }
 
-    async function addItemAttachment(index, text) {
-        const itemIndex = index.index;
-        console.log(itemIndex);
-        const documentNo = '4915';//******************************************PLACEHOLDER
-        console.log(documentNo);
-        const orderType = order._OrTy;
-        console.log(orderType);
-        const orderCompany = order._OrderCo;
-        console.log(orderCompany);
-        const orderSuffix = orderInfo?.OrderDetail?.[itemIndex]?.OrdSuf;
-        if (orderSuffix !== undefined) {
-            // You can use orderSuf here
+    async function addItemAttachment(text) {
+        if(text.length===0) {
+            setInLineEmptyNoteModalVisible(true);
+        }
+        else {
+            const itemIndex = annotatedItemIndex;
+            console.log(itemIndex);
+            const documentNo = order._OrderNumber;
+            console.log(documentNo);
+            const orderType = order._OrTy;
+            console.log(orderType);
+            const orderCompany = order._OrderCo;
+            console.log(orderCompany);
+            const orderSuffix = orderInfo?.OrderDetail?.[itemIndex]?.OrdSuf;
+            if (orderSuffix !== undefined) {
+                // You can use orderSuf here
+                console.log(orderSuffix);
+            } else {
+                // Handle the case where "OrdSuf" or its parent properties are not found
+                console.error("OrdSuf is not found in the orderInfo object.");
+            }
+            const orderLine = orderInfo?.OrderDetail?.[itemIndex]?.Line;
+            if(orderLine !== undefined) {
+                console.log(orderLine);
+            } else {
+                console.error("Order line is not found in the orderInfo object.")
+            }
+            const attachmentName = 'Attachment ORCH 3';//*****************************PLACEHOLDER
+            console.log(attachmentName);
+            const attachmentString = text;
             console.log(orderSuffix);
-        } else {
-            // Handle the case where "OrdSuf" or its parent properties are not found
-            console.error("OrdSuf is not found in the orderInfo object.");
-        }
-        const orderLine = orderInfo?.OrderDetail?.[itemIndex]?.Line;
-        if(orderLine !== undefined) {
-            console.log(orderLine);
-        } else {
-            console.error("Order line is not found in the orderInfo object.")
-        }
-        const attachmentName = 'Attachment ORCH 3';//*****************************PLACEHOLDER
-        console.log(attachmentName);
-        const attachmentString = text;
-        console.log(orderSuffix);
-        console.log(text);
+            console.log(text);
 
-        const token = await retrieveData('Token');
+            const token = await retrieveData('Token');
 
-        const attachmentData = {
-            'DocumentNo' : documentNo,
-            'OrderType' : orderType,
-            'OrderCompany' : orderCompany,
-            'OrderSuffix' : orderSuffix,
-            "LineNo" : orderLine,
-            'AttachmentName' : attachmentName,
-            'AttachmentString' : attachmentString,
-        }
+            const attachmentData = {
+                'DocumentNo' : documentNo,
+                'OrderType' : orderType,
+                'OrderCompany' : orderCompany,
+                'OrderSuffix' : orderSuffix,
+                "LineNo" : orderLine,
+                'AttachmentName' : attachmentName,
+                'AttachmentString' : attachmentString,
+            }
 
-        await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddItemAttachment_Text', {
-            method: 'POST',
-            headers: {
-                'jde-AIS-Auth': token,
-                'Content-Type':'application/json',
-                'Access-Control-Allow-Credentials' : 'true',
-            },
-            body: JSON.stringify(attachmentData),
-        })
-            .then((response) => {
-                if (response != undefined) {
-                    if (!response.ok) {
-                        throw new Error('Request failed with status ' + response.status);
-                    }
-                    if (response.ok) {
-                        console.log(attachmentData);
-                    }
-                }
+            await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddItemAttachment_Text', {
+                method: 'POST',
+                headers: {
+                    'jde-AIS-Auth': token,
+                    'Content-Type':'application/json',
+                    'Access-Control-Allow-Credentials' : 'true',
+                },
+                body: JSON.stringify(attachmentData),
             })
-            .catch(error => {
+                .then((response) => {
+                    if (response != undefined) {
+                        if (!response.ok) {
+                            throw new Error('Request failed with status ' + response.status);
+                        }
+                        if (response.ok) {
+                            setInlineNoteConfVisible(true);
+                            setNoteModalVisible(false);
+                            console.log(attachmentData);
+                        }
+                    }
+                })
+                .catch(error => {
 
-            })
+                })
+        }
+
     }
 
-    function approveOrder() {
+    async function approveOrder() {
         const orderNumber = order._OrderNumber;
         //console.log(orderNumber);
         const orderType = order._OrTy;
+
         //console.log(orderType)
         const approvalData = {
             'OrderNo' : orderNumber,
             'OrderType' : orderType,
+            'Remark' : headerNotes,
         }
+
+        let token = await retrieveData('Token');
+
+        await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_ApprovePurchaseOrders', {
+            method: 'POST',
+            headers: {
+                'jde-AIS-Auth': token,
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Credentials' : 'true',
+            },
+            body: JSON.stringify(approvalData),
+        })
+            .then((response) => {
+                if (response != undefined) {
+                    if (!response.ok) {
+                        throw new Error('Request failed with status ' + response.status);
+                        console.log('Request failed with status: ' + response.status);
+                    }
+                    if (response.ok) {
+                        console.log('Order approved');
+                        setApproveModalVisible(true);
+                    }
+                }
+            })
+            .catch(error => {
+
+            })
         console.log(approvalData);
     }
 
@@ -320,6 +369,64 @@ const OrderPage = () => {
                       }}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Attachment added</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
+    const EmptyNoteAlertModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={emptyNoteModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setEmptyNoteModalVisible(false);
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setEmptyNoteModalVisible(!emptyNoteModalVisible);
+                }}
+                onDismiss={() => {
+                    setEmptyNoteModalVisible(!emptyNoteModalVisible);
+                }}>
+                <View style={styles.centeredView}
+                      onTouchStart={() => {
+                          setEmptyNoteModalVisible(!emptyNoteModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Please enter notes</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
+    const InLineEmptyNoteAlertModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={inLineEmptyNoteModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setInLineEmptyNoteModalVisible(false);
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setInLineEmptyNoteModalVisible(!inLineEmptyNoteModalVisible);
+                }}
+                onDismiss={() => {
+                    setInLineEmptyNoteModalVisible(!inLineEmptyNoteModalVisible);
+                }}>
+                <View style={[styles.centeredView,{elevation: 6}]}
+                      onTouchStart={() => {
+                          setInLineEmptyNoteModalVisible(!inLineEmptyNoteModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Please enter notes</Text>
                     </View>
                 </View>
             </Modal>
@@ -369,7 +476,7 @@ const OrderPage = () => {
                     setNoteModalVisible(!noteModalVisible);
                 }}>
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                    <View style={styles.inLineModalView}>
                         <View style={[styles.standardBox, styles.orderBox]}>
                             <TextInput
                                 editable={true}
@@ -407,6 +514,35 @@ const OrderPage = () => {
         )
     }
 
+    const ApproveModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={approveModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setApproveModalVisible(false);
+                        navigation.navigate('Queued for Approval');
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setApproveModalVisible(!approveModalVisible);
+                }}
+                onDismiss={() => {
+                    setApproveModalVisible(!approveModalVisible);
+                }}>
+                <View style={styles.centeredView}
+                      onTouchStart={() => {
+                          setApproveModalVisible(!approveModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Order Approved</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
 
     const OrderItemBox = ({item, index}) => {
         return (
@@ -430,7 +566,10 @@ const OrderPage = () => {
                     </View>
                     <View style={{flexDirection: 'row',}}>
                         <Pressable
-                            onPress={() => {setNoteModalVisible(true)}}
+                            onPress={() => {
+                                setNoteModalVisible(true);
+                                setAnnotatedItemIndex(index);
+                            }}
                             style={{flexDirection: 'row'}}
                         >
                             <Ionicons name='attach' size={20} color={styles.brightBlueColor.color} style={{paddingLeft: 0,}}/>
@@ -438,7 +577,6 @@ const OrderPage = () => {
                         </Pressable>
                     </View>
                 </View>
-                <NoteModal index={index}/>
             </View>
         )
     }
@@ -447,7 +585,15 @@ const OrderPage = () => {
         return (
             <View style={{flexGrow: 1, height: 100}}>
                 <InlineNoteConfirmationModal/>
-                <NoteModal/>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={noteModalVisible}
+                    onRequestClose={() => setNoteModalVisible(!noteModalVisible)}
+                    onDismiss={() => setNoteModalVisible(!noteModalVisible)}
+                >
+                        <ItemNoteEntry onSubmitNote={addItemAttachment}/>
+                </Modal>
                 <FlatList
                     data={orderInfo.OrderDetail}
                     renderItem={OrderItemBox}
@@ -622,8 +768,10 @@ const OrderPage = () => {
                     <SlideToggle/>
                     {!isLoaded ? <LoadingMessage/> : currentTab === 'Order' ? <OrderInfo/> : (currentTab === 'Details' ? <OrderDetails/> :
                         <View style={{flex: 1}}>
+                            <ApproveModal/>
                             <NoteConfirmationModal/>
-                            <NoteEntry onSubmitNote={addHeaderAttachment}/>
+                            <EmptyNoteAlertModal/>
+                            <HeaderNoteEntry onSubmitNote={addHeaderAttachment}/>
                         </View>
                         )}
                     {isLoaded ? <ApproveRejectBar/> : <Text/>}
