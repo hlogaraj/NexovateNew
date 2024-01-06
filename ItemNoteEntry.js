@@ -20,7 +20,7 @@ const ItemNoteEntry = (props) => {
 
             <View style={styles.inLineNoteCenteredView}>
                 <View style={styles.inLineModalView}>
-                    <View style={[styles.standardBox, styles.orderBox]}>
+                    <View style={[styles.standardBox, styles.orderBox, {flexGrow: 1,}]}>
                         <TextInput
                             editable={true}
                             multiline={true}
@@ -37,9 +37,20 @@ const ItemNoteEntry = (props) => {
                             clearTextOnFocus={true}
                         />
                     </View>
-                    <Pressable style={[styles.attachNotesButton, styles.greenBackground]} onPress={submitNote}>
+                    <Pressable style={[styles.attachNotesButton, styles.greenBackground,
+                        {
+                            shadowColor: '#000',
+                            shadowOffset: {
+                                width: 4,
+                                height: 4,
+                            },
+                            shadowOpacity: 1,
+                            shadowRadius: 4,
+                            elevation: 6,
+                        }]}
+                       onPress={submitNote}>
                         <Animated.View>
-                            <Text style={{color: 'black', fontWeight: 500,}}>ATTACH NOTES</Text>
+                            <Text style={{color: 'white', fontWeight: 500,}}>ATTACH NOTES</Text>
                         </Animated.View>
                     </Pressable>
                 </View>

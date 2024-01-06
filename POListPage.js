@@ -163,7 +163,7 @@ const POListPage = () => {
             //swiped row -> confirmation container, approve/reject buttons
             <View style={styles.approveRejectRow}>
                 <Pressable style={[styles.approveRejectButton, styles.greenBackground, { width: 100, height: '100%',}]}>
-                        <Text style={{color: 'black', fontWeight: 500,}}>APPROVE</Text>
+                        <Text style={{color: 'white', fontWeight: 500,}}>APPROVE</Text>
                 </Pressable>
                 <Pressable style={[styles.approveRejectButton, styles.redBackground, {width: 100, height: '100%',}]}>
                         <Text style={{color: 'white', fontWeight: 500,}}>REJECT</Text>

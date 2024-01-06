@@ -18,7 +18,7 @@ const HeaderNoteEntry = (props) => {
     }
     return(
         <View style={{flex: 1}}>
-            <View style={[styles.standardBox, styles.orderBox, {flexGrow: 1}]}>
+            <View style={[styles.standardBox, styles.orderBox, {flexGrow: 1,}]}>
                 <TextInput
                     editable={true}
                     multiline={true}
@@ -37,7 +37,7 @@ const HeaderNoteEntry = (props) => {
             </View>
             <Pressable style={[styles.attachNotesButton, styles.greenBackground, {}]} onPress={submitNote}>
                 <Animated.View>
-                    <Text style={{color: 'black', fontWeight: 500,}}>ATTACH NOTES</Text>
+                    <Text style={{color: 'white', fontWeight: 500,}}>ATTACH NOTES</Text>
                 </Animated.View>
             </Pressable>
         </View>

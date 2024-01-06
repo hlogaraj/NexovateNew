@@ -293,6 +293,9 @@ const OrderPage = () => {
     }
 
     async function approveOrder() {
+        createApproveConfirmationModal();
+        //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
+        /*
         const orderNumber = order._OrderNumber;
         //console.log(orderNumber);
         const orderType = order._OrTy;
@@ -331,9 +334,13 @@ const OrderPage = () => {
 
             })
         console.log(approvalData);
+
+         */
     }
 
     function rejectOrder() {
+        createRejectConfirmationModal();
+        //setRejectModalVisible(true);
         const orderNumber = order._OrderNumber;
         const orderType = order._OrTy;
         const remark = 'Reject Header'
@@ -363,7 +370,7 @@ const OrderPage = () => {
                 onDismiss={() => {
                     setNoteConfirmationVisible(!noteConfirmationVisible);
                 }}>
-                <View style={styles.centeredView}
+                <View style={styles.inLineNoteCenteredView}
                       onTouchStart={() => {
                           setNoteConfirmationVisible(!noteConfirmationVisible);
                       }}>
@@ -453,7 +460,7 @@ const OrderPage = () => {
 
                     setInlineNoteConfVisible(!inlineNoteConfVisible);
                 }}>
-                <View style={styles.centeredView}
+                <View style={styles.inLineNoteCenteredView}
                       onTouchStart={() => {
                           setInlineNoteConfVisible(!inlineNoteConfVisible);
                       }}>
@@ -475,7 +482,7 @@ const OrderPage = () => {
                 onRequestClose={() => {
                     setNoteModalVisible(!noteModalVisible);
                 }}>
-                <View style={styles.centeredView}>
+                <View style={styles.inLineNoteCenteredView}>
                     <View style={styles.inLineModalView}>
                         <View style={[styles.standardBox, styles.orderBox]}>
                             <TextInput
@@ -505,7 +512,7 @@ const OrderPage = () => {
                         }
                         }>
                             <Animated.View>
-                                <Text style={{color: 'black', fontWeight: 500,}}>ATTACH NOTES</Text>
+                                <Text style={{color: 'white', fontWeight: 500,}}>ATTACH NOTES</Text>
                             </Animated.View>
                         </Pressable>
                     </View>
@@ -532,12 +539,68 @@ const OrderPage = () => {
                 onDismiss={() => {
                     setApproveModalVisible(!approveModalVisible);
                 }}>
-                <View style={styles.centeredView}
+                <View style={styles.inLineNoteCenteredView}
                       onTouchStart={() => {
                           setApproveModalVisible(!approveModalVisible);
                       }}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Order Approved</Text>
+                        <Text style={styles.approveModalText}>Order Approved</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
+    const createApproveConfirmationModal = () => {
+        Alert.alert(null, 'Approve this order?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => setApproveModalVisible(true)},
+
+            ], {cancelable: true},
+        );
+    };
+
+    const createRejectConfirmationModal = () => {
+        Alert.alert(null, 'Reject this order?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => setRejectModalVisible(true)},
+
+            ], {cancelable: true},
+        );
+    }
+
+    const RejectModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={rejectModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setRejectModalVisible(false);
+                        navigation.navigate('Queued for Approval');
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setRejectModalVisible(!rejectModalVisible);
+                }}
+                onDismiss={() => {
+                    setRejectModalVisible(!rejectModalVisible);
+                }}>
+                <View style={styles.inLineNoteCenteredView}
+                      onTouchStart={() => {
+                          setRejectModalVisible(!rejectModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.approveModalText}>Order Rejected</Text>
                     </View>
                 </View>
             </Modal>
@@ -632,7 +695,7 @@ const OrderPage = () => {
                 }
                 }>
                     <Animated.View>
-                        <Text style={{color: 'black', fontWeight: 500,}}>ATTACH NOTES</Text>
+                        <Text style={{color: 'white', fontWeight: 500,}}>ATTACH NOTES</Text>
                     </Animated.View>
                 </Pressable>
             </View>
@@ -673,7 +736,7 @@ const OrderPage = () => {
                 <Pressable style={[styles.approveRejectButton, styles.greenBackground, {width: 100, height: '100%',}]}
                                   onPress = {() => {approveOrder()}}>
                     <Animated.View>
-                        <Text style={{color: 'black', fontWeight: 500,}}>APPROVE</Text>
+                        <Text style={{color: 'white', fontWeight: 500,}}>APPROVE</Text>
                     </Animated.View>
                 </Pressable>
                 <Pressable style={[styles.approveRejectButton, styles.redBackground, {width: 100, height: '100%',}]}
@@ -766,9 +829,10 @@ const OrderPage = () => {
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <TabMenu/>
                     <SlideToggle/>
+                    <ApproveModal/>
+                    <RejectModal/>
                     {!isLoaded ? <LoadingMessage/> : currentTab === 'Order' ? <OrderInfo/> : (currentTab === 'Details' ? <OrderDetails/> :
                         <View style={{flex: 1}}>
-                            <ApproveModal/>
                             <NoteConfirmationModal/>
                             <EmptyNoteAlertModal/>
                             <HeaderNoteEntry onSubmitNote={addHeaderAttachment}/>

@@ -2,7 +2,8 @@ import { StyleSheet, Dimensions, Platform} from 'react-native';
 
 const defaultFontSize = Platform.OS === 'ios' ? 17 : 14;
 
-const color_darkBlue = '#1e4a6d';
+const color_darkBlue = 'rgba(60, 104, 139, 1)';
+//const color_darkBlue = '#1e4a6d';
 const color_lightBlue = '#f0f1f5';
 const color_lightGray = 'rgb(140, 140, 140)';
 const color_lightLightGray = 'rgb(220, 220, 220)';
@@ -147,10 +148,10 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     greenBackground: {
-        backgroundColor: 'rgba(0, 255, 0, 0.6)',
+        backgroundColor: 'rgba(0, 150, 0, 1)',
     },
     redBackground: {
-        backgroundColor: 'rgba(255, 0, 0, 0.6)',
+        backgroundColor: 'rgba(255, 0, 0, .5)',
     },
 
     loginButtonText: {
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
         flexShrink: 1,
-        backgroundColor: 'rgba(0,0,0,.4)',
+        backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 5,
     },
     inLineModalView: {
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: 'rgba(0,0,0,.4)',
+        backgroundColor: 'rgba(0,0,0,.6)',
         borderRadius: 5,
         padding: 10,
         alignItems: 'center',
@@ -400,6 +401,12 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         color: 'white',
+    },
+    approveModalText: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: defaultFontSize + 4,
+        fontWeight: 'bold',
     },
 });
 
