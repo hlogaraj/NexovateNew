@@ -394,7 +394,7 @@ const POListPage = () => {
                 }}
             >
                 <View style={styles.loginButtonWrapper}>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 50}} onPress={toggleFilterModal}/>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 50,}} onPress={toggleFilterModal}/>
                     <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor, {height: 300}]} onPress={getAllFilters}>
                         <Text style={styles.loginButtonText} >Test Filter API</Text>
                     </Pressable>
