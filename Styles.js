@@ -376,6 +376,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexShrink: 1,
+        marginTop: 57,
         backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 5,
     },
