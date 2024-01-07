@@ -60,7 +60,7 @@ const POListPage = ({route}) => {
         (async () => {
             await getPOList();
         })();
-    }, );
+    }, []);
 
     async function storePOResponse(response) {
         try {
