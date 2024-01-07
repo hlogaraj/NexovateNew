@@ -60,6 +60,13 @@ const POListPage = ({route}) => {
         (async () => {
             await getPOList();
         })();
+        navigation.setOptions({
+            headerRight: () => (
+                <Pressable onPress={() => toggleFilterModal()}>
+                    <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
+                </Pressable>
+                )
+        })
     }, []);
 
     async function storePOResponse(response) {
@@ -375,28 +382,27 @@ const POListPage = ({route}) => {
         return(
             <Modal
                 animationType={'none'}
-                transparent={false}
+                transparent={true}
                 visible={filterModalVisible}
                 onRequestClose={() => {
                     setFilterModalVisible(!filterModalVisible);
                 }}
             >
+                <View style={styles.loginButtonWrapper}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 50}} onPress={toggleFilterModal}/>
+                    <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor, {height: 300}]}>
+                        <Text style={styles.loginButtonText} onPress={getAllFilters}>Test Filter API</Text>
+                    </Pressable>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
+                </View>
             </Modal>
         )
     }
 
 
-    const FilterPage = () => {
-        return (
-            <View style={styles.standardBox} onPress={() => {console.log('handlecompanies')}}>
-                <Pressable onPress={() => {console.log('handlecompanies')}}>
-                    <Ionicons name="search" size={100} color="#555" style={styles.searchButton} />
-                </Pressable>
-            </View>
-
-        )
+    const toggleFilterModal = () => {
+        setFilterModalVisible(!filterModalVisible);
     }
-
     function filterOrder(orNo, orTy) {
         console.log(orNo);
         console.log(orders.length);
@@ -466,16 +472,13 @@ const POListPage = ({route}) => {
 
     return (
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
+            <FilterModal/>
             <ApproveModal/>
             <RejectModal/>
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                 {isLoaded ?
                     <SafeAreaView style={{flex: 1}}>
-                        <View style={styles.loginButtonWrapper}>
-                            <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor]}>
-                                <Text style={styles.loginButtonText} onPress={getAllFilters}>Test Filter API</Text>
-                            </Pressable>
-                        </View>
+
 
                         {isLoaded ? <FlatList
                                 data={orders}
