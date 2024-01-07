@@ -18,10 +18,10 @@ import { Swipeable } from 'react-native-gesture-handler';
 import styles from './Styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Order from './Order.js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-const POListPage = ({route}) => {
+const POListPage = () => {
 
     const [orders, setOrders] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -29,11 +29,13 @@ const POListPage = ({route}) => {
     const [allCompanies, setAllCompanies] = useState([]);
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
     const navigation = useNavigation();
+    const route = useRoute();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
+
 
     const retrieveData = async (key) => {
         try {
@@ -60,6 +62,16 @@ const POListPage = ({route}) => {
         (async () => {
             await getPOList();
         })();
+        navigation.setOptions({
+            headerRight: () => (
+                <Pressable onPress={() => {
+                    toggleFilterModal();
+                }}>
+                    <Ionicons name='funnel-outline' size={24} color='white' style={styles.topRightIcon}/>
+                </Pressable>
+            )
+        })
+
     }, []);
 
     async function storePOResponse(response) {
@@ -280,8 +292,8 @@ const POListPage = ({route}) => {
         } catch (error) {
             console.error('Error retrieving selected order details: ', error);
         }
-
     }
+
     const ApproveModal = () => {
         return(
             <Modal
@@ -375,16 +387,26 @@ const POListPage = ({route}) => {
         return(
             <Modal
                 animationType={'none'}
-                transparent={false}
+                transparent={true}
                 visible={filterModalVisible}
                 onRequestClose={() => {
                     setFilterModalVisible(!filterModalVisible);
                 }}
             >
+                <View style={styles.loginButtonWrapper}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 50}} onPress={toggleFilterModal}/>
+                    <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor, {height: 300}]} onPress={getAllFilters}>
+                        <Text style={styles.loginButtonText} >Test Filter API</Text>
+                    </Pressable>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
+                </View>
             </Modal>
         )
     }
 
+    const toggleFilterModal = () => {
+        setFilterModalVisible(!filterModalVisible);
+    }
 
     const FilterPage = () => {
         return (
@@ -466,17 +488,12 @@ const POListPage = ({route}) => {
 
     return (
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
+            <FilterModal/>
             <ApproveModal/>
             <RejectModal/>
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                 {isLoaded ?
                     <SafeAreaView style={{flex: 1}}>
-                        <View style={styles.loginButtonWrapper}>
-                            <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor]}>
-                                <Text style={styles.loginButtonText} onPress={getAllFilters}>Test Filter API</Text>
-                            </Pressable>
-                        </View>
-
                         {isLoaded ? <FlatList
                                 data={orders}
                                 renderItem={renderOrderBox}
@@ -510,7 +527,18 @@ POListPage.options = ({navigation}) => {
             <Pressable onPress={() => navigation.goBack()}>
                 <Ionicons name='ios-arrow-back' size={24} color='white' style={styles.topLeftIcon}/>
             </Pressable>
+        ),
+        /*
+        headerRight: () => (
+            <Pressable onPress={() => {
+                route.params.filter
+            }}>
+                <Ionicons name='funnel-outline' size={24} color='white' style={styles.topRightIcon}/>
+            </Pressable>
         )
+
+         */
+
     })
 }
 

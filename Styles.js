@@ -336,6 +336,9 @@ const styles = StyleSheet.create({
     topLeftIcon: {
         marginLeft: 15,
     },
+    topRightIcon: {
+        marginRight: 15,
+    },
     underline: {
         textDecorationLine: 'underline',
         textDecorationColor: color_lightGray,
