@@ -13,7 +13,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 const NestedStack = createStackNavigator();
 
-
 const MainApp = () => {
   return(
       <NestedStack.Navigator screenOptions={{
