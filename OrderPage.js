@@ -293,7 +293,7 @@ const OrderPage = () => {
     }
 
     async function approveOrder() {
-        createApproveConfirmationModal();
+        setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
         //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
         /*
         const orderNumber = order._OrderNumber;
@@ -338,8 +338,7 @@ const OrderPage = () => {
          */
     }
 
-    function rejectOrder() {
-        createRejectConfirmationModal();
+    async function rejectOrder() {
         //setRejectModalVisible(true);
         const orderNumber = order._OrderNumber;
         const orderType = order._OrTy;
@@ -350,6 +349,7 @@ const OrderPage = () => {
             'Remark' : remark,
         }
         console.log(rejectionData);
+        setRejectModalVisible(true);//***************************would move to after successful API response
     }
 
 
@@ -558,7 +558,7 @@ const OrderPage = () => {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => setApproveModalVisible(true)},
+                {text: 'OK', onPress: () => approveOrder()},
 
             ], {cancelable: true},
         );
@@ -571,7 +571,7 @@ const OrderPage = () => {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => setRejectModalVisible(true)},
+                {text: 'OK', onPress: () => rejectOrder()},
 
             ], {cancelable: true},
         );
@@ -734,13 +734,13 @@ const OrderPage = () => {
         return(
             <View style={[styles.approveRejectBar]}>
                 <Pressable style={[styles.approveRejectButton, styles.greenBackground, {width: 100, height: '100%',}]}
-                                  onPress = {() => {approveOrder()}}>
+                                  onPress = {() => {createApproveConfirmationModal()}}>
                     <Animated.View>
                         <Text style={{color: 'white', fontWeight: 500,}}>APPROVE</Text>
                     </Animated.View>
                 </Pressable>
                 <Pressable style={[styles.approveRejectButton, styles.redBackground, {width: 100, height: '100%',}]}
-                                  onPress = {() => {rejectOrder()}}>
+                                  onPress = {() => {createRejectConfirmationModal()}}>
                     <Animated.View >
                         <Text style={{color: 'white', fontWeight: 500,}}>REJECT</Text>
                     </Animated.View>

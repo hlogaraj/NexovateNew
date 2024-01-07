@@ -11,7 +11,7 @@ import {
     FlatList,
     Button,
     ActivityIndicator,
-    Modal
+    Modal, Alert
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -21,7 +21,7 @@ import Order from './Order.js';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-const POListPage = () => {
+const POListPage = ({route}) => {
 
     const [orders, setOrders] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -30,6 +30,8 @@ const POListPage = () => {
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
     const navigation = useNavigation();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
+    const [approveModalVisible, setApproveModalVisible] = useState(false);
+    const [rejectModalVisible, setRejectModalVisible] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
 
@@ -55,8 +57,10 @@ const POListPage = () => {
     };
 
     useEffect(() => {
-        getPOList();
-    }, [orders]);
+        (async () => {
+            await getPOList();
+        })();
+    }, );
 
     async function storePOResponse(response) {
         try {
@@ -100,7 +104,8 @@ const POListPage = () => {
             })
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error('Request failed with status ' + response.status);
+                        console.log('gePOList failed with status ' + response.status);
+                        console.log(JSON.stringify(response));
                     }
                     if (response.ok) {
                         storePOResponse(response);
@@ -109,12 +114,13 @@ const POListPage = () => {
                     }
                 })
                 .catch(error => {
-                    console.error("API call failed: ", error);
+                    console.error("gePOList failed: ", error);
                 })
         } catch (error) {
-            console.error('Purchase Approval error: ', error);
+            console.error('gePOList error: ', error);
         }
     }
+
 
     async function navigateToOrderPage(order) {
         try {
@@ -158,20 +164,23 @@ const POListPage = () => {
 
      */
 
-    const ApproveReject = () => {
+    const ApproveRejectButtons = (props) => {
+        //console.log(props.orNo);
+        //let tempOrderNumber = props.orderNumber;
+        //console.log(tempOrderNumber);
         return(
             //swiped row -> confirmation container, approve/reject buttons
             <View style={styles.approveRejectRow}>
-                <Pressable style={[styles.approveRejectButton, styles.greenBackground, { width: 100, height: '100%',}]}>
+                <Pressable style={[styles.approveRejectButton, styles.greenBackground, { width: 100, height: '100%',}]} onPress={() => createApproveConfirmationModal(props.orderNumber, props.orderType)}>
                         <Text style={{color: 'white', fontWeight: 500,}}>APPROVE</Text>
                 </Pressable>
-                <Pressable style={[styles.approveRejectButton, styles.redBackground, {width: 100, height: '100%',}]}>
+                <Pressable style={[styles.approveRejectButton, styles.redBackground, {width: 100, height: '100%',}]} onPress={() => createRejectConfirmationModal(props.orderNumber, props.orderType)}>
                         <Text style={{color: 'white', fontWeight: 500,}}>REJECT</Text>
                 </Pressable>
             </View>
         )
     }
-    const renderOrderBox = ({ item }) => {
+    const renderOrderBox = ({item}) => {
 
         const shadowStyle = Platform.select({
             ios: {
@@ -187,8 +196,7 @@ const POListPage = () => {
                 //default shadow style here
             },
         });
-
-
+        //let tempOrderNumber = item.OrderNumber;
         return (
             <View style={{width: '100%', height: 140}}>
                 <ScrollView
@@ -223,7 +231,7 @@ const POListPage = () => {
                         </Pressable>
                     </View>
                     <View style={styles.approveRejectBox}>
-                        <ApproveReject></ApproveReject>
+                        <ApproveRejectButtons orderNumber={item.OrderNumber} orderType={item.OrTy}></ApproveRejectButtons>
                     </View>
                 </ScrollView>
             </View>
@@ -274,6 +282,94 @@ const POListPage = () => {
         }
 
     }
+    const ApproveModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={approveModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setApproveModalVisible(false);
+                        navigation.navigate('Queued for Approval');
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setApproveModalVisible(!approveModalVisible);
+                }}
+                onDismiss={() => {
+                    setApproveModalVisible(!approveModalVisible);
+                }}>
+                <View style={styles.inLineNoteCenteredView}
+                      onTouchStart={() => {
+                          setApproveModalVisible(!approveModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.approveModalText}>Order Approved</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
+    const RejectModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={rejectModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setRejectModalVisible(false);
+                        navigation.navigate('Queued for Approval');
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setRejectModalVisible(!rejectModalVisible);
+                }}
+                onDismiss={() => {
+                    setRejectModalVisible(!rejectModalVisible);
+                }}>
+                <View style={styles.inLineNoteCenteredView}
+                      onTouchStart={() => {
+                          setRejectModalVisible(!rejectModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.approveModalText}>Order Rejected</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
+    function createApproveConfirmationModal (orderNumber, orderType) {
+        console.log(orderNumber);
+        console.log(orderType);
+        //console.log(orTy);//*************************************************************
+        Alert.alert(null, 'Approve this order?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => approveOrder(orderNumber, orderType)},
+
+            ], {cancelable: true},
+        );
+    };
+
+    const createRejectConfirmationModal = (orderNumber, orderType) => {
+        Alert.alert(null, 'Reject this order?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => rejectOrder(orderNumber, orderType)},
+
+            ], {cancelable: true},
+        );
+    }
 
     const FilterModal = () => {
         return(
@@ -301,9 +397,77 @@ const POListPage = () => {
         )
     }
 
+    function filterOrder(orNo, orTy) {
+        console.log(orNo);
+        console.log(orders.length);
+        let tempOrders = orders.filter((order)=> order.OrderNumber !== orNo);
+        setOrders(tempOrders);
+        console.log(orders.length);
+    }
+
+    async function approveOrder(orderNumber, orderType) {
+        filterOrder(orderNumber, orderType);
+        setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
+        //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
+        /*
+        const orderNumber = order.OrderNumber;
+        //console.log(orderNumber);
+        const orderType = order.OrTy;
+
+        //console.log(orderType)
+        const approvalData = {
+            'OrderNo' : orderNumber,
+            'OrderType' : orderType,
+        }
+
+        let token = await retrieveData('Token');
+
+        await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_ApprovePurchaseOrders', {
+            method: 'POST',
+            headers: {
+                'jde-AIS-Auth': token,
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Credentials' : 'true',
+            },
+            body: JSON.stringify(approvalData),
+        })
+            .then((response) => {
+                if (response != undefined) {
+                    if (!response.ok) {
+                        throw new Error('Request failed with status ' + response.status);
+                        console.log('Request failed with status: ' + response.status);
+                    }
+                    if (response.ok) {
+                        console.log('Order approved');
+                        setApproveModalVisible(true);
+                    }
+                }
+            })
+            .catch(error => {
+
+            })
+        console.log(approvalData);
+
+         */
+    }
+
+    async function rejectOrder(orderNumber, orderType) {
+       filterOrder(orderNumber, orderType);
+        //setRejectModalVisible(true);
+        const remark = 'Reject Header'
+        const rejectionData = {
+            'OrderNo' : orderNumber,
+            'OrderType' : orderType,
+            'Remark' : remark,
+        }
+        console.log(rejectionData);
+        setRejectModalVisible(true);//***************************would move to after successful API response
+    }
+
     return (
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
-
+            <ApproveModal/>
+            <RejectModal/>
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                 {isLoaded ?
                     <SafeAreaView style={{flex: 1}}>
@@ -351,3 +515,4 @@ POListPage.options = ({navigation}) => {
 }
 
 export default POListPage;
+
