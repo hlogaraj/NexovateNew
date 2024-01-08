@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Order from './Order.js';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import SelectDropdown from 'react-native-select-dropdown'
 
 const POListPage = ({route}) => {
 
@@ -27,6 +28,7 @@ const POListPage = ({route}) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [allBranchPlants, setAllBranchPlants] = useState([]);
     const [allCompanies, setAllCompanies] = useState([]);
+    const [orderCompany, setOrderCompany] = useState(null);
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
     const navigation = useNavigation();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -251,7 +253,7 @@ const POListPage = ({route}) => {
     }
 
 
-    const getAllFilters = async () => {
+    const getAllCompanies = async () => {
         try {
             let retries = 0;
             //console.log(order._OrderNumber);
@@ -276,7 +278,8 @@ const POListPage = ({route}) => {
                         }
                         if (response.ok) {
                             //console.log('HandleFilterOrderCompanies');
-                            console.log(response.json());
+                            console.log(response.CompanyMaster);
+                            setAllCompanies(response.CompanyMaster);
                         }
                     }
                 })
@@ -390,9 +393,31 @@ const POListPage = ({route}) => {
             >
                 <View style={styles.loginButtonWrapper}>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 50}} onPress={toggleFilterModal}/>
-                    <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor, {height: 300}]}>
-                        <Text style={styles.loginButtonText} onPress={getAllFilters}>Test Filter API</Text>
-                    </Pressable>
+                    <View style={{height: 300}}>
+                        <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor]}>
+                            <Text style={styles.loginButtonText} onPress={getAllCompanies}>Test Filter API</Text>
+                        </Pressable>
+                        <SelectDropdown
+                                data={allCompanies}
+                                onSelect={(selectedItem, index) => {
+                                    setOrderCompany(selectedItem);
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem.Name;
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item.CompanyCode + ' - ' + item.Name;
+                                }}
+                                defaultButtonText={'Select order company'}
+                                search
+                                searchPlaceHolder={'Search order by company'}
+                                renderSearchInputLeftIcon={() => {
+                                return <Ionicons name='search-outline' size={24}/>
+                                }}
+                                buttonStyle={{ height: 50, width: '100%'}}
+                        />
+                    </View>
+
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
                 </View>
             </Modal>
