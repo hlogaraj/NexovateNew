@@ -61,6 +61,7 @@ const POListPage = ({route}) => {
     useEffect(() => {
         (async () => {
             await getPOList();
+            await getAllCompanies();
         })();
         navigation.setOptions({
             headerRight: () => (
@@ -274,12 +275,12 @@ const POListPage = ({route}) => {
                     //console.log('HandleFilterOrderCompanies');
                     if (response != undefined) {
                         if (!response.ok) {
-                            console.log(response.json());
+                            console.log("Error fetching companies: " + response.json());
                         }
                         if (response.ok) {
                             //console.log('HandleFilterOrderCompanies');
-                            console.log(response.CompanyMaster);
-                            setAllCompanies(response.CompanyMaster);
+                            console.log('Response status: ' + response.status);
+                            console.log('response.CompanyMaster: ' + response.CompanyMaster);
                         }
                     }
                 })
