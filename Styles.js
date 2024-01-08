@@ -411,6 +411,51 @@ const styles = StyleSheet.create({
         fontSize: defaultFontSize + 4,
         fontWeight: 'bold',
     },
+    filterModalOuterContainer: {
+        height:400,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        padding: 15,
+    },
+    filterModalInnerContainer: {
+        backgroundColor: 'rgba(0,0,0,.6)',
+        borderRadius: 8,
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        height: 400,
+        padding: 20,
+
+    },
+    filterModalDropdown: {
+        height: 40,
+        width: 300,
+        backgroundColor: color_lightBlue,
+        borderRadius: 5,
+    },
+    dropdownText: {
+        color: color_lightGray,
+    },
+    filterModalSubmitRow: {
+        height: 60,
+        width: 300,
+        flexDirection: 'row',
+        justifyContent: 'stretch',
+        alignItems: 'flex-end',
+    },
+    filterModalSubmitButton: {
+        flexGrow: 1,
+        backGroundColor: 'white',
+        color: color_brightBlue,
+        borderRadius: 8,
+        height: 40,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: color_lightLightGray,
+    }
 });
 
 export default styles;

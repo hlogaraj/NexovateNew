@@ -28,8 +28,12 @@ const POListPage = ({route}) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [allBranchPlants, setAllBranchPlants] = useState([]);
     const [allCompanies, setAllCompanies] = useState([]);
-    const [orderCompany, setOrderCompany] = useState(null);
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
+
+    const [orderCompany, setOrderCompany] = useState(null);
+    const [orderBranch, setOrderBranch] = useState(null);
+    const [orderType, setOrderType] = useState(null);
+
     const navigation = useNavigation();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
@@ -61,7 +65,7 @@ const POListPage = ({route}) => {
     useEffect(() => {
         (async () => {
             await getPOList();
-            await getAllCompanies();
+            //await getAllCompanies();
         })();
         navigation.setOptions({
             headerRight: () => (
@@ -279,8 +283,31 @@ const POListPage = ({route}) => {
                         }
                         if (response.ok) {
                             //console.log('HandleFilterOrderCompanies');
-                            console.log('Response status: ' + response.status);
-                            console.log('response.CompanyMaster: ' + response.CompanyMaster);
+                            let keys1 = Object.keys(response);
+                            console.log(keys1);
+                            console.log(response.status);
+                            console.log(response.type);
+                            console.log(response._bodyBlob._data);
+                            /*
+                            for (let i=0; i < keys1.length; i++ ) {
+                                //console.log(keys1[i]);
+                                let key = keys1[i]
+                                console.log(key + ": " + response[key])
+                                let keys2 = Object.keys(response.key)
+                                for (let i=0; i < keys2.length; i++) {
+                                    console.log(keys2[i]);
+                                }
+                                //let key = bodyBlobKeys[i];
+                                //console.log(keys1[i] + ': ' + response.keys1[i])
+
+                            }
+
+                             */
+
+
+                            //console.log('Response status: ' + response.status);
+                            //console.log('response.CompanyMaster: ' + CompanyMaster);
+                            //console.log(response.statusText);
                         }
                     }
                 })
@@ -392,13 +419,31 @@ const POListPage = ({route}) => {
                     setFilterModalVisible(!filterModalVisible);
                 }}
             >
-                <View style={styles.loginButtonWrapper}>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 50}} onPress={toggleFilterModal}/>
-                    <View style={{height: 300}}>
-                        <Pressable style={[styles.loginButton,styles.darkBlueBackgroundColor]}>
-                            <Text style={styles.loginButtonText} onPress={getAllCompanies}>Test Filter API</Text>
-                        </Pressable>
-                        <SelectDropdown
+                <View>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 60}} onPress={toggleFilterModal}/>
+                    <View style={styles.filterModalOuterContainer}>
+                        <View style={styles.filterModalInnerContainer}>
+                            <SelectDropdown
+                                data={allOrderType}
+                                onSelect={(selectedItem, index) => {
+                                setOrderType(selectedItem);
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return (selectedItem.Codes + '-' + selectedItem.Description);
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return (item.Codes + '-' + item.Description);
+                                }}
+                                defaultButtonText={'Select order type'}
+                                search
+                                searchPlaceHolder={'Search order types'}
+                                renderSearchInputLeftIcon={() => {
+                                    return <Ionicons name='search-outline' size={24}/>
+                                }}
+                                buttonStyle={styles.filterModalDropdown}
+                                buttonTextStyle={styles.dropdownText}
+                            />
+                            <SelectDropdown
                                 data={allCompanies}
                                 onSelect={(selectedItem, index) => {
                                     setOrderCompany(selectedItem);
@@ -407,16 +452,52 @@ const POListPage = ({route}) => {
                                     return selectedItem.Name;
                                 }}
                                 rowTextForSelection={(item, index) => {
-                                    return item.CompanyCode + ' - ' + item.Name;
+                                    return item.CompanyCode + '-' + item.Name;
                                 }}
                                 defaultButtonText={'Select order company'}
                                 search
-                                searchPlaceHolder={'Search order by company'}
+                                searchPlaceHolder={'Search companies'}
                                 renderSearchInputLeftIcon={() => {
-                                return <Ionicons name='search-outline' size={24}/>
+                                    return <Ionicons name='search-outline' size={24}/>
                                 }}
-                                buttonStyle={{ height: 50, width: '100%'}}
-                        />
+                                buttonStyle={styles.filterModalDropdown}
+                                buttonTextStyle={styles.dropdownText}
+                            />
+                            <SelectDropdown
+                                data={allBranchPlants}
+                                onSelect={(selectedItem, index) => {
+                                    setOrderBranch(selectedItem);
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return (selectedItem.BranchPlant + '-' + selectedItem.Description);
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return (item.BranchPlant + '-' + item.Description);
+                                }}
+                                defaultButtonText={'Select order branch'}
+                                search
+                                searchPlaceHolder={'Search branches'}
+                                renderSearchInputLeftIcon={() => {
+                                    return <Ionicons name='search-outline' size={24}/>
+                                }}
+                                buttonStyle={styles.filterModalDropdown}
+                                buttonTextStyle={styles.dropdownText}
+                            />
+                            <View style={styles.filterModalSubmitRow}>
+                                <View style={[styles.filterModalSubmitButton, styles.lightBackgroundColor, {marginRight: 20}]}>
+                                    <Pressable style={{borderWidth: 0,}}>
+                                        <Text style={styles.lightGrayColor}>Reset</Text>
+                                    </Pressable>
+                                </View>
+                                <View style={[styles.filterModalSubmitButton, styles.darkBlueBackgroundColor, {marginLeft: 20}]}>
+                                    <Pressable style={{borderWidth: 0}}>
+                                        <Text style={{color: 'white', fontWeight: 'bold',}}>Submit</Text>
+                                    </Pressable>
+                                </View>
+
+                            </View>
+                        </View>
+
                     </View>
 
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
