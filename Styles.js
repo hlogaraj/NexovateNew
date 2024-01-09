@@ -412,25 +412,33 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     filterModalOuterContainer: {
-        height:400,
+        height:350,
         justifyContent: 'flex-start',
         alignItems: 'stretch',
         padding: 15,
+        paddingLeft: 80,
     },
     filterModalInnerContainer: {
-        backgroundColor: 'rgba(0,0,0,.6)',
+        backgroundColor: color_lightBlue,
         borderRadius: 8,
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'center',
-        height: 400,
+        height: 300,
         padding: 20,
-
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     filterModalDropdown: {
         height: 40,
-        width: 300,
-        backgroundColor: color_lightBlue,
+        width: 275,
+        backgroundColor: 'white',
         borderRadius: 5,
     },
     dropdownText: {
@@ -438,14 +446,14 @@ const styles = StyleSheet.create({
     },
     filterModalSubmitRow: {
         height: 60,
-        width: 300,
+        width: 275,
         flexDirection: 'row',
         justifyContent: 'stretch',
         alignItems: 'flex-end',
     },
     filterModalSubmitButton: {
         flexGrow: 1,
-        backGroundColor: 'white',
+        backgroundColor: color_darkBlue,
         color: color_brightBlue,
         borderRadius: 8,
         height: 40,
@@ -455,6 +463,21 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: color_lightLightGray,
+        marginLeft: 20,
+    },
+    filterModalResetButton: {
+        flexGrow: 1,
+        backgroundColor: 'white',
+        color: color_brightBlue,
+        borderRadius: 8,
+        height: 40,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: color_lightGray,
+        marginRight: 20,
     }
 });
 

@@ -63,10 +63,12 @@ const POListPage = ({route}) => {
     };
 
     useEffect(() => {
-        (async () => {
-            await getPOList();
-            //await getAllCompanies();
-        })();
+        if (!isLoaded) {
+            (async () => {
+                await retrieveOrders();
+                //await getAllCompanies();
+            })();
+        }
         navigation.setOptions({
             headerRight: () => (
                 <Pressable onPress={() => toggleFilterModal()}>
@@ -272,7 +274,6 @@ const POListPage = ({route}) => {
                 headers: {
                     'jde-AIS-Auth': token,
                     'Content-Type':'application/json',
-                    'Access-Control-Allow-Credentials' : 'true',
                 },
             })
                 .then((response) => {
@@ -285,9 +286,38 @@ const POListPage = ({route}) => {
                             //console.log('HandleFilterOrderCompanies');
                             let keys1 = Object.keys(response);
                             console.log(keys1);
+                            /*
                             console.log(response.status);
                             console.log(response.type);
-                            console.log(response._bodyBlob._data);
+                            console.log('BodyInit: ' + response._bodyInit);
+                            console.log('BodyInit available keys: ' + Object.keys(response._bodyInit));
+                            console.log('BodyInit._data: ' + response._bodyInit._data);
+                            console.log('BodyInit._data available keys: ' + Object.keys(response._bodyInit._data));
+                            //console.log('BodyInit._data.__collector: ' + response._bodyInit._data.__collector);
+                            console.log('BodyInit._data.__collector type: ' + typeof(response._bodyInit._data.__collector));
+                            console.log('__collector keys: ' + Object.keys(response._bodyInit._data.__collector));
+                            console.log('__collector as a string: ' + JSON.stringify(response._bodyInit._data.__collector, null, 4));
+                            console.log('BodyBlob available keys: ' + Object.keys(response._bodyBlob));
+                            console.log('BodyBlob data: ' + response._bodyBlob._data);
+                            console.log('BodyBlob data as a string: ' + JSON.stringify(response._bodyBlob._data, null, 4));
+
+                             */
+                            let type = JSON.stringify(response.type, null, 4);
+                            let status = JSON.stringify(response.status, null, 4);
+                            let ok = JSON.stringify(response.ok, null, 4);
+                            let statusText = JSON.stringify(response.statusText, null, 4);
+                            let headers = JSON.stringify(response.headers, null, 4);
+                            let url = JSON.stringify(response.url, null, 4);
+                            let bodyUsed = JSON.stringify(response.bodyUsed, null, 4);
+                            let _bodyInit = JSON.stringify(response._bodyInit, null, 4)
+                            let _bodyBlob = JSON.stringify(response._bodyBlob, null, 4)
+
+
+                            console.log('type: ' + type + ', status: ' + status + ', statusText: ' + statusText);
+                            console.log('headers: ' + headers)
+                            console.log('_bodyInit: ' + _bodyInit);
+                            console.log('_bodyBlob: ' + _bodyBlob);
+                            //console.log(data.CompanyMaster);
                             /*
                             for (let i=0; i < keys1.length; i++ ) {
                                 //console.log(keys1[i]);
@@ -484,12 +514,12 @@ const POListPage = ({route}) => {
                                 buttonTextStyle={styles.dropdownText}
                             />
                             <View style={styles.filterModalSubmitRow}>
-                                <View style={[styles.filterModalSubmitButton, styles.lightBackgroundColor, {marginRight: 20}]}>
+                                <View style={[styles.filterModalResetButton]}>
                                     <Pressable style={{borderWidth: 0,}}>
                                         <Text style={styles.lightGrayColor}>Reset</Text>
                                     </Pressable>
                                 </View>
-                                <View style={[styles.filterModalSubmitButton, styles.darkBlueBackgroundColor, {marginLeft: 20}]}>
+                                <View style={[styles.filterModalSubmitButton]}>
                                     <Pressable style={{borderWidth: 0}}>
                                         <Text style={{color: 'white', fontWeight: 'bold',}}>Submit</Text>
                                     </Pressable>
@@ -515,6 +545,13 @@ const POListPage = ({route}) => {
         console.log(orders.length);
         let tempOrders = orders.filter((order)=> order.OrderNumber !== orNo);
         setOrders(tempOrders);
+        /*
+        (async () => {
+            await storeData('Orders', JSON.stringify(orders));
+            //await getAllCompanies();
+        })();
+
+         */
         console.log(orders.length);
     }
 
