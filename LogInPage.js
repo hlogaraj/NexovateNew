@@ -7,6 +7,8 @@ import styles from './Styles.js';
 //import Order from './Order.js';
 //import storage from './MMKVStorage.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import {Ionicons} from "@expo/vector-icons";
+import POListPage from "./POListPage";
 
 const LogInPage = () => {
     const [username, setUsername] = useState('');
@@ -35,7 +37,7 @@ const LogInPage = () => {
     }
 
     function navigateToDashboard() {
-        navigation.navigate('MainApp');
+        navigation.navigate('Dashboard');
     }
 
     async function handleLogin() {

@@ -545,13 +545,6 @@ const POListPage = ({route}) => {
         console.log(orders.length);
         let tempOrders = orders.filter((order)=> order.OrderNumber !== orNo);
         setOrders(tempOrders);
-        /*
-        (async () => {
-            await storeData('Orders', JSON.stringify(orders));
-            //await getAllCompanies();
-        })();
-
-         */
         console.log(orders.length);
     }
 

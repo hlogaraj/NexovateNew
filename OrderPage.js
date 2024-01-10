@@ -31,8 +31,11 @@ const OrderPage = () => {
 
     const navigation = useNavigation();
 
-    function navigateToDashboard() {
-        navigation.navigate('MainApp');
+    function navigateToPOListPage() {
+        (async () => {
+            await AsyncStorage.removeItem('Orders');
+            navigation.navigate('Queued for Approval');
+        })();
     }
 
 
@@ -530,14 +533,16 @@ const OrderPage = () => {
                 onShow={() => {
                     setTimeout(() => {
                         setApproveModalVisible(false);
-                        navigation.navigate('Queued for Approval');
+                        navigateToPOListPage();
                     }, 3000);
                 }}
                 onRequestClose={() => {
-                    setApproveModalVisible(!approveModalVisible);
+                    setApproveModalVisible(false);
+                    navigateToPOListPage();
                 }}
                 onDismiss={() => {
-                    setApproveModalVisible(!approveModalVisible);
+                    setApproveModalVisible(false);
+                    navigateToPOListPage();
                 }}>
                 <View style={styles.inLineNoteCenteredView}
                       onTouchStart={() => {
@@ -586,14 +591,16 @@ const OrderPage = () => {
                 onShow={() => {
                     setTimeout(() => {
                         setRejectModalVisible(false);
-                        navigation.navigate('Queued for Approval');
+                        navigateToPOListPage();
                     }, 3000);
                 }}
                 onRequestClose={() => {
-                    setRejectModalVisible(!rejectModalVisible);
+                    setRejectModalVisible(false);
+                    navigateToPOListPage();
                 }}
                 onDismiss={() => {
-                    setRejectModalVisible(!rejectModalVisible);
+                    setRejectModalVisible(false);
+                    navigateToPOListPage();
                 }}>
                 <View style={styles.inLineNoteCenteredView}
                       onTouchStart={() => {

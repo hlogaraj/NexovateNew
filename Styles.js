@@ -2,8 +2,8 @@ import { StyleSheet, Dimensions, Platform} from 'react-native';
 
 const defaultFontSize = Platform.OS === 'ios' ? 17 : 14;
 
-const color_darkBlue = 'rgba(60, 104, 139, 1)';
-//const color_darkBlue = '#1e4a6d';
+//const color_darkBlue = 'rgba(60, 104, 139, 1)';
+const color_darkBlue = '#1e4a6d';
 const color_lightBlue = '#f0f1f5';
 const color_lightGray = 'rgb(140, 140, 140)';
 const color_lightLightGray = 'rgb(220, 220, 220)';
