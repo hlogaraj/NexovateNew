@@ -10,9 +10,12 @@ const Dashboard = () => {
     const navigation = useNavigation();
 
     function navigateToPOListPage() {
+        /*
         (async () => {
             await AsyncStorage.removeItem('Orders');
         })();
+
+         */
         navigation.navigate('Queued for Approval');
     }
 

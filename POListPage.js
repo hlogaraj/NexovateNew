@@ -21,6 +21,7 @@ import Order from './Order.js';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
+import FilterModal from './FilterModal.js';
 
 const POListPage = ({route}) => {
 
@@ -29,10 +30,6 @@ const POListPage = ({route}) => {
     const [allBranchPlants, setAllBranchPlants] = useState([]);
     const [allCompanies, setAllCompanies] = useState([]);
     const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
-
-    const [orderCompany, setOrderCompany] = useState(null);
-    const [orderBranch, setOrderBranch] = useState(null);
-    const [orderType, setOrderType] = useState(null);
 
     const navigation = useNavigation();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -80,10 +77,13 @@ const POListPage = ({route}) => {
         })
     }, []);
 
+
+
     async function storePOResponse(response) {
         try {
             let parsedResponse = await response.json();
             parsedResponse = parsedResponse.PurchaseOrders;
+            //console.log(parsedResponse);
             let stringifiedResponse = JSON.stringify((parsedResponse));
             await storeData('PO_Data', stringifiedResponse);
             let orderList = await parsedResponse.map((purchaseOrder) => new Order(purchaseOrder));
@@ -98,15 +98,27 @@ const POListPage = ({route}) => {
             const storedOrderList = await AsyncStorage.getItem('Orders');
             if (storedOrderList) {
                 let parsedOrderList = await JSON.parse(storedOrderList);
-                let orders = await parsedOrderList.map((orderData) => new Order(orderData));
-                setOrders(orders);
+                let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
+                setOrders(newOrders);
                 setIsLoaded(true);
             } else {
                 await getPOList();
-                console.log(orders);
+                //console.log(orders);
             }
         } catch (error) {
             //console.error('Error retrieving OrderList: ', error);
+        }
+    }
+
+    async function updateOrders() {
+        try {
+            const updatedOrderList = await AsyncStorage.getItem('Orders');
+            let parsedOrderList = await JSON.parse(updatedOrderList);
+            let updatedOrders = await parsedOrderList.map((orderData) => new Order(orderData));
+            setOrders(updatedOrders);
+            setIsLoaded(true);
+        } catch (error) {
+            console.error('Error updating Orders: ', error);
         }
     }
 
@@ -264,9 +276,6 @@ const POListPage = ({route}) => {
 
     const getAllCompanies = async () => {
         try {
-            //console.log(order._OrderNumber);
-            //console.log(order._OrTy);
-            //console.log(order);
             const token = await retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_CompanyMasterSearch', {
@@ -307,9 +316,6 @@ const POListPage = ({route}) => {
 
     const getAllOrderTypes = async () => {
         try {
-            //console.log(order._OrderNumber);
-            //console.log(order._OrTy);
-            //console.log(order);
             const token = await retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_DocumentTypes', {
@@ -334,7 +340,7 @@ const POListPage = ({route}) => {
                 .then((parsedResponse) => {
                     if (parsedResponse.DocumentTypes) {
                         const orderTypes = parsedResponse.DocumentTypes;
-                        console.log(orderTypes);
+                        //console.log(orderTypes);
                         setAllOrderType(orderTypes);
                     } else {
                         console.log("AllOrderType not found in the response");
@@ -350,9 +356,6 @@ const POListPage = ({route}) => {
 
     const getAllBranchPlants = async () => {
         try {
-            //console.log(order._OrderNumber);
-            //console.log(order._OrTy);
-            //console.log(order);
             const token = await retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_BranchPlantMaster', {
@@ -377,11 +380,60 @@ const POListPage = ({route}) => {
                 .then((parsedResponse) => {
                     if (parsedResponse.BranchPlantMaster) {
                         const branchPlants = parsedResponse.BranchPlantMaster;
-                        console.log(branchPlants);
+                        //console.log(branchPlants);
                         setAllBranchPlants(branchPlants);
                     } else {
                         console.log("BranchPlantMaster not found in the response");
                     }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        } catch (error) {
+            console.error('Error retrieving selected order details: ', error);
+        }
+    }
+
+    const getOrderByFilters = async (orderType, orderBranch, orderCompany ) => {
+        try {
+            const token = await retrieveData('Token');
+
+            const body = {
+                orderType : orderType,
+                branchPlant: orderBranch,
+                orderCompany: orderCompany,
+            }
+
+            await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
+                method: 'POST',
+                headers: {
+                    'jde-AIS-Auth': token,
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify(body)
+            })
+                .then((response) => {
+                    //console.log('HandleFilterOrderCompanies');
+                    if (response != undefined) {
+                        if (!response.ok) {
+                            console.log("Error fetching filtered orders: " + response.json());
+                        }
+                        if (response.ok) {
+                            //console.log('got response');
+                            //console.log(response.json());
+                            //storePOResponse(response);
+                            return response.json();
+                        }
+                    } else {
+                        console.log("Error fetching filtered orders: " + response.json());
+                    }
+                })
+
+                .then((responseJSON) => {
+                    let filteredOrders = responseJSON.PurchaseOrders;
+                    console.log(filteredOrders);
+                    let updatedOrders = filteredOrders.map((orderData) => new Order(orderData))
+                    setOrders(updatedOrders);
                 })
                 .catch(error => {
                     console.log(error);
@@ -480,7 +532,7 @@ const POListPage = ({route}) => {
         );
     }
 
-    const FilterModal = () => {
+    const FilterModalContainer = () => {
         return(
             <Modal
                 animationType={'none'}
@@ -492,85 +544,12 @@ const POListPage = ({route}) => {
             >
                 <View>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 60}} onPress={toggleFilterModal}/>
-                    <View style={styles.filterModalOuterContainer}>
-                        <View style={styles.filterModalInnerContainer}>
-                            <SelectDropdown
-                                data={allOrderType}
-                                onSelect={(selectedItem, index) => {
-                                setOrderType(selectedItem);
-                                }}
-                                buttonTextAfterSelection={(selectedItem, index) => {
-                                    return (selectedItem.Codes + '-' + selectedItem.Description);
-                                }}
-                                rowTextForSelection={(item, index) => {
-                                    return (item.Codes + '-' + item.Description);
-                                }}
-                                defaultButtonText={'Select order type'}
-                                search
-                                searchPlaceHolder={'Search order types'}
-                                renderSearchInputLeftIcon={() => {
-                                    return <Ionicons name='search-outline' size={24}/>
-                                }}
-                                buttonStyle={styles.filterModalDropdown}
-                                buttonTextStyle={styles.dropdownText}
-                            />
-                            <SelectDropdown
-                                data={allCompanies}
-                                onSelect={(selectedItem, index) => {
-                                    setOrderCompany(selectedItem);
-                                }}
-                                buttonTextAfterSelection={(selectedItem, index) => {
-                                    return selectedItem.Name;
-                                }}
-                                rowTextForSelection={(item, index) => {
-                                    return item.CompanyCode + '-' + item.Name;
-                                }}
-                                defaultButtonText={'Select order company'}
-                                search
-                                searchPlaceHolder={'Search companies'}
-                                renderSearchInputLeftIcon={() => {
-                                    return <Ionicons name='search-outline' size={24}/>
-                                }}
-                                buttonStyle={styles.filterModalDropdown}
-                                buttonTextStyle={styles.dropdownText}
-                            />
-                            <SelectDropdown
-                                data={allBranchPlants}
-                                onSelect={(selectedItem, index) => {
-                                    setOrderBranch(selectedItem);
-                                }}
-                                buttonTextAfterSelection={(selectedItem, index) => {
-                                    return (selectedItem.BranchPlant + '-' + selectedItem.Description);
-                                }}
-                                rowTextForSelection={(item, index) => {
-                                    return (item.BranchPlant + '-' + item.Description);
-                                }}
-                                defaultButtonText={'Select order branch'}
-                                search
-                                searchPlaceHolder={'Search branches'}
-                                renderSearchInputLeftIcon={() => {
-                                    return <Ionicons name='search-outline' size={24}/>
-                                }}
-                                buttonStyle={styles.filterModalDropdown}
-                                buttonTextStyle={styles.dropdownText}
-                            />
-                            <View style={styles.filterModalSubmitRow}>
-                                <View style={[styles.filterModalResetButton]}>
-                                    <Pressable style={{borderWidth: 0,}}>
-                                        <Text style={styles.lightGrayColor}>Reset</Text>
-                                    </Pressable>
-                                </View>
-                                <View style={[styles.filterModalSubmitButton]}>
-                                    <Pressable style={{borderWidth: 0}}>
-                                        <Text style={{color: 'white', fontWeight: 'bold',}}>Submit</Text>
-                                    </Pressable>
-                                </View>
-
-                            </View>
-                        </View>
-
-                    </View>
-
+                        <FilterModal
+                            onSubmit={getOrderByFilters}
+                            allOrderType={allOrderType}
+                            allCompanies={allCompanies}
+                            allBranchPlants={allBranchPlants}
+                        />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
                 </View>
             </Modal>
@@ -650,7 +629,7 @@ const POListPage = ({route}) => {
 
     return (
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
-            <FilterModal/>
+            <FilterModalContainer/>
             <ApproveModal/>
             <RejectModal/>
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
