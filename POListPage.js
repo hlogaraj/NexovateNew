@@ -394,8 +394,10 @@ const POListPage = ({route}) => {
         }
     }
 
-    const getOrderByFilters = async (orderType, orderBranch, orderCompany ) => {
+    const getOrdersByFilters = async (orderType, orderBranch, orderCompany ) => {
         try {
+            setFilterModalVisible(false);
+            setIsLoaded(false);
             const token = await retrieveData('Token');
 
             const body = {
@@ -426,17 +428,25 @@ const POListPage = ({route}) => {
                         }
                     } else {
                         console.log("Error fetching filtered orders: " + response.json());
+                        setIsLoaded(true);
                     }
                 })
 
                 .then((responseJSON) => {
-                    let filteredOrders = responseJSON.PurchaseOrders;
-                    console.log(filteredOrders);
-                    let updatedOrders = filteredOrders.map((orderData) => new Order(orderData))
-                    setOrders(updatedOrders);
+                    if (responseJSON.PurchaseOrders) {
+                        let filteredOrders = responseJSON.PurchaseOrders;
+                        console.log(filteredOrders.length);
+                        let updatedOrders = filteredOrders.map((orderData) => new Order(orderData))
+                        setOrders(updatedOrders);
+                        setIsLoaded(true);
+                    } else {
+                        console.log("PurchaseOrders not found in response");
+                        setIsLoaded(true);
+                    }
                 })
                 .catch(error => {
                     console.log(error);
+                    setIsLoaded(true);
                 })
         } catch (error) {
             console.error('Error retrieving selected order details: ', error);
@@ -545,7 +555,7 @@ const POListPage = ({route}) => {
                 <View>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 60}} onPress={toggleFilterModal}/>
                         <FilterModal
-                            onSubmit={getOrderByFilters}
+                            onSubmit={getOrdersByFilters}
                             allOrderType={allOrderType}
                             allCompanies={allCompanies}
                             allBranchPlants={allBranchPlants}

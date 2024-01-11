@@ -444,6 +444,9 @@ const styles = StyleSheet.create({
     dropdownText: {
         color: color_lightGray,
     },
+    selectedDropdownText: {
+        color: 'black',
+    },
     filterModalSubmitRow: {
         height: 60,
         width: 275,

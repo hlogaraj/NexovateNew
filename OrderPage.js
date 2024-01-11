@@ -178,7 +178,7 @@ const OrderPage = () => {
                 // Handle the case where "OrdSuf" or its parent properties are not found
                 console.error("OrdSuf is not found in the orderInfo object.");
             }
-            const attachmentName = 'Attachment ORCH 3';//*****************************PLACEHOLDER
+            const attachmentName = 'Attachment ORCH 3';//************************************************************************PLACEHOLDER
             console.log(attachmentName);
             const attachmentString = text;
             console.log(orderSuffix);
@@ -249,7 +249,7 @@ const OrderPage = () => {
             } else {
                 console.error("Order line is not found in the orderInfo object.")
             }
-            const attachmentName = 'Attachment ORCH 3';//*****************************PLACEHOLDER
+            const attachmentName = 'Attachment ORCH 3';//*********************************************************************PLACEHOLDER
             console.log(attachmentName);
             const attachmentString = text;
             console.log(orderSuffix);

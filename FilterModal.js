@@ -2,7 +2,7 @@ import {Modal, Pressable, Text, View} from "react-native";
 import styles from "./Styles";
 import SelectDropdown from "react-native-select-dropdown";
 import {Ionicons} from "@expo/vector-icons";
-import {useState} from "react";
+import {useState, useRef} from "react";
 
 const FilterModal = (props) => {
 
@@ -10,11 +10,23 @@ const FilterModal = (props) => {
     const [orderCompany, setOrderCompany] = useState(null);
     const [orderBranch, setOrderBranch] = useState(null);
 
+    const typesRef = useRef({});
+    const companiesRef = useRef({});
+    const branchesRef = useRef({});
+
     function submitFilters() {
         props.onSubmit(orderType.Codes, orderBranch.BranchPlant, orderCompany.CompanyCode );
     }
-    return(
 
+    function reset() {
+        setOrderType(null);
+        setOrderCompany(null);
+        setOrderBranch(null);
+        typesRef.current.reset();
+        companiesRef.current.reset();
+        branchesRef.current.reset();
+    }
+    return(
         <View style={styles.filterModalOuterContainer}>
             <View style={styles.filterModalInnerContainer}>
                 <SelectDropdown
@@ -28,14 +40,17 @@ const FilterModal = (props) => {
                     rowTextForSelection={(item, index) => {
                         return (item.Codes + '-' + item.Description);
                     }}
-                    defaultButtonText={'Select order type'}
+                    defaultButtonText={'(Select order type)'}
                     search
                     searchPlaceHolder={'Search order types'}
                     renderSearchInputLeftIcon={() => {
                         return <Ionicons name='search-outline' size={24}/>
                     }}
                     buttonStyle={styles.filterModalDropdown}
-                    buttonTextStyle={styles.dropdownText}
+                    buttonTextStyle={styles.selectedDropdownText}
+                    selectedRowTextStyle={styles.selectedDropdownText}
+                    rowTextStyle={styles.dropdownText}
+                    ref={typesRef}
                 />
                 <SelectDropdown
                     data={props.allCompanies}
@@ -48,14 +63,17 @@ const FilterModal = (props) => {
                     rowTextForSelection={(item, index) => {
                         return item.CompanyCode + '-' + item.Name;
                     }}
-                    defaultButtonText={'Select order company'}
+                    defaultButtonText={'(Select order company)'}
                     search
                     searchPlaceHolder={'Search companies'}
                     renderSearchInputLeftIcon={() => {
                         return <Ionicons name='search-outline' size={24}/>
                     }}
                     buttonStyle={styles.filterModalDropdown}
-                    buttonTextStyle={styles.dropdownText}
+                    buttonTextStyle={styles.selectedDropdownText}
+                    selectedRowTextStyle={styles.selectedDropdownText}
+                    rowTextStyle={styles.dropdownText}
+                    ref={companiesRef}
                 />
                 <SelectDropdown
                     data={props.allBranchPlants}
@@ -68,18 +86,24 @@ const FilterModal = (props) => {
                     rowTextForSelection={(item, index) => {
                         return (item.BranchPlant + '-' + item.Description);
                     }}
-                    defaultButtonText={'Select order branch'}
+                    defaultButtonText={'(Select order branch)'}
                     search
                     searchPlaceHolder={'Search branches'}
                     renderSearchInputLeftIcon={() => {
                         return <Ionicons name='search-outline' size={24}/>
                     }}
                     buttonStyle={styles.filterModalDropdown}
-                    buttonTextStyle={styles.dropdownText}
+                    buttonTextStyle={styles.selectedDropdownText}
+                    selectedRowTextStyle={styles.selectedDropdownText}
+                    rowTextStyle={styles.dropdownText}
+                    ref={branchesRef}
                 />
                 <View style={styles.filterModalSubmitRow}>
                     <View style={[styles.filterModalResetButton]}>
-                        <Pressable style={{borderWidth: 0,}}>
+                        <Pressable
+                            style={{borderWidth: 0,}}
+                            onPress={reset}
+                        >
                             <Text style={styles.lightGrayColor}>Reset</Text>
                         </Pressable>
                     </View>
