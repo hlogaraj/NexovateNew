@@ -66,7 +66,9 @@ const POListPage = ({route}) => {
         if (!isLoaded) {
             (async () => {
                 await retrieveOrders();
-                //await getAllCompanies();
+                await getAllCompanies();
+                await getAllOrderTypes();
+                await getAllBranchPlants();
             })();
         }
         navigation.setOptions({
@@ -262,11 +264,9 @@ const POListPage = ({route}) => {
 
     const getAllCompanies = async () => {
         try {
-            let retries = 0;
             //console.log(order._OrderNumber);
             //console.log(order._OrTy);
             //console.log(order);
-            const body = {};
             const token = await retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_CompanyMasterSearch', {
@@ -284,72 +284,113 @@ const POListPage = ({route}) => {
                         }
                         if (response.ok) {
                             //console.log('HandleFilterOrderCompanies');
-                            let keys1 = Object.keys(response);
-                            console.log(keys1);
-                            /*
-                            console.log(response.status);
-                            console.log(response.type);
-                            console.log('BodyInit: ' + response._bodyInit);
-                            console.log('BodyInit available keys: ' + Object.keys(response._bodyInit));
-                            console.log('BodyInit._data: ' + response._bodyInit._data);
-                            console.log('BodyInit._data available keys: ' + Object.keys(response._bodyInit._data));
-                            //console.log('BodyInit._data.__collector: ' + response._bodyInit._data.__collector);
-                            console.log('BodyInit._data.__collector type: ' + typeof(response._bodyInit._data.__collector));
-                            console.log('__collector keys: ' + Object.keys(response._bodyInit._data.__collector));
-                            console.log('__collector as a string: ' + JSON.stringify(response._bodyInit._data.__collector, null, 4));
-                            console.log('BodyBlob available keys: ' + Object.keys(response._bodyBlob));
-                            console.log('BodyBlob data: ' + response._bodyBlob._data);
-                            console.log('BodyBlob data as a string: ' + JSON.stringify(response._bodyBlob._data, null, 4));
-
-                             */
-                            let type = JSON.stringify(response.type, null, 4);
-                            let status = JSON.stringify(response.status, null, 4);
-                            let ok = JSON.stringify(response.ok, null, 4);
-                            let statusText = JSON.stringify(response.statusText, null, 4);
-                            let headers = JSON.stringify(response.headers, null, 4);
-                            let url = JSON.stringify(response.url, null, 4);
-                            let bodyUsed = JSON.stringify(response.bodyUsed, null, 4);
-                            let _bodyInit = JSON.stringify(response._bodyInit, null, 4)
-                            let _bodyBlob = JSON.stringify(response._bodyBlob, null, 4)
-
-
-                            console.log('type: ' + type + ', status: ' + status + ', statusText: ' + statusText);
-                            console.log('headers: ' + headers)
-                            console.log('_bodyInit: ' + _bodyInit);
-                            console.log('_bodyBlob: ' + _bodyBlob);
-                            //console.log(data.CompanyMaster);
-                            /*
-                            for (let i=0; i < keys1.length; i++ ) {
-                                //console.log(keys1[i]);
-                                let key = keys1[i]
-                                console.log(key + ": " + response[key])
-                                let keys2 = Object.keys(response.key)
-                                for (let i=0; i < keys2.length; i++) {
-                                    console.log(keys2[i]);
-                                }
-                                //let key = bodyBlobKeys[i];
-                                //console.log(keys1[i] + ': ' + response.keys1[i])
-
-                            }
-
-                             */
-
-
-                            //console.log('Response status: ' + response.status);
-                            //console.log('response.CompanyMaster: ' + CompanyMaster);
-                            //console.log(response.statusText);
+                            return response.json();
                         }
+                    }
+                })
+                .then((parsedResponse) => {
+                    if (parsedResponse.CompanyMaster) {
+                        const companies = parsedResponse.CompanyMaster;
+                        //console.log(companies);
+                        setAllCompanies(companies);
+                    } else {
+                        console.log("CompanyMaster not found in the response");
                     }
                 })
                 .catch(error => {
                     console.log(error);
                 })
-
         } catch (error) {
             console.error('Error retrieving selected order details: ', error);
         }
-
     }
+
+    const getAllOrderTypes = async () => {
+        try {
+            //console.log(order._OrderNumber);
+            //console.log(order._OrTy);
+            //console.log(order);
+            const token = await retrieveData('Token');
+
+            await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_DocumentTypes', {
+                method: 'GET',
+                headers: {
+                    'jde-AIS-Auth': token,
+                    'Content-Type':'application/json',
+                },
+            })
+                .then((response) => {
+                    //console.log('HandleFilterOrderCompanies');
+                    if (response != undefined) {
+                        if (!response.ok) {
+                            console.log("Error fetching order types: " + response.json());
+                        }
+                        if (response.ok) {
+                            //console.log('HandleFilterOrderCompanies');
+                            return response.json();
+                        }
+                    }
+                })
+                .then((parsedResponse) => {
+                    if (parsedResponse.DocumentTypes) {
+                        const orderTypes = parsedResponse.DocumentTypes;
+                        console.log(orderTypes);
+                        setAllOrderType(orderTypes);
+                    } else {
+                        console.log("AllOrderType not found in the response");
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        } catch (error) {
+            console.error('Error retrieving selected order details: ', error);
+        }
+    }
+
+    const getAllBranchPlants = async () => {
+        try {
+            //console.log(order._OrderNumber);
+            //console.log(order._OrTy);
+            //console.log(order);
+            const token = await retrieveData('Token');
+
+            await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_BranchPlantMaster', {
+                method: 'GET',
+                headers: {
+                    'jde-AIS-Auth': token,
+                    'Content-Type':'application/json',
+                },
+            })
+                .then((response) => {
+                    //console.log('HandleFilterOrderCompanies');
+                    if (response != undefined) {
+                        if (!response.ok) {
+                            console.log("Error fetching branch plants: " + response.json());
+                        }
+                        if (response.ok) {
+                            //console.log('HandleFilterOrderCompanies');
+                            return response.json();
+                        }
+                    }
+                })
+                .then((parsedResponse) => {
+                    if (parsedResponse.BranchPlantMaster) {
+                        const branchPlants = parsedResponse.BranchPlantMaster;
+                        console.log(branchPlants);
+                        setAllBranchPlants(branchPlants);
+                    } else {
+                        console.log("BranchPlantMaster not found in the response");
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        } catch (error) {
+            console.error('Error retrieving selected order details: ', error);
+        }
+    }
+
     const ApproveModal = () => {
         return(
             <Modal
