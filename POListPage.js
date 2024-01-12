@@ -38,9 +38,9 @@ const POListPage = ({route}) => {
 
     const screenWidth = Dimensions.get('window').width;
 
-    const retrieveData = async (key) => {
+    const retrieveData = (key) => {
         try {
-            let value = await AsyncStorage.getItem(key);
+            let value = MMKVwithEncryption.getItem(key);
             if (value !== null) {
                 return value
             } else {
@@ -50,9 +50,9 @@ const POListPage = ({route}) => {
             console.log('Error retrieving string: ', error);
         }
     };
-    const storeData = async (key, value) => {
+    const storeData = (key, value) => {
         try {
-            await AsyncStorage.setItem(key, value);
+            MMKVwithEncryption.setItem(key, value);
             //console.log('String stored successfully.');
         } catch (error) {
             console.log('Error storing string: ', error);
@@ -95,7 +95,7 @@ const POListPage = ({route}) => {
 
     async function retrieveOrders() {
         try {
-            const storedOrderList = await AsyncStorage.getItem('Orders');
+            const storedOrderList = MMKVwithEncryption.getItem('Orders');
             if (storedOrderList) {
                 let parsedOrderList = await JSON.parse(storedOrderList);
                 let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
@@ -112,7 +112,7 @@ const POListPage = ({route}) => {
 
     async function updateOrders() {
         try {
-            const updatedOrderList = await AsyncStorage.getItem('Orders');
+            const updatedOrderList = MMKVwithEncryption.getItem('Orders');
             let parsedOrderList = await JSON.parse(updatedOrderList);
             let updatedOrders = await parsedOrderList.map((orderData) => new Order(orderData));
             setOrders(updatedOrders);
@@ -123,7 +123,7 @@ const POListPage = ({route}) => {
     }
 
     async function getPOList() {
-        const token = await retrieveData('Token');
+        const token = retrieveData('Token');
 
         try {
             fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
@@ -152,10 +152,10 @@ const POListPage = ({route}) => {
     }
 
 
-    async function navigateToOrderPage(order) {
+    function navigateToOrderPage(order) {
         try {
             let stringifiedOrder = JSON.stringify(order);
-            await AsyncStorage.setItem('selectedOrder', stringifiedOrder);
+            MMKVwithEncryption.setItem('selectedOrder', stringifiedOrder);
             navigation.navigate('Order Page');
         } catch (error) {
             //console.log('Error saving order information: ', error);
@@ -276,7 +276,7 @@ const POListPage = ({route}) => {
 
     const getAllCompanies = async () => {
         try {
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_CompanyMasterSearch', {
                 method: 'GET',
@@ -316,7 +316,7 @@ const POListPage = ({route}) => {
 
     const getAllOrderTypes = async () => {
         try {
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_DocumentTypes', {
                 method: 'GET',
@@ -356,7 +356,7 @@ const POListPage = ({route}) => {
 
     const getAllBranchPlants = async () => {
         try {
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_BranchPlantMaster', {
                 method: 'GET',
@@ -398,7 +398,7 @@ const POListPage = ({route}) => {
         try {
             setFilterModalVisible(false);
             setIsLoaded(false);
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             const body = {
                 orderType : orderType,

@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 import HeaderNoteEntry from './HeaderNoteEntry.js';
 import ItemNoteEntry from './ItemNoteEntry.js';
+import {MMKVwithEncryption} from "./App";
 
 const OrderPage = () => {
 
@@ -32,10 +33,8 @@ const OrderPage = () => {
     const navigation = useNavigation();
 
     function navigateToPOListPage() {
-        (async () => {
-            await AsyncStorage.removeItem('Orders');
-            navigation.navigate('Queued for Approval');
-        })();
+        MMKVwithEncryption.removeItem('Orders');
+        navigation.navigate('Queued for approval');
     }
 
 
@@ -68,9 +67,9 @@ const OrderPage = () => {
         }
     }, [order, navigation, isLoaded, noteConfirmationVisible])
 
-    async function retrieveData(key) {
+    function retrieveData(key) {
         try {
-            let value = await AsyncStorage.getItem(key);
+            let value = MMKVwithEncryption.getItem(key);
             if (value !== null) {
                 return value
             } else {
@@ -80,9 +79,9 @@ const OrderPage = () => {
             console.log('Error retrieving string: ', error);
         }
     };
-    async function storeData(key, value) {
+    function storeData(key, value) {
         try {
-            await AsyncStorage.setItem(key, value);
+            MMKVwithEncryption.setItem(key, value);
             //console.log('String stored successfully.');
         } catch (error) {
             console.log('Error storing string: ', error);
@@ -110,7 +109,7 @@ const OrderPage = () => {
                 'OrderType' : order._OrTy,
             }
 
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_PO_Approval_OrderDetail', {
                 method: 'POST',
@@ -142,7 +141,7 @@ const OrderPage = () => {
 
     async function retrieveOrder() {
         try {
-            const storedOrder = await AsyncStorage.getItem('selectedOrder');
+            const storedOrder = MMKVwithEncryption.getItem('selectedOrder');
             const token = await retrieveData('Token');
             //console.log(token);
             //console.log(JSON.stringify(token));
@@ -184,7 +183,7 @@ const OrderPage = () => {
             console.log(orderSuffix);
             console.log(text);
 
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             const attachmentData = {
                 'DocumentNo' : documentNo,
@@ -255,7 +254,7 @@ const OrderPage = () => {
             console.log(orderSuffix);
             console.log(text);
 
-            const token = await retrieveData('Token');
+            const token = retrieveData('Token');
 
             const attachmentData = {
                 'DocumentNo' : documentNo,
@@ -510,8 +509,8 @@ const OrderPage = () => {
                             setInlineNoteConfVisible(true);
                             setNoteModalVisible(false);
                             //console.log('setNoteConfirmationVisible');
-                            addItemAttachment(tempIndex,headerNotes);
-                            setHeaderNotes(''); //**************************************************Fix to submit the typed note
+                            addItemAttachment(tempIndex, headerNotes).then(r => setHeaderNotes(''));
+                             //**************************************************Fix to submit the typed note
                         }
                         }>
                             <Animated.View>
@@ -697,8 +696,8 @@ const OrderPage = () => {
                 <Pressable style={[styles.attachNotesButton, styles.greenBackground, {}]} onPress={() => {
                     setNoteConfirmationVisible(true);
                     //console.log('setNoteConfirmationVisible');
-                    addHeaderAttachment(headerNotes);
-                    setHeaderNotes(''); //**************************************************Fix to submit the typed note
+                    addHeaderAttachment(headerNotes).then(r => setHeaderNotes(''));
+                     //**************************************************Fix to submit the typed note
                 }
                 }>
                     <Animated.View>

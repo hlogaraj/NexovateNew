@@ -18,8 +18,8 @@ const LogInPage = () => {
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
 
-    async function clearData() {
-        await AsyncStorage.clear();
+   function clearData() {
+        MMKVwithEncryption.clearStore();
     }
     useEffect(() => {
         clearData();
@@ -35,8 +35,8 @@ const LogInPage = () => {
         const stringifiedResponse = JSON.stringify(parsedResponse);
         const stringifiedToken = JSON.stringify(parsedToken);
 
-        await AsyncStorage.setItem('Response', stringifiedResponse);
-        await AsyncStorage.setItem('Token', parsedToken);
+        MMKVwithEncryption.setString('Response', stringifiedResponse);
+        MMKVwithEncryption.setString('Token', parsedToken);
     }
 
     function navigateToDashboard() {
