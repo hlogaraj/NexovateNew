@@ -7,10 +7,13 @@ import styles from './Styles.js';
 //import Order from './Order.js';
 //import storage from './MMKVStorage.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import {MMKVwithEncryption} from "./App";
 import {Ionicons} from "@expo/vector-icons";
 import POListPage from "./POListPage";
 
 const LogInPage = () => {
+
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();

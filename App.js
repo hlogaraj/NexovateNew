@@ -8,7 +8,11 @@ import OrderPage from './OrderPage.js';
 import styles from './Styles.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-//import {MMKVStorage} from './MMKVStorage.js';
+import {MMKVLoader, MMKVStorage} from 'react-native-mmkv-storage';
+
+const MMKVwithEncryption = new MMKVLoader()
+    .withEncryption()
+    .initialize();
 
 //const Stack = createStackNavigator();
 const NavigationStack = createStackNavigator();
@@ -47,3 +51,5 @@ const App = () => {
  */
 
 export default App;
+
+export {MMKVwithEncryption};

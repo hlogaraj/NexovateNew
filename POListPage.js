@@ -16,7 +16,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
 import styles from './Styles.js';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import {MMKVwithEncryption} from "./App";
 import Order from './Order.js';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';

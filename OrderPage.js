@@ -3,7 +3,7 @@ import {Text, View, TextInput, Pressable, FlatList, Button, Platform, Switch, Sc
 import {StatusBar} from 'expo-status-bar';
 import {useNavigation} from "@react-navigation/native";
 import styles from './Styles.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MMKVwithEncryption} from "./App";
 import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 import HeaderNoteEntry from './HeaderNoteEntry.js';

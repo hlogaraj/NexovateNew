@@ -3,7 +3,6 @@ import {Text, View, Pressable, BackHandler, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import styles from './Styles.js';
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Dashboard = () => {
 
