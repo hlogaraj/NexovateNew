@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import {MMKVwithEncryption} from "./App";
 import {Ionicons} from "@expo/vector-icons";
 import POListPage from "./POListPage";
+import {MMKV} from "react-native-mmkv";
 
 const LogInPage = () => {
 
@@ -37,6 +38,7 @@ const LogInPage = () => {
 
         MMKVwithEncryption.setString('Response', stringifiedResponse);
         MMKVwithEncryption.setString('Token', parsedToken);
+        console.log(MMKVwithEncryption.getString('Token'));
     }
 
     function navigateToDashboard() {

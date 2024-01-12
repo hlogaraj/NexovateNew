@@ -40,7 +40,7 @@ const POListPage = ({route}) => {
 
     const retrieveData = (key) => {
         try {
-            let value = MMKVwithEncryption.getItem(key);
+            let value = MMKVwithEncryption.getString(key);
             if (value !== null) {
                 return value
             } else {
@@ -52,7 +52,7 @@ const POListPage = ({route}) => {
     };
     const storeData = (key, value) => {
         try {
-            MMKVwithEncryption.setItem(key, value);
+            MMKVwithEncryption.setString(key, value);
             //console.log('String stored successfully.');
         } catch (error) {
             console.log('Error storing string: ', error);
@@ -95,7 +95,7 @@ const POListPage = ({route}) => {
 
     async function retrieveOrders() {
         try {
-            const storedOrderList = MMKVwithEncryption.getItem('Orders');
+            const storedOrderList = MMKVwithEncryption.getString('Orders');
             if (storedOrderList) {
                 let parsedOrderList = await JSON.parse(storedOrderList);
                 let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
@@ -112,7 +112,7 @@ const POListPage = ({route}) => {
 
     async function updateOrders() {
         try {
-            const updatedOrderList = MMKVwithEncryption.getItem('Orders');
+            const updatedOrderList = MMKVwithEncryption.getString('Orders');
             let parsedOrderList = await JSON.parse(updatedOrderList);
             let updatedOrders = await parsedOrderList.map((orderData) => new Order(orderData));
             setOrders(updatedOrders);
@@ -124,7 +124,6 @@ const POListPage = ({route}) => {
 
     async function getPOList() {
         const token = retrieveData('Token');
-
         try {
             fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
                 method: 'GET',
@@ -155,7 +154,7 @@ const POListPage = ({route}) => {
     function navigateToOrderPage(order) {
         try {
             let stringifiedOrder = JSON.stringify(order);
-            MMKVwithEncryption.setItem('selectedOrder', stringifiedOrder);
+            MMKVwithEncryption.setString('selectedOrder', stringifiedOrder);
             navigation.navigate('Order Page');
         } catch (error) {
             //console.log('Error saving order information: ', error);
@@ -276,8 +275,7 @@ const POListPage = ({route}) => {
 
     const getAllCompanies = async () => {
         try {
-            const token = retrieveData('Token');
-
+            let token = retrieveData('Token');
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_CompanyMasterSearch', {
                 method: 'GET',
                 headers: {

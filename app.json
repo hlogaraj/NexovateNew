@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Nexovate",
-    "slug": "Nexovate",
+    "slug": "nexovate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "30867b5e-c70f-4adf-85bc-48d43473ef14"
+      }
+    },
+    "owner": "hlogaraj"
   }
 }

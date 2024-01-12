@@ -8,7 +8,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 import HeaderNoteEntry from './HeaderNoteEntry.js';
 import ItemNoteEntry from './ItemNoteEntry.js';
-import {MMKVwithEncryption} from "./App";
 
 const OrderPage = () => {
 
@@ -69,7 +68,7 @@ const OrderPage = () => {
 
     function retrieveData(key) {
         try {
-            let value = MMKVwithEncryption.getItem(key);
+            let value = MMKVwithEncryption.getString(key);
             if (value !== null) {
                 return value
             } else {
@@ -81,7 +80,7 @@ const OrderPage = () => {
     };
     function storeData(key, value) {
         try {
-            MMKVwithEncryption.setItem(key, value);
+            MMKVwithEncryption.setString(key, value);
             //console.log('String stored successfully.');
         } catch (error) {
             console.log('Error storing string: ', error);
@@ -141,8 +140,8 @@ const OrderPage = () => {
 
     async function retrieveOrder() {
         try {
-            const storedOrder = MMKVwithEncryption.getItem('selectedOrder');
-            const token = await retrieveData('Token');
+            const storedOrder = MMKVwithEncryption.getString('selectedOrder');
+            const token = retrieveData('Token');
             //console.log(token);
             //console.log(JSON.stringify(token));
             if (storedOrder) {
