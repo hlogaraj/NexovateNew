@@ -1,4 +1,4 @@
-import {Text, View, Pressable, BackHandler, ScrollView} from 'react-native';
+import {Text, View, Pressable, BackHandler, ScrollView, Alert} from 'react-native';
 
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -6,6 +6,8 @@ import styles from './Styles.js';
 import { Ionicons } from '@expo/vector-icons';
 import {MMKVwithEncryption} from "./App";
 import Order from "./Order";
+import POListPage from "./POListPage";
+import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-backhandler";
 
 const Dashboard = () => {
 
@@ -16,15 +18,88 @@ const Dashboard = () => {
     const [rejectedByMeOrders, setRejectedByMeOrders] = useState([]);
     const [token, setToken] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [logOutConfirmationVisible, setLogOutConfirmationVisible] = useState(false);
 
     const navigation = useNavigation();
 
-
+    useAndroidBackHandler(() => {
+        Alert.alert(
+            'Log out?',
+            'You will need to log back in.',
+            [
+                {
+                    text: "Stay logged in", style: 'cancel', onPress: () => {
+                    }
+                },
+                {
+                    text: 'Log out',
+                    style: {color: 'rgb(255,0,0)'},
+                    // If the user confirmed, then we dispatch the action we blocked earlier
+                    // This will continue the action that had triggered the removal of the screen
+                    onPress: () => navigation.goBack()
+                },
+            ],
+    {cancelable: true,}
+        );
+        return true;
+    })
 
     useEffect(() => {
         (async () => {
             await retrievePendingOrders();
         })();
+
+        navigation.setOptions({
+            headerLeft: () => (
+                <Pressable onPress={() => {
+                    Alert.alert(
+                        'Log out?',
+                        'You will need to log back in.',
+                        [
+                            {
+                                text: "Stay logged in", style: 'cancel', onPress: () => {
+                                }
+                            },
+                            {
+                                text: 'Log out',
+                                style: {color: 'rgb(255,0,0)'},
+                                // If the user confirmed, then we dispatch the action we blocked earlier
+                                // This will continue the action that had triggered the removal of the screen
+                                onPress: () => navigation.goBack()
+                            },
+                        ],
+                        {cancelable: true,}
+                    );
+                }}>
+                    <Ionicons name="ios-arrow-back" size={24} color='white' style={styles.topLeftIcon}/>
+                </Pressable>
+            )
+        })
+
+/*
+        navigation.addListener('beforeRemove', (e) => {
+            e.prevent
+            // Prompt the user before leaving the screen
+            Alert.alert(
+                'Log out?',
+                'You will need to log back in.',
+                [
+                    {
+                        text: "Stay logged in", style: 'cancel', onPress: () => {
+                        }
+                    },
+                    {
+                        text: 'Log out',
+                        style: 'destructive',
+                        // If the user confirmed, then we dispatch the action we blocked earlier
+                        // This will continue the action that had triggered the removal of the screen
+                        onPress: () => navigation.goBack()
+                    },
+                ]
+            );
+        })
+
+ */
     }, []);
 
 
@@ -133,7 +208,6 @@ const Dashboard = () => {
     }
 
 
-
     return (
         <ScrollView>
             <View style={styles.pageContainer}>
@@ -152,6 +226,18 @@ const Dashboard = () => {
         </ScrollView>
 
     )
+}
+
+Dashboard.options = ({navigation}) => {
+    return({
+
+        //headerBackgroundContainerStyle: {backgroundColor: styles.darkBlueBackgroundColor.backgroundColor},
+        headerLeft: () => (
+            <Pressable onPress={() => navigation.goBack()}>
+                <Ionicons name='ios-arrow-back' size={24} color='white' style={styles.topLeftIcon}/>
+            </Pressable>
+        )
+    })
 }
 
 export default Dashboard;

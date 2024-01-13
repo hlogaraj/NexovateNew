@@ -120,7 +120,7 @@ const LogInPage = () => {
                         <View style={styles.loginButtonWrapper}>
                             <Pressable
                                 style={[styles.loginButton,(username === '' || password === '')
-                                    ? {backgroundColor: 'rgb(140, 140, 140)',}
+                                    ? {backgroundColor: 'rgb(185, 185, 185)',}
                                     : styles.darkBlueBackgroundColor,
                                     ]}
                                 onPress={handleLogin}>

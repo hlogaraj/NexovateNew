@@ -113,7 +113,7 @@ const FilterModal = (props) => {
                     <View style={[
                         styles.filterModalSubmitButton,
                         (orderCompany === null || orderBranch === null || orderType === null)
-                            ? {backgroundColor: 'rgb(140, 140, 140)',}
+                            ? {backgroundColor: 'rgb(185, 185, 185)',}
                             : null,
                     ]}>
                         <Pressable
