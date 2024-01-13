@@ -33,7 +33,7 @@ const OrderPage = () => {
 
     function navigateToPOListPage() {
         MMKVwithEncryption.removeItem('Orders');
-        navigation.navigate('Queued for approval');
+        navigation.navigate('Queued for Approval');
     }
 
 
@@ -640,8 +640,8 @@ const OrderPage = () => {
                             }}
                             style={{flexDirection: 'row'}}
                         >
-                            <Ionicons name='attach' size={20} color={styles.brightBlueColor.color} style={{paddingLeft: 0,}}/>
-                            <Text style={[styles.brightBlueColor]}>Notes</Text>
+                            <Ionicons name='attach' size={20} color={styles.darkBlueColor.color} style={{paddingLeft: 0,}}/>
+                            <Text style={[styles.darkBlueColor, {fontWeight: 'bold'}]}>Notes</Text>
                         </Pressable>
                     </View>
                 </View>

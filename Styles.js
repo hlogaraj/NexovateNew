@@ -180,7 +180,9 @@ const styles = StyleSheet.create({
     redBackground: {
         backgroundColor: 'rgba(255, 0, 0, .5)',
     },
-
+    redColor: {
+        color: 'rgba(255, 100, 100, 1)',
+    },
     loginButtonText: {
         color: 'white',
         textAlign: 'center',
@@ -415,6 +417,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexShrink: 1,
         marginTop: 57,
+        backgroundColor: 'rgba(0,0,0,.5)',
+        borderRadius: 5,
+    },
+    failedLoginCenteredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexShrink: 1,
         backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 5,
     },

@@ -1,4 +1,15 @@
-import {StyleSheet, Text, View, TextInput, Pressable, TouchableOpacity, Button, ScrollView} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    Pressable,
+    TouchableOpacity,
+    Button,
+    ScrollView,
+    Alert,
+    Modal
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useFonts} from 'expo-font';
 import {useNavigation} from '@react-navigation/native';
@@ -17,6 +28,8 @@ const LogInPage = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [failureModalVisible, setFailureModalVisible] = useState(false);
+
     const navigation = useNavigation();
 
    function clearData() {
@@ -62,7 +75,9 @@ const LogInPage = () => {
             })
                 .then((response) => {
                     if (!response.ok) {
-                        console.log(response.json());
+                        setFailureModalVisible(true);
+                        setUsername('');
+                        setPassword('');
                     }
                     if (response.ok) {
 
@@ -85,10 +100,41 @@ const LogInPage = () => {
         }
     }
 
+    const FailureModal = () => {
+        return(
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={failureModalVisible}
+                onShow={() => {
+                    setTimeout(() => {
+                        setFailureModalVisible(false);
+                    }, 3000);
+                }}
+                onRequestClose={() => {
+                    setFailureModalVisible(false);
+                }}
+                onDismiss={() => {
+                    setFailureModalVisible(false);
+                }}>
+                <View style={styles.failedLoginCenteredView}
+                      onTouchStart={() => {
+                          setFailureModalVisible(!failureModalVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={[styles.approveModalText,styles.redColor]}>Login failed</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     return (
         <ScrollView>
+            <FailureModal/>
             <View style={styles.pageContainer}>
                 <View style={[styles.loginPage, styles.lightBackgroundColor]}>
+
                     <Text style={[styles.title, styles.darkBlueColor]}>Nexovate Inc.</Text>
                     <View style={styles.loginForm}>
                         <View style={styles.loginFormRow}>
