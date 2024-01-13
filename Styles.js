@@ -7,7 +7,7 @@ const color_darkBlue = '#1e4a6d';
 const color_lightBlue = '#f0f1f5';
 const color_lightGray = 'rgb(140, 140, 140)';
 const color_lightLightGray = 'rgb(220, 220, 220)';
-const color_brightBlue = '#4b6e8a';
+const color_brightBlue = '#7892a7';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
     },
     brightBlueColor: {
         color: color_brightBlue,
+    },
+    brightBlueBackgroundColor: {
+      backgroundColor: color_brightBlue,
     },
     standardBox: {
         borderColor: 'rgb(200,200,200)',
@@ -72,9 +75,10 @@ const styles = StyleSheet.create({
         //flex: 0.1,
         flexDirection: 'column',
         alignItems: 'stretch',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         position: 'relative',
         width: '100%',
+        height: 60,
         //height: '50%',
     },
     loginLabelCollapsed: {
@@ -121,10 +125,22 @@ const styles = StyleSheet.create({
     },
     loginButtonWrapper: {
         width: '100%',
-        paddingTop:8,
+        paddingTop:20,
     },
     loginButton: {
         padding: 10,
+        width: '100%',
+        borderRadius: 5,
+        backgroundColor: color_darkBlue,
+        //backgroundColor: '#1e4a6d',
+    },
+    dashboardButton: {
+        padding: 10,
+        height: 100,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         width: '100%',
         borderRadius: 5,
         //backgroundColor: '#1e4a6d',
@@ -157,6 +173,11 @@ const styles = StyleSheet.create({
     loginButtonText: {
         color: 'white',
         textAlign: 'center',
+    },
+    dashboardButtonText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: defaultFontSize + 4,
     },
     dataBox: {
         flexDirection: 'row',
@@ -459,7 +480,7 @@ const styles = StyleSheet.create({
         backgroundColor: color_darkBlue,
         color: color_brightBlue,
         borderRadius: 8,
-        height: 40,
+        height: 60,
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
@@ -473,7 +494,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         color: color_brightBlue,
         borderRadius: 8,
-        height: 40,
+        height: 60,
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',

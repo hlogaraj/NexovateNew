@@ -38,7 +38,7 @@ const LogInPage = () => {
 
         MMKVwithEncryption.setString('Response', stringifiedResponse);
         MMKVwithEncryption.setString('Token', parsedToken);
-        console.log(MMKVwithEncryption.getString('Token'));
+        //console.log(MMKVwithEncryption.getString('Token'));
     }
 
     function navigateToDashboard() {
@@ -118,7 +118,10 @@ const LogInPage = () => {
                         </View>
                         <View style={styles.loginButtonWrapper}>
                             <Pressable
-                                style={[styles.loginButton, styles.darkBlueBackgroundColor]}
+                                style={[styles.loginButton,(username === '' || password === '')
+                                    ? {backgroundColor: 'rgb(140, 140, 140)',}
+                                    : styles.darkBlueBackgroundColor,
+                                    ]}
                                 onPress={handleLogin}>
                                 <Text style={styles.loginButtonText}>Log In</Text>
                             </Pressable>

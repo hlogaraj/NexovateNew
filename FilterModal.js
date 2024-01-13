@@ -15,6 +15,9 @@ const FilterModal = (props) => {
     const branchesRef = useRef({});
 
     function submitFilters() {
+        //console.log('OrderType: ' + orderType.Codes);
+        //console.log('OrderBranch: ' + orderBranch.BranchPlant);
+        //console.log('OrderCompany: ' + orderCompany.CompanyCode)
         props.onSubmit(orderType.Codes, orderBranch.BranchPlant, orderCompany.CompanyCode );
     }
 

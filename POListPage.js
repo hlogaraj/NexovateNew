@@ -399,10 +399,12 @@ const POListPage = ({route}) => {
             const token = retrieveData('Token');
 
             const body = {
-                orderType : orderType,
-                branchPlant: orderBranch,
-                orderCompany: orderCompany,
+                orderType : orderType, //.replace(/ /g, ''),
+                branchPlant: orderBranch, //.replace(/ /g, ''),
+                orderCompany: orderCompany, //.replace(/ /g, ''),
             }
+
+            console.log(body);
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
                 method: 'POST',
@@ -410,7 +412,7 @@ const POListPage = ({route}) => {
                     'jde-AIS-Auth': token,
                     'Content-Type':'application/json',
                 },
-                body: JSON.stringify(body)
+                body: JSON.stringify(body),
             })
                 .then((response) => {
                     //console.log('HandleFilterOrderCompanies');
@@ -420,7 +422,6 @@ const POListPage = ({route}) => {
                         }
                         if (response.ok) {
                             //console.log('got response');
-                            //console.log(response.json());
                             //storePOResponse(response);
                             return response.json();
                         }
@@ -432,6 +433,7 @@ const POListPage = ({route}) => {
 
                 .then((responseJSON) => {
                     if (responseJSON.PurchaseOrders) {
+                        console.log(responseJSON);
                         let filteredOrders = responseJSON.PurchaseOrders;
                         console.log(filteredOrders.length);
                         let updatedOrders = filteredOrders.map((orderData) => new Order(orderData))
