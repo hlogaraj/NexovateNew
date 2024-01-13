@@ -7,7 +7,7 @@ const color_darkBlue = '#1e4a6d';
 const color_lightBlue = '#f0f1f5';
 const color_lightGray = 'rgb(140, 140, 140)';
 const color_lightLightGray = 'rgb(220, 220, 220)';
-const color_brightBlue = '#7892a7';
+const color_brightBlue = '#a5b7c5';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -135,10 +135,21 @@ const styles = StyleSheet.create({
         //backgroundColor: '#1e4a6d',
     },
     dashboardButton: {
-        padding: 10,
-        height: 100,
-        flex: 1,
+        //padding: 10,
+        //height: 100,
+        //flex: 1,
         flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        borderRadius: 5,
+        //backgroundColor: '#1e4a6d',
+    },
+    dashboardBanner: {
+        padding: 10,
+        height: 150,
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
@@ -174,10 +185,16 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
-    dashboardButtonText: {
-        color: 'white',
+    dashboardButtonTextSmall: {
+        //color: 'black',
         textAlign: 'center',
         fontSize: defaultFontSize + 4,
+    },
+    dashboardButtonTextLarge: {
+        textAlign: 'center',
+        fontSize: defaultFontSize + 8,
+        fontWeight: 'bold',
+        paddingBottom: 10,
     },
     dataBox: {
         flexDirection: 'row',

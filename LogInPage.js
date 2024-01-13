@@ -24,7 +24,7 @@ const LogInPage = () => {
     }
     useEffect(() => {
         clearData();
-    });
+    }, []);
 
     const [customFontsLoaded] = useFonts({
         'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
@@ -38,6 +38,7 @@ const LogInPage = () => {
 
         MMKVwithEncryption.setString('Response', stringifiedResponse);
         MMKVwithEncryption.setString('Token', parsedToken);
+        navigateToDashboard();
         //console.log(MMKVwithEncryption.getString('Token'));
     }
 
@@ -64,7 +65,7 @@ const LogInPage = () => {
                         console.log(response.json());
                     }
                     if (response.ok) {
-                        navigateToDashboard();
+
                         setUsername(''); //clear the entered username
                         setPassword(''); //clear the entered password
                         storeLoginResponse(response);

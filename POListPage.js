@@ -29,7 +29,7 @@ const POListPage = ({route}) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [allBranchPlants, setAllBranchPlants] = useState([]);
     const [allCompanies, setAllCompanies] = useState([]);
-    const [allOrderType, setAllOrderType] = useState(['OP', 'OD']);
+    const [allOrderType, setAllOrderType] = useState([]);
 
     const navigation = useNavigation();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -85,9 +85,9 @@ const POListPage = ({route}) => {
             parsedResponse = parsedResponse.PurchaseOrders;
             //console.log(parsedResponse);
             let stringifiedResponse = JSON.stringify((parsedResponse));
-            await storeData('PO_Data', stringifiedResponse);
+            storeData('PO_Data', stringifiedResponse);
             let orderList = await parsedResponse.map((purchaseOrder) => new Order(purchaseOrder));
-            await (storeData('Orders', stringifiedResponse));
+            storeData('PendingOrders', stringifiedResponse);
         } catch (error) {
             console.error('Error storing PO Data: ', error);
         }
@@ -95,7 +95,7 @@ const POListPage = ({route}) => {
 
     async function retrieveOrders() {
         try {
-            const storedOrderList = MMKVwithEncryption.getString('Orders');
+            const storedOrderList = MMKVwithEncryption.getString('PendingOrders');
             if (storedOrderList) {
                 let parsedOrderList = await JSON.parse(storedOrderList);
                 let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
@@ -112,7 +112,7 @@ const POListPage = ({route}) => {
 
     async function updateOrders() {
         try {
-            const updatedOrderList = MMKVwithEncryption.getString('Orders');
+            const updatedOrderList = MMKVwithEncryption.getString('PendingOrders');
             let parsedOrderList = await JSON.parse(updatedOrderList);
             let updatedOrders = await parsedOrderList.map((orderData) => new Order(orderData));
             setOrders(updatedOrders);
