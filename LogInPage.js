@@ -8,7 +8,8 @@ import {
     Button,
     ScrollView,
     Alert,
-    Modal
+    Modal,
+    Image
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useFonts} from 'expo-font';
@@ -29,6 +30,7 @@ const LogInPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [failureModalVisible, setFailureModalVisible] = useState(false);
+    const [hidePassword, setHidePassword] = useState(true);
 
     const navigation = useNavigation();
 
@@ -134,8 +136,7 @@ const LogInPage = () => {
             <FailureModal/>
             <View style={styles.pageContainer}>
                 <View style={[styles.loginPage, styles.lightBackgroundColor]}>
-
-                    <Text style={[styles.title, styles.darkBlueColor]}>Nexovate Inc.</Text>
+                    <Image source={require('./assets/NexovateLogo_Vectorized_1K.png')} style={{width: 300, resizeMode: 'contain', flex: 1}}/>
                     <View style={styles.loginForm}>
                         <View style={styles.loginFormRow}>
                             <View style={[styles.loginInputWrapper, styles.whiteBackground]}>
@@ -159,7 +160,13 @@ const LogInPage = () => {
                                     default=''
                                     value={password}
                                     onChangeText={(password) => setPassword(password)}
-                                    secureTextEntry={true}
+                                    secureTextEntry={hidePassword}
+                                />
+                                <Ionicons
+                                    name={hidePassword? 'eye-off-outline'  : 'eye-outline'}
+                                    size={24}
+                                    color={styles.brightBlueColor.color}
+                                    onPress={() => setHidePassword(!hidePassword)}
                                 />
                             </View>
                         </View>
@@ -167,7 +174,7 @@ const LogInPage = () => {
                             <Pressable
                                 style={[styles.loginButton,(username === '' || password === '')
                                     ? {backgroundColor: 'rgb(185, 185, 185)',}
-                                    : styles.darkBlueBackgroundColor,
+                                    : styles.brightBlueBackgroundColor,
                                     ]}
                                 onPress={handleLogin}>
                                 <Text style={styles.loginButtonText}>Log In</Text>

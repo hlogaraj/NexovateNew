@@ -212,7 +212,7 @@ const Dashboard = () => {
         <ScrollView>
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
-                    <View style={[styles.dashboardBanner, styles.brightBlueBackgroundColor]}>
+                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>
                         <Pressable onPress={navigateToPOListPage} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(pendingOrders.length > 0) ? pendingOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>

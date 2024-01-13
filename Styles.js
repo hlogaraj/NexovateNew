@@ -7,11 +7,26 @@ const color_darkBlue = '#1e4a6d';
 const color_lightBlue = '#f0f1f5';
 const color_lightGray = 'rgb(140, 140, 140)';
 const color_lightLightGray = 'rgb(220, 220, 220)';
-const color_brightBlue = '#a5b7c5';
+const color_midBlue = '#a5b7c5';
+const color_brightBlue = '#3084e4';
+const color_lightBrightBlue = '#c1daf7';
 
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+
+    brightBlueColor: {
+        color: color_brightBlue,
+    },
+    brightBlueBackgroundColor: {
+        backgroundColor: color_brightBlue,
+    },
+    lightBrightBlueColor: {
+        color: color_lightBrightBlue,
+    },
+    lightBrightBlueBackgroundColor: {
+        backgroundColor: color_lightBrightBlue,
+    },
     lightBackgroundColor: {
         backgroundColor: color_lightBlue,
     },
@@ -24,11 +39,11 @@ const styles = StyleSheet.create({
     darkBlueColor: {
         color: color_darkBlue,
     },
-    brightBlueColor: {
-        color: color_brightBlue,
+    midBlueColor: {
+        color: color_midBlue,
     },
-    brightBlueBackgroundColor: {
-      backgroundColor: color_brightBlue,
+    midBlueBackgroundColor: {
+      backgroundColor: color_midBlue,
     },
     standardBox: {
         borderColor: 'rgb(200,200,200)',
@@ -42,7 +57,7 @@ const styles = StyleSheet.create({
     },
     appContainer: {
         width: '100%',
-        backgroundColor: color_brightBlue,
+        backgroundColor: color_midBlue,
         flex: 1,
     },
     container: {
@@ -62,7 +77,7 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
     },
     loginForm: {
-        flex: 0.5,
+        flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
@@ -110,11 +125,14 @@ const styles = StyleSheet.create({
         //borderBottomColor: 'rgb(190, 0, 0)',
         padding: 4,
         width: '100%',
+        marginRight: -36,
     },
     loginInputWrapper: {
         borderWidth: 1,
         borderRadius: 5,
         borderColor: 'rgb(200,200,200)',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     loginInputExpanded: {
         width: '100%',
@@ -216,12 +234,12 @@ const styles = StyleSheet.create({
         //color: '#1e4a6d',
     },
     loginPage: {
-        flex: 1,
+        flexDirection: 'column',
         //backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         //position: 'relative',
-        paddingTop: '60%',
+        paddingTop: '40%',
         //paddingBottom: '25%',
         width: '100%',
     },
@@ -505,7 +523,7 @@ const styles = StyleSheet.create({
     filterModalSubmitButton: {
         flexGrow: 1,
         backgroundColor: color_darkBlue,
-        color: color_brightBlue,
+        color: color_midBlue,
         borderRadius: 8,
         height: 60,
         padding: 10,
@@ -519,7 +537,7 @@ const styles = StyleSheet.create({
     filterModalResetButton: {
         flexGrow: 1,
         backgroundColor: 'white',
-        color: color_brightBlue,
+        color: color_midBlue,
         borderRadius: 8,
         height: 60,
         padding: 10,
