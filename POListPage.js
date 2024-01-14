@@ -18,7 +18,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import styles from './Styles.js';
 import {MMKVwithEncryption} from "./App";
 import Order from './Order.js';
-import { useNavigation } from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
 import FilterModal from './FilterModal.js';
@@ -38,6 +38,8 @@ const POListPage = ({route}) => {
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
+
+    const isFocused = useIsFocused();
 
     const retrieveData = (key) => {
         try {
@@ -61,24 +63,28 @@ const POListPage = ({route}) => {
     };
 
     useEffect(() => {
-        MMKVwithEncryption.setString('PendingOrders', '');
-        setYetToLoadPOList(true);
-        if (!isLoaded) {
-            (async () => {
-                await retrieveOrders();
-                await getAllCompanies();
-                await getAllOrderTypes();
-                await getAllBranchPlants();
-            })();
-        }
-        navigation.setOptions({
-            headerRight: () => (
-                <Pressable onPress={() => toggleFilterModal()}>
-                    <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
-                </Pressable>
+        if (isFocused) {
+            MMKVwithEncryption.setString('PendingOrders', '');
+            console.log('resetting pending orders');
+            setYetToLoadPOList(true);
+            if (!isLoaded) {
+                (async () => {
+                    await retrieveOrders();
+                    await getAllCompanies();
+                    await getAllOrderTypes();
+                    await getAllBranchPlants();
+                })();
+            }
+            navigation.setOptions({
+                headerRight: () => (
+                    <Pressable onPress={() => toggleFilterModal()}>
+                        <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
+                    </Pressable>
                 )
-        })
-    }, []);
+            })
+        }
+
+    }, [isFocused]);
 
 
 
@@ -99,7 +105,7 @@ const POListPage = ({route}) => {
     async function retrieveOrders() {
         try {
             const storedOrderList = MMKVwithEncryption.getString('PendingOrders');
-            if (storedOrderList && storedOrderList.length > 0 && yetToLoadPOList) {
+            if (storedOrderList && storedOrderList.length > 0 ) {
                 let parsedOrderList = await JSON.parse(storedOrderList);
                 let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
                 setOrders(newOrders);

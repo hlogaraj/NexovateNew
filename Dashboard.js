@@ -1,7 +1,7 @@
 import {Text, View, Pressable, BackHandler, ScrollView, Alert} from 'react-native';
 
 import React, {useState, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import styles from './Styles.js';
 import { Ionicons } from '@expo/vector-icons';
 import {MMKVwithEncryption} from "./App";
@@ -22,6 +22,8 @@ const Dashboard = () => {
     const [logOutConfirmationVisible, setLogOutConfirmationVisible] = useState(false);
 
     const navigation = useNavigation();
+
+    const isFocused = useIsFocused();
 
     useAndroidBackHandler(() => {
         Alert.alert(
@@ -46,64 +48,68 @@ const Dashboard = () => {
     })
 
     useEffect(() => {
-        MMKVwithEncryption.setString('PendingOrders', '');
-        setYetToLoadPendingOrders(true);
-        (async () => {
-            await retrievePendingOrders();
-        })();
+        if (isFocused) {
+            MMKVwithEncryption.setString('PendingOrders', '');
+            setYetToLoadPendingOrders(true);
+            console.log('resetting pending orders');
+            (async () => {
+                await retrievePendingOrders();
+            })();
 
-        navigation.setOptions({
-            headerLeft: () => (
-                <Pressable onPress={() => {
-                    Alert.alert(
-                        'Log out?',
-                        'You will need to log back in.',
-                        [
-                            {
-                                text: "Stay logged in", style: 'cancel', onPress: () => {
-                                }
-                            },
-                            {
-                                text: 'Log out',
-                                style: {color: 'rgb(255,0,0)'},
-                                // If the user confirmed, then we dispatch the action we blocked earlier
-                                // This will continue the action that had triggered the removal of the screen
-                                onPress: () => navigation.goBack()
-                            },
-                        ],
-                        {cancelable: true,}
-                    );
-                }}>
-                    <Ionicons name="ios-arrow-back" size={24} color='white' style={styles.topLeftIcon}/>
-                </Pressable>
-            )
-        })
+            navigation.setOptions({
+                headerLeft: () => (
+                    <Pressable onPress={() => {
+                        Alert.alert(
+                            'Log out?',
+                            'You will need to log back in.',
+                            [
+                                {
+                                    text: "Stay logged in", style: 'cancel', onPress: () => {
+                                    }
+                                },
+                                {
+                                    text: 'Log out',
+                                    style: {color: 'rgb(255,0,0)'},
+                                    // If the user confirmed, then we dispatch the action we blocked earlier
+                                    // This will continue the action that had triggered the removal of the screen
+                                    onPress: () => navigation.goBack()
+                                },
+                            ],
+                            {cancelable: true,}
+                        );
+                    }}>
+                        <Ionicons name="ios-arrow-back" size={24} color='white' style={styles.topLeftIcon}/>
+                    </Pressable>
+                )
+            })
 
-/*
-        navigation.addListener('beforeRemove', (e) => {
-            e.prevent
-            // Prompt the user before leaving the screen
-            Alert.alert(
-                'Log out?',
-                'You will need to log back in.',
-                [
-                    {
-                        text: "Stay logged in", style: 'cancel', onPress: () => {
-                        }
-                    },
-                    {
-                        text: 'Log out',
-                        style: 'destructive',
-                        // If the user confirmed, then we dispatch the action we blocked earlier
-                        // This will continue the action that had triggered the removal of the screen
-                        onPress: () => navigation.goBack()
-                    },
-                ]
-            );
-        })
+            /*
+                    navigation.addListener('beforeRemove', (e) => {
+                        e.prevent
+                        // Prompt the user before leaving the screen
+                        Alert.alert(
+                            'Log out?',
+                            'You will need to log back in.',
+                            [
+                                {
+                                    text: "Stay logged in", style: 'cancel', onPress: () => {
+                                    }
+                                },
+                                {
+                                    text: 'Log out',
+                                    style: 'destructive',
+                                    // If the user confirmed, then we dispatch the action we blocked earlier
+                                    // This will continue the action that had triggered the removal of the screen
+                                    onPress: () => navigation.goBack()
+                                },
+                            ]
+                        );
+                    })
 
- */
-    }, []);
+             */
+        }
+
+    }, [isFocused]);
 
 
     const retrieveData = (key) => {
