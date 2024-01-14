@@ -78,7 +78,7 @@ const POsRejected = ({route}) => {
             navigation.setOptions({
                 headerRight: () => (
                     <Pressable onPress={() => toggleFilterModal()}>
-                        <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
+                        <Ionicons name="funnel" size={24} color='white' style={styles.topRightIcon}/>
                     </Pressable>
                 )
             })
@@ -417,7 +417,7 @@ const POsRejected = ({route}) => {
             console.log(body);
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_InquireRejectOrders', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'jde-AIS-Auth': token,
                     'Content-Type':'application/json',
@@ -564,7 +564,7 @@ const POsRejected = ({route}) => {
                 }}
             >
                 <View>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 60}} onPress={toggleFilterModal}/>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 120}} onPress={toggleFilterModal}/>
                     <FilterModal
                         onSubmit={getOrdersByFilters}
                         allOrderType={allOrderType}

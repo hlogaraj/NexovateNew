@@ -78,7 +78,7 @@ const POsAwaitingApproval = ({route}) => {
             navigation.setOptions({
                 headerRight: () => (
                     <Pressable onPress={() => toggleFilterModal()}>
-                        <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
+                        <Ionicons name="funnel" size={24} color='white' style={styles.topRightIcon}/>
                     </Pressable>
                 )
             })
@@ -562,7 +562,7 @@ const POsAwaitingApproval = ({route}) => {
                 }}
             >
                 <View>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 60}} onPress={toggleFilterModal}/>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 120}} onPress={toggleFilterModal}/>
                         <FilterModal
                             onSubmit={getOrdersByFilters}
                             allOrderType={allOrderType}

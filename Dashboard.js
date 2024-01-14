@@ -1,4 +1,4 @@
-import {Text, View, Pressable, BackHandler, ScrollView, Alert} from 'react-native';
+import {Text, View, Pressable, BackHandler, ScrollView, Alert, Image} from 'react-native';
 
 import React, {useState, useEffect} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -8,6 +8,7 @@ import {MMKVwithEncryption} from "./App";
 import Order from "./Order";
 import POsAwaitingApproval from "./POsAwaitingApproval";
 import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-backhandler";
+import PODashboard from "./PODashboard";
 
 const Dashboard = () => {
 
@@ -158,13 +159,21 @@ const Dashboard = () => {
         <ScrollView>
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
-                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>
-                        <Pressable onPress={navigateToPODashboard} style={styles.dashboardBanner}>
-                            <View style={styles.dashboardButtonSmall}>
-                                <Ionicons name="receipt-outline" size={24} color='black' style={styles.topRightIcon}/>
-                                <Text style={styles.dashboardButtonTextSmall}>Purchase Orders</Text>
-                            </View>
+                    <View style={[styles.dashboardRow]}>
+                        <Pressable onPress={navigateToPODashboard} style={[styles.dashboardButtonSmall, {zIndex: 0.5}]}>
+                        <View >
+
+                                <Image source={require('./assets/orders.png')} style={{height: 70, resizeMode: 'contain', alignSelf: 'center'}}/>
+                                <Text style={[styles.dashboardButtonTextSmall, {alignSelf: 'center'}]}>Purchase Orders</Text>
+
+                        </View>
                         </Pressable>
+                        <View style={styles.dashboardButtonSmall}>
+                            <Pressable>
+                                <Image source={require('./assets/warehouse.png')} style={{height: 70, resizeMode: 'contain', alignSelf: 'center'}}/>
+                                <Text style={[styles.dashboardButtonTextSmall, {alignSelf: 'center'}]}>Warehouse</Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -173,6 +182,20 @@ const Dashboard = () => {
         )
 
 
+}
+
+Dashboard.options = ({navigation}) => {
+    return({
+
+        //headerBackgroundContainerStyle: {backgroundColor: styles.darkBlueBackgroundColor.backgroundColor},
+        headerLeft: () => (
+            <Pressable onPress={() => navigation.goBack()}>
+                <Ionicons name='ios-arrow-back' size={24} color='white' style={styles.topLeftIcon}/>
+            </Pressable>
+
+        ),
+
+    })
 }
 
 export default Dashboard;

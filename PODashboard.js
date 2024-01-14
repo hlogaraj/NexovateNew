@@ -337,7 +337,7 @@ const PODashboard = () => {
                         <Pressable onPress={navigateToPendingOrders} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(pendingOrders.length > 0) ? pendingOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>
-                                <Ionicons name="receipt-outline" size={24} color='black' style={styles.topRightIcon}/>
+                                <Ionicons name="receipt-outline" size={50} color='black' style={styles.topRightIcon}/>
                                 <Text style={styles.dashboardButtonTextSmall}>POs Awaiting Approval</Text>
                             </View>
                         </Pressable>
@@ -346,7 +346,7 @@ const PODashboard = () => {
                         <Pressable onPress={navigateToApprovedOrders} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(approvedOrders.length > 0) ? approvedOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>
-                                <Ionicons name="checkmark-circle-outline" size={24} color='black' style={styles.topRightIcon}/>
+                                <Ionicons name="checkmark-circle-outline" size={50} color='black' style={styles.topRightIcon}/>
                                 <Text style={styles.dashboardButtonTextSmall}>Approved Orders</Text>
                             </View>
                         </Pressable>
@@ -355,7 +355,7 @@ const PODashboard = () => {
                         <Pressable onPress={navigateToRejectedOrders} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(rejectedOrders.length > 0) ? rejectedOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>
-                                <Ionicons name="close-circle-outline" size={24} color='black' style={styles.topRightIcon}/>
+                                <Ionicons name="close-circle-outline" size={50} color='black' style={styles.topRightIcon}/>
                                 <Text style={styles.dashboardButtonTextSmall}>Rejected Orders</Text>
                             </View>
                         </Pressable>
