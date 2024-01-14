@@ -6,7 +6,7 @@ import styles from './Styles.js';
 import { Ionicons } from '@expo/vector-icons';
 import {MMKVwithEncryption} from "./App";
 import Order from "./Order";
-import POListPage from "./POListPage";
+import POsAwaitingApproval from "./POsAwaitingApproval";
 import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-backhandler";
 
 const Dashboard = () => {
@@ -42,20 +42,13 @@ const Dashboard = () => {
                     onPress: () => navigation.goBack()
                 },
             ],
-    {cancelable: true,}
+            {cancelable: true,}
         );
         return true;
     })
 
     useEffect(() => {
         if (isFocused) {
-            MMKVwithEncryption.setString('PendingOrders', '');
-            setYetToLoadPendingOrders(true);
-            console.log('resetting pending orders');
-            (async () => {
-                await retrievePendingOrders();
-            })();
-
             navigation.setOptions({
                 headerLeft: () => (
                     <Pressable onPress={() => {
@@ -133,20 +126,7 @@ const Dashboard = () => {
         }
     };
 
-    async function storePendingOrders(response) {
-        try {
-            let parsedResponse = await response.json();
-            parsedResponse = parsedResponse.PurchaseOrders;
-            setPendingOrders(parsedResponse);
-            //console.log(parsedResponse);
-            let stringifiedResponse = JSON.stringify((parsedResponse));
-            storeData('PO_Data', stringifiedResponse);
-            let orderList = await parsedResponse.map((purchaseOrder) => new Order(purchaseOrder));
-            storeData('PendingOrders', stringifiedResponse);
-        } catch (error) {
-            console.error('Error storing PO Data: ', error);
-        }
-    }
+
     /*
     function retrieveToken() {
         try {
@@ -159,62 +139,18 @@ const Dashboard = () => {
 
      */
 
-    async function getPendingOrders() {
-        let tempToken = MMKVwithEncryption.getString('Token')
-        //console.log(tempToken);
-            try {
-                fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
-                    method: 'GET',
-                    headers: {
-                        'Jde-Ais-Auth': tempToken,
-                    }
-                })
-                    .then((response) => {
-                        if (!response.ok) {
-                            console.log('gePOList failed with status ' + response.status);
-                            console.log(JSON.stringify(response));
-                        }
-                        if (response.ok) {
-                            setYetToLoadPendingOrders(false);
-                            storePendingOrders(response);
-                            retrievePendingOrders();
-                        }
-                    })
-                    .catch(error => {
-                        console.error("gePOList failed: ", error);
-                    })
-            } catch (error) {
-                console.error('gePOList error: ', error);
-            }
-
-    }
-
-    async function retrievePendingOrders() {
-        try {
-            const pendingOrders = MMKVwithEncryption.getString('PendingOrders');
-            if (pendingOrders && pendingOrders.length > 0 && yetToLoadPendingOrders) {
-                let parsedOrderList = await JSON.parse(pendingOrders);
-                let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
-                setPendingOrders(newOrders);
-                //setIsLoaded(true);
-            } else {
-                await getPendingOrders();
-                //console.log(orders);
-            }
-        } catch (error) {
-            //console.error('Error retrieving OrderList: ', error);
-        }
-    }
 
 
-    function navigateToPOListPage() {
+
+
+    function navigateToPODashboard() {
         /*
         (async () => {
             await AsyncStorage.removeItem('Orders');
         })();
 
          */
-        navigation.navigate('Queued for Approval');
+        navigation.navigate('PO Dashboard');
     }
 
 
@@ -223,11 +159,10 @@ const Dashboard = () => {
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>
-                        <Pressable onPress={navigateToPOListPage} style={styles.dashboardBanner}>
-                            <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(pendingOrders.length > 0) ? pendingOrders.length : ' '}</Text>
-                            <View style={styles.dashboardButton}>
+                        <Pressable onPress={navigateToPODashboard} style={styles.dashboardBanner}>
+                            <View style={styles.dashboardButtonSmall}>
                                 <Ionicons name="receipt-outline" size={24} color='black' style={styles.topRightIcon}/>
-                                <Text style={styles.dashboardButtonTextSmall}>Awaiting Approval</Text>
+                                <Text style={styles.dashboardButtonTextSmall}>Purchase Orders</Text>
                             </View>
                         </Pressable>
                     </View>
@@ -235,19 +170,9 @@ const Dashboard = () => {
             </View>
         </ScrollView>
 
-    )
-}
-
-Dashboard.options = ({navigation}) => {
-    return({
-
-        //headerBackgroundContainerStyle: {backgroundColor: styles.darkBlueBackgroundColor.backgroundColor},
-        headerLeft: () => (
-            <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name='ios-arrow-back' size={24} color='white' style={styles.topLeftIcon}/>
-            </Pressable>
         )
-    })
+
+
 }
 
 export default Dashboard;

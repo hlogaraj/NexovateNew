@@ -163,8 +163,20 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         //backgroundColor: '#1e4a6d',
     },
+    dashboardButtonSmall: {
+        //padding: 10,
+        //height: 100,
+        //flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 200,
+        borderRadius: 5,
+        //backgroundColor: '#1e4a6d',
+    },
     dashboardBanner: {
         padding: 10,
+        marginBottom: 10,
         height: 150,
         flex: 1,
         flexDirection: 'column',
@@ -204,6 +216,11 @@ const styles = StyleSheet.create({
     loginButtonText: {
         color: 'white',
         textAlign: 'center',
+    },
+    logoText: {
+        color: 'white',
+        textAlign: 'left',
+        fontSize: defaultFontSize + 4,
     },
     dashboardButtonTextSmall: {
         //color: 'black',
@@ -248,6 +265,7 @@ const styles = StyleSheet.create({
         //backgroundColor: '#f0f1f5',
         alignItems: 'stretch',
         justifyContent: 'center',
+        flexDirection: 'column',
         //position: 'relative',
         //paddingTop: '25%',
         width: screenWidth,
@@ -547,7 +565,18 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: color_lightGray,
         marginRight: 20,
-    }
+    },
+    logoBar: {
+        width: 450,
+        paddingRight: 200,
+        paddingTop: 30,
+        //paddingLeft: 10,
+        backgroundColor: color_darkBlue,
+        height: 100,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
 });
 
 export default styles;

@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
 import FilterModal from './FilterModal.js';
 
-const POListPage = ({route}) => {
+const POsAwaitingApproval = ({route}) => {
 
     const [orders, setOrders] = useState([]);
     const [yetToLoadPOList, setYetToLoadPOList] = useState(true);
@@ -695,7 +695,7 @@ const POListPage = ({route}) => {
     )
 };
 
-POListPage.options = ({navigation}) => {
+POsAwaitingApproval.options = ({navigation}) => {
     return({
         headerStyle: {
             backgroundColor: styles.darkBlueBackgroundColor.backgroundColor,
@@ -713,5 +713,5 @@ POListPage.options = ({navigation}) => {
     })
 }
 
-export default POListPage;
+export default POsAwaitingApproval;
 

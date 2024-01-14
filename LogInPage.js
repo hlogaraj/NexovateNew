@@ -21,7 +21,7 @@ import styles from './Styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {MMKVwithEncryption} from "./App";
 import {Ionicons} from "@expo/vector-icons";
-import POListPage from "./POListPage";
+import POsAwaitingApproval from "./POsAwaitingApproval";
 import {MMKV} from "react-native-mmkv";
 
 const LogInPage = () => {
@@ -58,7 +58,7 @@ const LogInPage = () => {
     }
 
     function navigateToDashboard() {
-        navigation.navigate('Dashboard');
+        navigation.navigate('Home');
     }
 
     async function handleLogin() {
