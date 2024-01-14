@@ -164,7 +164,7 @@ const Dashboard = () => {
                         <View >
 
                                 <Image source={require('./assets/orders.png')} style={{height: 70, resizeMode: 'contain', alignSelf: 'center'}}/>
-                                <Text style={[styles.dashboardButtonTextSmall, {alignSelf: 'center'}]}>Purchase Orders</Text>
+                                <Text style={[styles.dashboardButtonTextSmall, {alignSelf: 'center'}]}>Purchase Order Approval</Text>
 
                         </View>
                         </Pressable>
