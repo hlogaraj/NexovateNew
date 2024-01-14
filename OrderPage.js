@@ -33,6 +33,7 @@ const OrderPage = () => {
 
     function navigateToPOListPage() {
         MMKVwithEncryption.removeItem('Orders');
+        MMKVwithEncryption.setString('PendingOrder', '');
         navigation.navigate('Queued for Approval');
     }
 
@@ -293,22 +294,22 @@ const OrderPage = () => {
 
     }
 
-    async function approveOrder() {
-        setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
+    async function approveOrder(orderNumber, orderType) {
+        //setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
         //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
-        /*
-        const orderNumber = order._OrderNumber;
-        //console.log(orderNumber);
-        const orderType = order._OrTy;
 
-        //console.log(orderType)
+        //const orderNumber = order._OrderNumber;
+        console.log(orderNumber);
+        //const orderType = order._OrTy;
+
+        console.log(orderType)
         const approvalData = {
             'OrderNo' : orderNumber,
             'OrderType' : orderType,
             'Remark' : headerNotes,
         }
 
-        let token = await retrieveData('Token');
+        let token = retrieveData('Token');
 
         await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_ApprovePurchaseOrders', {
             method: 'POST',
@@ -334,23 +335,46 @@ const OrderPage = () => {
             .catch(error => {
 
             })
-        console.log(approvalData);
 
-         */
+
     }
 
-    async function rejectOrder() {
+    async function rejectOrder(orderNumber, orderType) {
         //setRejectModalVisible(true);
-        const orderNumber = order._OrderNumber;
-        const orderType = order._OrTy;
+        console.log(orderNumber);
+        console.log(orderType);
         const remark = 'Reject Header'
         const rejectionData = {
             'OrderNo' : orderNumber,
             'OrderType' : orderType,
             'Remark' : remark,
         }
-        console.log(rejectionData);
-        setRejectModalVisible(true);//***************************would move to after successful API response
+
+        let token = retrieveData('Token');
+
+        await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_RejectPurchaseOrders', {
+            method: 'POST',
+            headers: {
+                'jde-AIS-Auth': token,
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Credentials' : 'true',
+            },
+            body: JSON.stringify(rejectionData),
+        })
+            .then((response) => {
+                if (response != undefined) {
+                    if (!response.ok) {
+                        throw new Error('Request failed with status ' + response.status);
+                        console.log('Request failed with status: ' + response.status);
+                    }
+                    if (response.ok) {
+                        console.log('Order approved');
+                        setRejectModalVisible(true);
+                    }
+                }
+            })
+            .catch(error => {
+            })
     }
 
 
@@ -561,7 +585,7 @@ const OrderPage = () => {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => approveOrder()},
+                {text: 'OK', onPress: () => approveOrder(order._OrderNumber, order._OrTy)},
 
             ], {cancelable: true},
         );
@@ -574,7 +598,7 @@ const OrderPage = () => {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => rejectOrder()},
+                {text: 'OK', onPress: () => rejectOrder(order._OrderNumber, order._OrTy)},
 
             ], {cancelable: true},
         );

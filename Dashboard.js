@@ -12,6 +12,7 @@ import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-back
 const Dashboard = () => {
 
     const [pendingOrders, setPendingOrders] = useState([]);
+    const [yetToLoadPendingOrders, setYetToLoadPendingOrders] = useState(true);
     const [approvedOrders, setApprovedOrders] = useState([]);
     const [rejectedOrders, setRejectedOrders] = useState([]);
     const [approvedByMeOrders, setApprovedByMeOrders] = useState([]);
@@ -45,6 +46,8 @@ const Dashboard = () => {
     })
 
     useEffect(() => {
+        MMKVwithEncryption.setString('PendingOrders', '');
+        setYetToLoadPendingOrders(true);
         (async () => {
             await retrievePendingOrders();
         })();
@@ -152,7 +155,7 @@ const Dashboard = () => {
 
     async function getPendingOrders() {
         let tempToken = MMKVwithEncryption.getString('Token')
-        console.log(tempToken);
+        //console.log(tempToken);
             try {
                 fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
                     method: 'GET',
@@ -166,6 +169,7 @@ const Dashboard = () => {
                             console.log(JSON.stringify(response));
                         }
                         if (response.ok) {
+                            setYetToLoadPendingOrders(false);
                             storePendingOrders(response);
                             retrievePendingOrders();
                         }
@@ -182,7 +186,7 @@ const Dashboard = () => {
     async function retrievePendingOrders() {
         try {
             const pendingOrders = MMKVwithEncryption.getString('PendingOrders');
-            if (pendingOrders) {
+            if (pendingOrders && pendingOrders.length > 0 && yetToLoadPendingOrders) {
                 let parsedOrderList = await JSON.parse(pendingOrders);
                 let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
                 setPendingOrders(newOrders);

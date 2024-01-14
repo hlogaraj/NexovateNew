@@ -26,6 +26,7 @@ import FilterModal from './FilterModal.js';
 const POListPage = ({route}) => {
 
     const [orders, setOrders] = useState([]);
+    const [yetToLoadPOList, setYetToLoadPOList] = useState(true);
     const [isLoaded, setIsLoaded] = useState(false);
     const [allBranchPlants, setAllBranchPlants] = useState([]);
     const [allCompanies, setAllCompanies] = useState([]);
@@ -60,6 +61,8 @@ const POListPage = ({route}) => {
     };
 
     useEffect(() => {
+        MMKVwithEncryption.setString('PendingOrders', '');
+        setYetToLoadPOList(true);
         if (!isLoaded) {
             (async () => {
                 await retrieveOrders();
@@ -96,14 +99,13 @@ const POListPage = ({route}) => {
     async function retrieveOrders() {
         try {
             const storedOrderList = MMKVwithEncryption.getString('PendingOrders');
-            if (storedOrderList) {
+            if (storedOrderList && storedOrderList.length > 0 && yetToLoadPOList) {
                 let parsedOrderList = await JSON.parse(storedOrderList);
                 let newOrders = await parsedOrderList.map((orderData) => new Order(orderData));
                 setOrders(newOrders);
                 setIsLoaded(true);
             } else {
                 await getPOList();
-                //console.log(orders);
             }
         } catch (error) {
             //console.error('Error retrieving OrderList: ', error);
@@ -137,6 +139,7 @@ const POListPage = ({route}) => {
                         console.log(JSON.stringify(response));
                     }
                     if (response.ok) {
+                        setYetToLoadPOList(false);
                         storePOResponse(response);
                         retrieveOrders();
                         setIsLoaded(true);
@@ -579,13 +582,8 @@ const POListPage = ({route}) => {
     }
 
     async function approveOrder(orderNumber, orderType) {
-        filterOrder(orderNumber, orderType);
-        setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
+        //setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
         //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
-        /*
-        const orderNumber = order.OrderNumber;
-        //console.log(orderNumber);
-        const orderType = order.OrTy;
 
         //console.log(orderType)
         const approvalData = {
@@ -593,7 +591,7 @@ const POListPage = ({route}) => {
             'OrderType' : orderType,
         }
 
-        let token = await retrieveData('Token');
+        let token = retrieveData('Token');
 
         await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_ApprovePurchaseOrders', {
             method: 'POST',
@@ -612,6 +610,7 @@ const POListPage = ({route}) => {
                     }
                     if (response.ok) {
                         console.log('Order approved');
+                        filterOrder(orderNumber, orderType);
                         setApproveModalVisible(true);
                     }
                 }
@@ -619,22 +618,46 @@ const POListPage = ({route}) => {
             .catch(error => {
 
             })
-        console.log(approvalData);
-
-         */
     }
 
     async function rejectOrder(orderNumber, orderType) {
-       filterOrder(orderNumber, orderType);
+
         //setRejectModalVisible(true);
-        const remark = 'Reject Header'
+        const remark = 'Reject Header' //**********************************************grab from user
         const rejectionData = {
             'OrderNo' : orderNumber,
             'OrderType' : orderType,
             'Remark' : remark,
         }
-        console.log(rejectionData);
-        setRejectModalVisible(true);//***************************would move to after successful API response
+
+        let token = retrieveData('Token');
+
+        await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_RejectPurchaseOrders', {
+            method: 'POST',
+            headers: {
+                'jde-AIS-Auth': token,
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Credentials' : 'true',
+            },
+            body: JSON.stringify(rejectionData),
+        })
+            .then((response) => {
+                if (response != undefined) {
+                    if (!response.ok) {
+                        throw new Error('Request failed with status ' + response.status);
+                        console.log('Request failed with status: ' + response.status);
+                    }
+                    if (response.ok) {
+                        console.log('Order approved');
+                        filterOrder(orderNumber, orderType);
+                        setRejectModalVisible(true);
+                    }
+                }
+            })
+            .catch(error => {
+
+            })
+        //console.log(approvalData);
     }
 
     return (
