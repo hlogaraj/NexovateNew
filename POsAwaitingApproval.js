@@ -143,10 +143,13 @@ const POsAwaitingApproval = ({route}) => {
                 }
             })
                 .then((response) => {
+                    /*
                     if (!response.ok) {
                         console.log('gePOList failed with status ' + response.status);
                         console.log(JSON.stringify(response));
                     }
+
+                     */
                     if (response.ok) {
                         setYetToLoadPOList(false);
                         storePOResponse(response);

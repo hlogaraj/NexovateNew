@@ -93,6 +93,7 @@ const OrderPage = () => {
             const parsedResponse = await response.json();
             await setOrderInfo(parsedResponse);
             const parsedOrderDetail = orderInfo.OrderDetail;
+            console.log(parsedOrderDetail);
             await setOrderDetail(parsedOrderDetail);
             //await console.log(JSON.stringify(orderInfo));
             setIsLoaded(true);
@@ -216,7 +217,7 @@ const OrderPage = () => {
                 // Handle the case where "OrdSuf" or its parent properties are not found
                 console.error("OrdSuf is not found in the orderInfo object.");
             }
-            const attachmentName = 'Attachment ORCH 3';//************************************************************************PLACEHOLDER
+            const attachmentName = 'Order Level Attachment';//************************************************************************PLACEHOLDER
             console.log(attachmentName);
             const attachmentString = text;
             console.log(orderSuffix);
@@ -266,13 +267,13 @@ const OrderPage = () => {
         }
         else {
             const itemIndex = annotatedItemIndex;
-            console.log(itemIndex);
+            //console.log(itemIndex);
             const documentNo = order._OrderNumber;
-            console.log(documentNo);
+            //console.log(documentNo);
             const orderType = order._OrTy;
-            console.log(orderType);
+            //console.log(orderType);
             const orderCompany = order._OrderCo;
-            console.log(orderCompany);
+            //console.log(orderCompany);
             const orderSuffix = orderInfo?.OrderDetail?.[itemIndex]?.OrdSuf;
             if (orderSuffix !== undefined) {
                 // You can use orderSuf here
@@ -288,23 +289,25 @@ const OrderPage = () => {
                 console.error("Order line is not found in the orderInfo object.")
             }
             const attachmentName = 'Attachment ORCH 3';//*********************************************************************PLACEHOLDER
-            console.log(attachmentName);
+            //console.log(attachmentName);
             const attachmentString = text;
-            console.log(orderSuffix);
-            console.log(text);
+            //console.log(orderSuffix);
+            //console.log(text);
 
             const token = retrieveData('Token');
 
             const attachmentData = {
                 'DocumentNo' : documentNo,
                 'OrderType' : orderType,
-                'OrderCompany' : orderCompany,
+                "LineNo" : orderLine / 1000 * 1000,
+                //'OrderCompany' : orderCompany,
                 'OrderSuffix' : orderSuffix,
-                "LineNo" : orderLine,
+
                 'AttachmentName' : attachmentName,
                 'AttachmentString' : attachmentString,
             }
 
+            console.log(attachmentData);
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddItemAttachment_Text', {
                 method: 'POST',
                 headers: {
@@ -312,7 +315,7 @@ const OrderPage = () => {
                     'Content-Type':'application/json',
                     'Access-Control-Allow-Credentials' : 'true',
                 },
-                body: JSON.stringify(attachmentData),
+                body: attachmentData,
             })
                 .then((response) => {
                     if (response != undefined) {
@@ -571,7 +574,7 @@ const OrderPage = () => {
                             setInlineNoteConfVisible(true);
                             setNoteModalVisible(false);
                             //console.log('setNoteConfirmationVisible');
-                            addItemAttachment(tempIndex, headerNotes).then(r => setHeaderNotes(''));
+                            addItemAttachment(itemNotes).then(r => setItemNotes(''));
                              //**************************************************Fix to submit the typed note
                         }
                         }>
