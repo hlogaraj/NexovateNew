@@ -29,7 +29,7 @@ const App = () => {
       <View style={[styles.appContainer, styles.lightBackgroundColor]}>
         <StatusBar backgroundColor={styles.lightBackgroundColor.backgroundColor} style={'dark'}/>
           <View style={styles.logoBar}>
-              <Image source={require('./assets/splash.png')} style={{width: 50, resizeMode: 'contain', alignSelf: 'center', marginLeft: 15, marginRight: 15,}}/>
+              <Image source={require('./assets/splash.png')} style={{width: 30, resizeMode: 'contain', alignSelf: 'center', marginLeft: 15, marginRight: 15,}}/>
               <Text style={styles.logoText}>Nexovate</Text>
           </View>
         <NavigationContainer>

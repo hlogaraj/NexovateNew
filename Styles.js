@@ -589,13 +589,23 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     logoBar: {
-        paddingTop: 40,
+        paddingTop: 30,
         //paddingLeft: 10,
         backgroundColor: color_lightBlue,
-        height: 100,
+        height: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
+    },
+    dropShadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
 });
 

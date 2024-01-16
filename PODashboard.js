@@ -333,7 +333,7 @@ const PODashboard = () => {
         <ScrollView style={[styles.lightBackgroundColor, {flexGrow: 1}]}>
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
-                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>
+                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor, styles.dropShadow]}>
                         <Pressable onPress={navigateToPendingOrders} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(pendingOrders.length > 0) ? pendingOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>
@@ -342,7 +342,7 @@ const PODashboard = () => {
                             </View>
                         </Pressable>
                     </View>
-                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>
+                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor, styles.dropShadow]}>
                         <Pressable onPress={navigateToApprovedOrders} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(approvedOrders.length > 0) ? approvedOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>
@@ -351,7 +351,7 @@ const PODashboard = () => {
                             </View>
                         </Pressable>
                     </View>
-                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>
+                    <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor, styles.dropShadow]}>
                         <Pressable onPress={navigateToRejectedOrders} style={styles.dashboardBanner}>
                             <Text style={[styles.dashboardButtonTextLarge, styles.darkBlueColor,]}>{(rejectedOrders.length > 0) ? rejectedOrders.length : ' '}</Text>
                             <View style={styles.dashboardButton}>

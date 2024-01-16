@@ -682,7 +682,7 @@ const OrderPage = () => {
 
     const OrderItemBox = ({item, index}) => {
         return (
-            <View style = {[styles.orderBox, styles.standardBox, {paddingHorizontal: 20, paddingVertical: 15,}]}>
+            <View style = {[styles.orderBox, styles.standardBox, {paddingHorizontal: 20, paddingVertical: 15,}, styles.dropShadow]}>
                 <View style={{width: '100%',}}>
                     <Text style={[styles.extraLineHeight, styles.bigFont]}>{index + 1
                     }. {item.ItemNumber} - {item.Description}</Text>
@@ -777,24 +777,24 @@ const OrderPage = () => {
     const TabMenu = () => {
         return(
             <View style={[styles.tabMenu, styles.standardBox]}>
-                <Pressable style={
-                    [currentTab === 'Order' ? styles.darkBlueBackgroundColor : styles.whiteBackground,
-                        styles.tabMenuButton]}
-                                  onPress={() => setCurrentTab('Order')}
+                <Pressable
+                    style={[currentTab === 'Order' ? styles.darkBlueBackgroundColor : styles.whiteBackground, styles.tabMenuButton]}
+                    onPress={() => setCurrentTab('Order')}
+                    hitSlop={{x: 20, y: 15}}
                 >
                     <Text style={currentTab==='Order' ? styles.activeTabText : styles.inactiveTabText}>Order</Text>
                 </Pressable>
-                <Pressable style={
-                    [currentTab === 'Details' ? styles.darkBlueBackgroundColor : styles.whiteBackground,
-                        styles.tabMenuButton]}
-                                  onPress={() => setCurrentTab('Details')}
+                <Pressable
+                    style={[currentTab === 'Details' ? styles.darkBlueBackgroundColor : styles.whiteBackground, styles.tabMenuButton]}
+                    onPress={() => setCurrentTab('Details')}
+                    hitSlop={{x: 15, y: 15}}
                 >
                     <Text style={currentTab==='Details' ? styles.activeTabText : styles.inactiveTabText}>Details</Text>
                 </Pressable>
-                <Pressable style={
-                    [currentTab === 'Notes' ? styles.darkBlueBackgroundColor : styles.whiteBackground,
-                        styles.tabMenuButton]}
-                                  onPress={() => setCurrentTab('Notes')}
+                <Pressable
+                    style={[currentTab === 'Notes' ? styles.darkBlueBackgroundColor : styles.whiteBackground, styles.tabMenuButton]}
+                    onPress={() => setCurrentTab('Notes')}
+                    hitSlop={{x: 15, y: 15}}
                 >
                     <Text style={currentTab==='Notes' ? styles.activeTabText : styles.inactiveTabText}>Notes</Text>
                 </Pressable>

@@ -160,7 +160,7 @@ const Dashboard = () => {
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <View style={[styles.dashboardRow]}>
-                        <Pressable onPress={navigateToPODashboard} style={[styles.dashboardButtonSmall, {zIndex: 0.5}]}>
+                        <Pressable onPress={navigateToPODashboard} style={[styles.dashboardButtonSmall, {zIndex: 0.5}, styles.dropShadow]}>
                         <View >
 
                                 <Image source={require('./assets/orders.png')} style={{height: 70, resizeMode: 'contain', alignSelf: 'center'}}/>
@@ -168,7 +168,7 @@ const Dashboard = () => {
 
                         </View>
                         </Pressable>
-                        <View style={styles.dashboardButtonSmall}>
+                        <View style={[styles.dashboardButtonSmall, styles.dropShadow]}>
                             <Pressable>
                                 <Image source={require('./assets/warehouse.png')} style={{height: 70, resizeMode: 'contain', alignSelf: 'center'}}/>
                                 <Text style={[styles.dashboardButtonTextSmall, {alignSelf: 'center'}]}>Warehouse</Text>
