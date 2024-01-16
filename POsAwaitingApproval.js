@@ -11,7 +11,7 @@ import {
     FlatList,
     Button,
     ActivityIndicator,
-    Modal, Alert
+    Modal, Alert, Switch
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -22,6 +22,8 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
 import FilterModal from './FilterModal.js';
+//import ForeignDomesticToggle from "./ForeignDomesticToggle";
+import {MMKV} from "react-native-mmkv";
 
 const POsAwaitingApproval = ({route}) => {
 
@@ -36,6 +38,7 @@ const POsAwaitingApproval = ({route}) => {
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
+    const [isDomestic, setIsDomestic] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
 
@@ -263,7 +266,7 @@ const POsAwaitingApproval = ({route}) => {
                             <View
                                 style = {{width: '50%', alignItems: 'flex-end',}}>
                                 <Text style={[styles.extraExtraLineHeight, styles.bolder, styles.bigFont]}>{item.DaysOld} Days</Text>
-                                <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{item.OrderAmount} {item.CurCod}</Text>
+                                <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{isDomestic? item.OrderAmount : item._ForeignOpenAmount} {isDomestic? item._BaseCurr : item.CurCod}</Text>
                                 <Text style={[styles.extraExtraLineHeight, styles.lightGrayColor]}>{item.OrderDate}</Text>
                             </View>
                         </Pressable>
@@ -408,9 +411,9 @@ const POsAwaitingApproval = ({route}) => {
             const token = retrieveData('Token');
 
             const body = {
-                orderType : orderType, //.replace(/ /g, ''),
-                branchPlant: orderBranch, //.replace(/ /g, ''),
-                orderCompany: orderCompany, //.replace(/ /g, ''),
+                'orderType' : orderType, //.replace(/ /g, ''),
+                'branchPlant': orderBranch, //.replace(/ /g, ''),
+                'orderCompany': orderCompany, //.replace(/ /g, ''),
             }
 
             console.log(body);
@@ -442,9 +445,10 @@ const POsAwaitingApproval = ({route}) => {
 
                 .then((responseJSON) => {
                     if (responseJSON.PurchaseOrders) {
-                        console.log(responseJSON);
+                        //console.log(responseJSON);
                         let filteredOrders = responseJSON.PurchaseOrders;
-                        console.log(filteredOrders.length);
+                        console.log(filteredOrders);
+                        //console.log(filteredOrders.length);
                         let updatedOrders = filteredOrders.map((orderData) => new Order(orderData))
                         setOrders(updatedOrders);
                         setIsLoaded(true);
@@ -461,6 +465,8 @@ const POsAwaitingApproval = ({route}) => {
             console.error('Error retrieving selected order details: ', error);
         }
     }
+
+
 
     const ApproveModal = () => {
         return(
@@ -576,6 +582,28 @@ const POsAwaitingApproval = ({route}) => {
     }
 
 
+    const ForeignDomesticToggle = () => {
+        const toggleSwitch = () =>
+            setIsDomestic((previousState) => !previousState);
+
+        return (
+            <View style={styles.slideToggleContainer}>
+                <Text style ={{paddingHorizontal: 10, alignSelf: 'center',}}>Foreign/Domestic</Text>
+                <Switch
+                    //style={styles.slideToggle}
+                    trackColor={{false : 'rgb(125, 125, 125)', true: '#1e4a6d'}}
+                    thumbColor={isDomestic ? 'white' : 'white'}
+                    ios_backgroundColor={'#3e3e3e'}
+                    onValueChange={toggleSwitch}
+                    value={isDomestic}
+                />
+            </View>
+        )
+    }
+
+
+
+
     const toggleFilterModal = () => {
         setFilterModalVisible(!filterModalVisible);
     }
@@ -595,6 +623,7 @@ const POsAwaitingApproval = ({route}) => {
         const approvalData = {
             'OrderNo' : orderNumber,
             'OrderType' : orderType,
+            'Remark' : '',
         }
 
         let token = retrieveData('Token');
@@ -666,6 +695,10 @@ const POsAwaitingApproval = ({route}) => {
         //console.log(approvalData);
     }
 
+    function toggleDomestic(isDomestic) {
+        setIsDomestic(isDomestic);
+    }
+
     return (
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
             <FilterModalContainer/>
@@ -674,7 +707,7 @@ const POsAwaitingApproval = ({route}) => {
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                 {isLoaded ?
                     <SafeAreaView style={{flex: 1}}>
-
+                        <ForeignDomesticToggle onToggle={toggleDomestic}/>
 
                         {isLoaded ? <FlatList
                                 data={orders}

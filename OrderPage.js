@@ -139,6 +139,45 @@ const OrderPage = () => {
         }
     }
 
+    /*
+    async function getDomesticOrderDetail() {
+        try {
+            let token = MMKVwithEncryption.getString('Token');
+            let body = {
+                'OrderNumber' : order._OrderNumber,
+                'OrderType' : order._OrTy,
+            }
+            await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_PO_DomesticValueForForeignOrders', {
+                method: 'POST',
+                headers: {
+                    'jde-AIS-Auth': token,
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify(body),
+            })
+                .then(response => {
+                    if (response != undefined) {
+                        if (!response.ok) {
+                            console.log("Error fetching domestic order detail: " + response.json());
+                        }
+                        if (response.ok) {
+                            //console.log('got response');
+                            //storePOResponse(response);
+                            orders.
+                        }
+                    } else {
+                        console.log("Error fetching domestic order detail: " + response.json());
+                        setIsLoaded(true);
+                    }
+                })
+        } catch (error) {
+            console.error('Error retrieving domestic order details: ', error);
+        }
+    }
+
+     */
+
+
     async function retrieveOrder() {
         try {
             const storedOrder = MMKVwithEncryption.getString('selectedOrder');
@@ -604,6 +643,8 @@ const OrderPage = () => {
         );
     }
 
+
+
     const RejectModal = () => {
         return(
             <Modal
@@ -777,7 +818,7 @@ const OrderPage = () => {
             </View>
         )
     }
-    const SlideToggle = () => {
+    const ForeignDomesticToggle = () => {
         const toggleSwitch = () =>
             setIsDomestic((previousState) => !previousState);
 
@@ -857,7 +898,7 @@ const OrderPage = () => {
             <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <TabMenu/>
-                    <SlideToggle/>
+                    <ForeignDomesticToggle/>
                     <ApproveModal/>
                     <RejectModal/>
                     {!isLoaded ? <LoadingMessage/> : currentTab === 'Order' ? <OrderInfo/> : (currentTab === 'Details' ? <OrderDetails/> :
