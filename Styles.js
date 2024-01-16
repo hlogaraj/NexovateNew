@@ -518,11 +518,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     filterModalOuterContainer: {
-        height:350,
+        flex: 1,
+        flexGrow: 1,
+        flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'stretch',
         padding: 15,
-        paddingLeft: 80,
+        backgroundColor: 'rgb(0,0,0,.5)',
     },
     filterModalInnerContainer: {
         backgroundColor: color_lightBlue,
@@ -530,8 +532,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'center',
-        height: 300,
+        //height: 300,
         padding: 20,
+        /*
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -540,6 +543,28 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+
+         */
+    },
+    filterModalInnerInnerContainer: {
+        backgroundColor: color_lightBlue,
+        borderRadius: 5,
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'flex-start',
+        width: '100%',
+        //height: 300,
+        padding: 5,
+        margin: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        flexShrink: 1,
     },
     filterModalDropdown: {
         height: 40,
@@ -596,6 +621,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        width: '100%',
     },
     dropShadow: {
         shadowColor: '#000',
@@ -606,6 +632,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    h3Text: {
+      fontSize: defaultFontSize + 8,
+    },
+    h4Text: {
+      fontSize: defaultFontSize + 4,
+    },
+    pText: {
+        fontSize: defaultFontSize,
+    },
+    h2Text: {
+        fontSize: defaultFontSize + 12,
+    },
+    h1Text: {
+        fontSize: defaultFontSize + 16,
     },
 });
 

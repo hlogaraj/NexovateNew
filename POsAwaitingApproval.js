@@ -570,15 +570,15 @@ const POsAwaitingApproval = ({route}) => {
                     setFilterModalVisible(!filterModalVisible);
                 }}
             >
-                <View>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 120}} onPress={toggleFilterModal}/>
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 100}} onPress={toggleFilterModal}/>
                         <FilterModal
                             onSubmit={getOrdersByFilters}
                             allOrderType={allOrderType}
                             allCompanies={allCompanies}
                             allBranchPlants={allBranchPlants}
                         />
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleFilterModal}/>
                 </View>
             </Modal>
         )
