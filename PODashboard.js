@@ -330,7 +330,7 @@ const PODashboard = () => {
 
 
     return (
-        <ScrollView>
+        <ScrollView style={[styles.lightBackgroundColor, {flexGrow: 1}]}>
             <View style={styles.pageContainer}>
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <View style={[styles.dashboardBanner, styles.lightBrightBlueBackgroundColor]}>

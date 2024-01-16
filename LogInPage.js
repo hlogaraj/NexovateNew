@@ -132,7 +132,7 @@ const LogInPage = () => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style={[styles.lightBackgroundColor, {flexGrow: 1}]}>
             <FailureModal/>
             <View style={styles.pageContainer}>
                 <View style={[styles.loginPage, styles.lightBackgroundColor]}>
