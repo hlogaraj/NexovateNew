@@ -13,4 +13,15 @@ export const loginReducer = (state = initialState, action) => {
     }
 };
 
+export const sideMenuReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case 'OPENSIDEMENU':
+            return {...state, sideMenuOpen: true};
+        case 'CLOSESIDEMENU':
+            return {...state, sideMenuOpen: false};
+        default:
+            return state;
+    }
+}
+
 

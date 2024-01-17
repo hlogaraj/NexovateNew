@@ -1,9 +1,10 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {loginReducer} from './AuthReducers.js';
+import {loginReducer, sideMenuReducer} from './AuthReducers.js';
 import { thunk } from 'redux-thunk';
 
 const rootReducer = combineReducers({
-    login: loginReducer
+    login: loginReducer,
+    sideMenu: sideMenuReducer,
     // Add more reducers if needed
 });
 
