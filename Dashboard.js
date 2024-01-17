@@ -9,9 +9,9 @@ import Order from "./Order";
 import POsAwaitingApproval from "./POsAwaitingApproval";
 import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-backhandler";
 import PODashboard from "./PODashboard";
+import {LogoutModal} from "./CustomModals";
 
 import { useDispatch } from 'react-redux';
-import FilterModal from "./FilterModal";
 
 const Dashboard = () => {
 
@@ -31,39 +31,41 @@ const Dashboard = () => {
 
     const dispatch = useDispatch();
 
-    const LogoutModal = () => {
-        function stayLoggedIn() {
-            setLogOutConfirmationVisible(false);
+    const toggleLogoutConfirmation = () => {
+        setLogOutConfirmationVisible(!logOutConfirmationVisible);
+    }
+    useEffect(() => {
+        if (isFocused) {
+            navigation.setOptions({
+                headerLeft: () => (
+                    <Pressable onPress={() => {
+                        toggleLogoutConfirmation();
+                        console.log('back press');
+                    }}>
+                        <Ionicons name='ios-arrow-back' size={24} color='white' style={styles.topLeftIcon}/>
+                    </Pressable>
+                )
+            })
         }
 
-        function logOut() {
-            navigation.goBack();
-            dispatch({ type: 'LOGOUT' });
-        }
-        return (
-            <Modal
-                visible={logOutConfirmationVisible}
-                transparent={true}
-                animationType={'fade'}
-                onRequestClose={setLogOutConfirmationVisible(false)}
-                onRequestClose={() => {
-                    setLogOutConfirmationVisible(!logOutConfirmationVisible);
-                }}
-                onDismiss={() => {
-                    setLogOutConfirmationVisible(!logOutConfirmationVisible);
-                }}>
-                <View style={styles.inLineNoteCenteredView}
-                      onTouchStart={() => {
-                          setLogOutConfirmationVisible(!logOutConfirmationVisible);
-                      }}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.approveModalText}>Order Rejected</Text>
-                    </View>
-                </View>
-            </Modal>
-        )
+    }, [isFocused] );
+
+    function logOut() {
+        setLogOutConfirmationVisible(false);
+        navigation.goBack();
+        dispatch({type: 'LOGOUT'});
     }
 
+    function stayLoggedIn() {
+        setLogOutConfirmationVisible(false);
+    }
+
+    useAndroidBackHandler(() => {
+        console.log('back press');
+        toggleLogoutConfirmation();
+        return true;
+    })
+    /*
     useAndroidBackHandler(() => {
         Alert.alert(
             'Log out?',
@@ -89,6 +91,9 @@ const Dashboard = () => {
         return true;
     })
 
+     */
+
+    /*
     useEffect(() => {
         if (isFocused) {
             navigation.setOptions({
@@ -141,10 +146,12 @@ const Dashboard = () => {
                         );
                     })
 
-             */
+
         }
 
     }, [isFocused]);
+    */
+
 
 
     const retrieveData = (key) => {
@@ -195,10 +202,31 @@ const Dashboard = () => {
         navigation.navigate('PO Dashboard');
     }
 
+    const LogoutModalContainer = () => {
+        return (
+            <Modal
+                animationType={'none'}
+                transparent={true}
+                visible={logOutConfirmationVisible}
+                onRequestClose={() => {
+                    setLogOutConfirmationVisible(!logOutConfirmationVisible);
+                }}
+            >
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: '35%'}} onPress={() => setLogOutConfirmationVisible(false)}/>
+                    <LogoutModal onCancel={stayLoggedIn} onConfirm={logOut}/>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={() => setLogOutConfirmationVisible(false)}/>
+                </View>
+            </Modal>
+        )
+    }
+
 
     return (
         <ScrollView style={[styles.lightBackgroundColor, {flexGrow: 1}]}>
+            <LogoutModalContainer/>
             <View style={styles.pageContainer}>
+
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <View style={[styles.dashboardRow]}>
                         <Pressable onPress={navigateToPODashboard} style={[styles.dashboardButtonSmall, {zIndex: 0.5}, styles.dropShadow]}>

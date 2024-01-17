@@ -8,6 +8,7 @@ import POsApproved from "./POsApproved";
 import POsRejected from "./POsRejected";
 import OrderPage from './OrderPage.js';
 import Dashboard from './Dashboard.js';
+import {LogoBar, SideMenu} from "./CustomModals";
 import styles from './Styles.js';
 import {NavigationContainer, NavigationContext, useNavigation, useRoute} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,31 +22,22 @@ import store from './redux/Store';
 import { useSelector } from 'react-redux';
 
 
+
+
 //const Stack = createStackNavigator();
 const NavigationStack = createStackNavigator();
 
 const App = () => {
 
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+
+
 
     return (
 
         <View style={[styles.appContainer, styles.lightBackgroundColor]}>
             <StatusBar backgroundColor={styles.lightBackgroundColor.backgroundColor} style={'dark'}/>
-            {isLoggedIn ?
-                <View style={styles.logoBar}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 15, alignSelf: 'center'}}>
-                        <Image source={require('./assets/splash.png')} style={{width: 30, resizeMode: 'contain', alignSelf: 'center', marginRight: 15}}/>
-                        <Text style={styles.logoText}>Nexovate</Text>
-                    </View>
-                    <Ionicons style={{right: 15}} name={'menu'} size={36}/>
-                </View>
-
-                :null
-            }
-
-
-
+            {isLoggedIn ? <LogoBar/> : null}
             <NavigationContainer>
                 <NavigationStack.Navigator screenOptions={{
                     headerStyle: {

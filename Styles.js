@@ -12,9 +12,17 @@ const color_midBlue = '#a5b7c5';
 const color_brightBlue = '#3084e4';
 const color_lightBrightBlue = '#c1daf7';
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get('screen').width;
 
 const styles = StyleSheet.create({
+
+    screenwidth: {
+        width: screenWidth,
+    },
+
+    defaultFontSize: {
+        fontSize: defaultFontSize,
+    },
 
     brightBlueColor: {
         color: color_brightBlue,
@@ -624,7 +632,7 @@ const styles = StyleSheet.create({
         maxHeight: 80,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         width: screenWidth,
         flex: 1,
         alignSelf: 'stretch',

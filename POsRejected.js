@@ -21,7 +21,7 @@ import Order from './Order.js';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
-import FilterModal from './FilterModal.js';
+import CustomModals from './CustomModals.js';
 
 const POsRejected = ({route}) => {
 
@@ -565,7 +565,7 @@ const POsRejected = ({route}) => {
             >
                 <View>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 120}} onPress={toggleFilterModal}/>
-                    <FilterModal
+                    <CustomModals
                         onSubmit={getOrdersByFilters}
                         allOrderType={allOrderType}
                         allCompanies={allCompanies}

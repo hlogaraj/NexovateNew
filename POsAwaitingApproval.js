@@ -21,7 +21,7 @@ import Order from './Order.js';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
-import FilterModal from './FilterModal.js';
+import {FilterModal} from './CustomModals.js';
 //import ForeignDomesticToggle from "./ForeignDomesticToggle";
 import {MMKV} from "react-native-mmkv";
 
@@ -572,12 +572,12 @@ const POsAwaitingApproval = ({route}) => {
             >
                 <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 100}} onPress={toggleFilterModal}/>
-                        <FilterModal
-                            onSubmit={getOrdersByFilters}
-                            allOrderType={allOrderType}
-                            allCompanies={allCompanies}
-                            allBranchPlants={allBranchPlants}
-                        />
+                    <FilterModal
+                        onSubmit={getOrdersByFilters}
+                        allOrderType={allOrderType}
+                        allCompanies={allCompanies}
+                        allBranchPlants={allBranchPlants}
+                    />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleFilterModal}/>
                 </View>
             </Modal>
