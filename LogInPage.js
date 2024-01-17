@@ -48,6 +48,7 @@ const LogInPage = () => {
     useEffect(() => {
         clearData();
         dispatch({ type: 'LOGOUT' });
+        dispatch({ type: 'CLOSESIDEMENU'});
     }, []);
 
 

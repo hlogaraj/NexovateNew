@@ -30,13 +30,14 @@ const NavigationStack = createStackNavigator();
 const App = () => {
 
     const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
-
+    const sideMenuOpen = useSelector((state) => state.sideMenu.sideMenuOpen);
 
 
     return (
 
         <View style={[styles.appContainer, styles.lightBackgroundColor]}>
             <StatusBar backgroundColor={styles.lightBackgroundColor.backgroundColor} style={'dark'}/>
+            {sideMenuOpen ? <SideMenu/> : null}
             {isLoggedIn ? <LogoBar/> : null}
             <NavigationContainer>
                 <NavigationStack.Navigator screenOptions={{
