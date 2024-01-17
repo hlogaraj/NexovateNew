@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 
 const subHeaderStyle = [styles.h4Text,{fontWeight: 300, paddingBottom: 15}];
 const headerStyle = [styles.h3Text, {paddingBottom: 10,fontWeight: 500,}];
-const whiteHeaderStyle = [styles.h3Text, {fontWeight: 300, color: 'white',}];
+const whiteHeaderStyle = [{fontWeight: 300, color: 'white', fontSize: styles.h3Text.fontSize - 2}];
 const descriptionStyle = [styles.h4Text,{fontWeight: 300, paddingBottom: 25, paddingTop: 10}];
 
 const outerBoxStyle = {
@@ -386,7 +386,7 @@ export const LogoutModal = (props) => {
 export const SideMenu = () => {
 
     const sideMenuStyle = {
-        width: styles.screenwidth.width * .75,
+        width: styles.screenwidth.width * .8,
         //alignSelf: 'stretch',
         height: styles.screenHeight.height,
         //flex: 1,
@@ -397,34 +397,40 @@ export const SideMenu = () => {
         backgroundColor: 'rgb(100,100,100)',
         paddingLeft: 30,
         paddingRight: 30,
-        paddingTop: 100,
+        paddingTop: 50,
     }
+
+    const rowStyle = {borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2,height: 60, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end', width: '100%'};
+    const textContainerStyle = {  flexDirection: 'column', justifyContent: 'center', flex: 1,}
+    const iconStyle = {color: 'white', marginRight: 20, alignSelf: 'center'};
+    const iconSize = 30;
+
 
     return (
         <View>
             <View style={sideMenuStyle}>
-                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end', width: '100%'}}>
-                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
-                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
+                <View style={rowStyle}>
+                    <Ionicons style={iconStyle} name={'home'} size={iconSize}/>
+                    <View style={textContainerStyle}>
                         <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
                     </View>
                 </View>
-                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end',}}>
-                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
-                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
-                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
+                <View style={rowStyle}>
+                    <Ionicons style={iconStyle} name={'settings'} size={iconSize}/>
+                    <View style={textContainerStyle}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Settings</Text>
                     </View>
                 </View>
-                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end',}}>
-                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
-                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
-                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
+                <View style={rowStyle}>
+                    <Ionicons style={iconStyle} name={'information-circle'} size={iconSize}/>
+                    <View style={textContainerStyle}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>About</Text>
                     </View>
                 </View>
-                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end',}}>
-                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
-                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
-                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
+                <View style={rowStyle}>
+                    <Ionicons style={iconStyle} name={'log-out'} size={iconSize}/>
+                    <View style={textContainerStyle}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Log Out</Text>
                     </View>
                 </View>
 
