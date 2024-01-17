@@ -419,7 +419,7 @@ const POsAwaitingApproval = ({route}) => {
                 'orderCompany': orderCompany, //.replace(/ /g, ''),
             }
 
-            console.log(body);
+            console.log(JSON.stringify(body));
 
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_GetPurchaseApproval', {
                 method: 'POST',

@@ -60,6 +60,9 @@ const styles = StyleSheet.create({
         width: screenWidth,
         backgroundColor: color_midBlue,
         flex: 1,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+
     },
     container: {
         flex: 1,
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
     },
     logoText: {
         color: color_darkBlue,
-        textAlign: 'left',
+        //textAlign: 'left',
         fontSize: defaultFontSize + 4,
     },
     dashboardButtonTextSmall: {
@@ -614,14 +617,17 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     logoBar: {
-        paddingTop: 30,
+        top: 20,
         //paddingLeft: 10,
         backgroundColor: color_lightBlue,
         height: 80,
+        maxHeight: 80,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        width: '100%',
+        justifyContent: 'space-between',
+        width: screenWidth,
+        flex: 1,
+        alignSelf: 'stretch',
     },
     dropShadow: {
         shadowColor: '#000',
