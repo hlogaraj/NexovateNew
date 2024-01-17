@@ -13,11 +13,16 @@ const color_brightBlue = '#3084e4';
 const color_lightBrightBlue = '#c1daf7';
 
 const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
 
     screenwidth: {
         width: screenWidth,
+    },
+
+    screenHeight: {
+        height: screenHeight,
     },
 
     defaultFontSize: {

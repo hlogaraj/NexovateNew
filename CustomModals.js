@@ -4,9 +4,11 @@ import SelectDropdown from "react-native-select-dropdown";
 import {Ionicons} from "@expo/vector-icons";
 import React, {useState, useRef} from "react";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { useDispatch } from 'react-redux';
 
 const subHeaderStyle = [styles.h4Text,{fontWeight: 300, paddingBottom: 15}];
 const headerStyle = [styles.h3Text, {paddingBottom: 10,fontWeight: 500,}];
+const whiteHeaderStyle = [styles.h3Text, {fontWeight: 300, color: 'white',}];
 const descriptionStyle = [styles.h4Text,{fontWeight: 300, paddingBottom: 25, paddingTop: 10}];
 
 const outerBoxStyle = {
@@ -384,38 +386,60 @@ export const LogoutModal = (props) => {
 export const SideMenu = () => {
 
     const sideMenuStyle = {
-        width: '75%',
-        alignSelf: 'flex-start',
-        height: '100%',
-        flex: 1,
+        width: styles.screenwidth.width * .75,
+        //alignSelf: 'stretch',
+        height: styles.screenHeight.height,
+        //flex: 1,
+        flexGrow: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignContent: 'flex-start',
-        color: styles.lightGrayColor.color
+        backgroundColor: 'rgb(100,100,100)',
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 100,
     }
+
     return (
-        <KeyboardAwareScrollView>
-            <View style={outerBoxStyle}>
-                <View style={innerBoxStyle}>
-                    <View style={{width: '100%', alignItems: 'center', paddingLeft: 5,}}>
-                        <Text style={headerStyle}>Warning</Text>
-                        <Text style={descriptionStyle}>Are you sure you want to logout?</Text>
-                    </View>
-                    <View style={confirmButtonRowStyle}>
-                        <Pressable onPress={cancelLogout}>
-                            <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>No</Text>
-                        </Pressable>
-                        <Pressable onPress={confirmLogout}>
-                            <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>Yes</Text>
-                        </Pressable>
+        <View>
+            <View style={sideMenuStyle}>
+                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end', width: '100%'}}>
+                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
+                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
                     </View>
                 </View>
+                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end',}}>
+                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
+                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
+                    </View>
+                </View>
+                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end',}}>
+                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
+                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
+                    </View>
+                </View>
+                <View style={{height: 50, flexDirection: 'row',alignItems: 'stretch', alignContent: 'flex-end',}}>
+                    <Ionicons style={{color: 'white', marginRight: 20, alignSelf: 'center'}} name={'home'} size={36}/>
+                    <View style={{ borderBottomColor: 'rgb(80,80,80)', borderBottomWidth: 2, flexDirection: 'column', justifyContent: 'center', flex: 1,}}>
+                        <Text style={[whiteHeaderStyle,{color: 'white',}]}>Dashboard</Text>
+                    </View>
+                </View>
+
             </View>
-        </KeyboardAwareScrollView>
+        </View>
+
     )
 }
 
 export const LogoBar = () => {
+    const dispatch = useDispatch();
+
+    function openSideMenu() {
+        dispatch({type: 'OPENSIDEMENU'});
+    }
 
     const logoBarStyle = {
         top: 20,
@@ -435,12 +459,12 @@ export const LogoBar = () => {
         color: styles.darkBlueColor.color,
         //textAlign: 'left',
         fontSize: styles.defaultFontSize.fontSize + 4,
-        marginRight: 10
+        marginRight: 10,
     }
 
     return(
         <View style={logoBarStyle}>
-            <Ionicons style={{position: 'absolute',left: 15}} name={'menu'} size={36}/>
+            <Ionicons style={{position: 'absolute',left: 15, color: styles.darkBlueColor.color}} name={'menu'} size={36} onPress={openSideMenu}/>
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center' , alignSelf: 'center'}}>
                 <Text style={logoTextStyle}>Nexovate</Text>
                 <Image source={require('./assets/splash.png')} style={{width: 30, resizeMode: 'contain', alignSelf: 'center',marginRight: 10}}/>
