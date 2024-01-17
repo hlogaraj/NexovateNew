@@ -1,14 +1,17 @@
-import {Text, View, Pressable, BackHandler, ScrollView, Alert, Image} from 'react-native';
+import {Text, View, Pressable, BackHandler, ScrollView, Alert, Image, Modal} from 'react-native';
 
 import React, {useState, useEffect} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import styles from './Styles.js';
 import { Ionicons } from '@expo/vector-icons';
-import {MMKVwithEncryption} from "./App";
+import {MMKVwithEncryption} from "./Globals.js";
 import Order from "./Order";
 import POsAwaitingApproval from "./POsAwaitingApproval";
 import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-backhandler";
 import PODashboard from "./PODashboard";
+
+import { useDispatch } from 'react-redux';
+import FilterModal from "./FilterModal";
 
 const Dashboard = () => {
 
@@ -26,6 +29,41 @@ const Dashboard = () => {
 
     const isFocused = useIsFocused();
 
+    const dispatch = useDispatch();
+
+    const LogoutModal = () => {
+        function stayLoggedIn() {
+            setLogOutConfirmationVisible(false);
+        }
+
+        function logOut() {
+            navigation.goBack();
+            dispatch({ type: 'LOGOUT' });
+        }
+        return (
+            <Modal
+                visible={logOutConfirmationVisible}
+                transparent={true}
+                animationType={'fade'}
+                onRequestClose={setLogOutConfirmationVisible(false)}
+                onRequestClose={() => {
+                    setLogOutConfirmationVisible(!logOutConfirmationVisible);
+                }}
+                onDismiss={() => {
+                    setLogOutConfirmationVisible(!logOutConfirmationVisible);
+                }}>
+                <View style={styles.inLineNoteCenteredView}
+                      onTouchStart={() => {
+                          setLogOutConfirmationVisible(!logOutConfirmationVisible);
+                      }}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.approveModalText}>Order Rejected</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     useAndroidBackHandler(() => {
         Alert.alert(
             'Log out?',
@@ -40,7 +78,10 @@ const Dashboard = () => {
                     style: {color: 'rgb(255,0,0)'},
                     // If the user confirmed, then we dispatch the action we blocked earlier
                     // This will continue the action that had triggered the removal of the screen
-                    onPress: () => navigation.goBack()
+                    onPress: () => {
+                        navigation.goBack();
+                        dispatch({ type: 'LOGOUT' });
+                    }
                 },
             ],
             {cancelable: true,}

@@ -4,7 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import styles from './Styles.js';
 import { Ionicons } from '@expo/vector-icons';
-import {MMKVwithEncryption} from "./App";
+import {MMKVwithEncryption} from "./Globals.js";
 import Order from "./Order";
 import POsAwaitingApproval from "./POsAwaitingApproval";
 import { useAndroidBackHandler, AndroidBackHandler } from "react-navigation-backhandler";

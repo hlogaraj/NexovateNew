@@ -14,21 +14,25 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {MMKVLoader, MMKVStorage} from 'react-native-mmkv-storage';
 import useState from 'react';
 import {Ionicons} from "@expo/vector-icons";
+import {MMKVwithEncryption} from "./Globals";
 
-const MMKVwithEncryption = new MMKVLoader()
-    .withEncryption()
-    .initialize();
+import { Provider } from 'react-redux';
+import store from './redux/Store';
+import { useSelector } from 'react-redux';
+
 
 //const Stack = createStackNavigator();
 const NavigationStack = createStackNavigator();
 
-
 const App = () => {
 
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
     return (
+
         <View style={[styles.appContainer, styles.lightBackgroundColor]}>
             <StatusBar backgroundColor={styles.lightBackgroundColor.backgroundColor} style={'dark'}/>
-
+            {isLoggedIn ?
                 <View style={styles.logoBar}>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 15, alignSelf: 'center'}}>
                         <Image source={require('./assets/splash.png')} style={{width: 30, resizeMode: 'contain', alignSelf: 'center', marginRight: 15}}/>
@@ -36,6 +40,10 @@ const App = () => {
                     </View>
                     <Ionicons style={{right: 15}} name={'menu'} size={36}/>
                 </View>
+
+                :null
+            }
+
 
 
             <NavigationContainer>
@@ -57,8 +65,17 @@ const App = () => {
                 </NavigationStack.Navigator>
             </NavigationContainer>
         </View>
+
     );
 
+}
+
+const WrappedApp = () => {
+    return (
+        <Provider store={store}>
+            <App/>
+        </Provider>
+    )
 }
 
 /*          <Stack.Navigator screenOptions={{
@@ -68,8 +85,9 @@ const App = () => {
             <Stack.Screen name="MainApp" component ={MainApp}/>
           </Stack.Navigator>
 
+
  */
 
-export default App;
+export default WrappedApp;
 
-export {MMKVwithEncryption};
+

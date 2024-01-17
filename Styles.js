@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         //position: 'relative',
-        paddingTop: '20%',
+        paddingTop: '40%',
         //paddingBottom: '25%',
         width: '100%',
     },

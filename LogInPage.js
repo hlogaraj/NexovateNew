@@ -19,10 +19,16 @@ import styles from './Styles.js';
 //import Order from './Order.js';
 //import storage from './MMKVStorage.js';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {MMKVwithEncryption} from "./App";
+import {MMKVwithEncryption} from "./Globals.js";
 import {Ionicons} from "@expo/vector-icons";
 import POsAwaitingApproval from "./POsAwaitingApproval";
 import {MMKV} from "react-native-mmkv";
+import {MMKVLoader} from "react-native-mmkv-storage";
+
+import { useDispatch } from 'react-redux';
+
+
+
 
 const LogInPage = () => {
 
@@ -34,12 +40,17 @@ const LogInPage = () => {
 
     const navigation = useNavigation();
 
+    const dispatch = useDispatch();
+
    function clearData() {
         MMKVwithEncryption.clearStore();
     }
     useEffect(() => {
         clearData();
+        dispatch({ type: 'LOGOUT' });
     }, []);
+
+
 
     const [customFontsLoaded] = useFonts({
         'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
@@ -82,10 +93,10 @@ const LogInPage = () => {
                         setPassword('');
                     }
                     if (response.ok) {
-
                         setUsername(''); //clear the entered username
                         setPassword(''); //clear the entered password
                         storeLoginResponse(response);
+                        dispatch({ type: 'LOGIN' });
                         //console.log(response);
                         //let responseData = response.json();
                         //let token = responseData.userInfo.token;
@@ -191,3 +202,4 @@ const LogInPage = () => {
 }
 
 export default LogInPage;
+

@@ -3,7 +3,7 @@ import {Text, View, TextInput, Pressable, FlatList, Button, Platform, Switch, Sc
 import {StatusBar} from 'expo-status-bar';
 import {useNavigation} from "@react-navigation/native";
 import styles from './Styles.js';
-import {MMKVwithEncryption} from "./App";
+import {MMKVwithEncryption} from "./Globals.js";
 import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 import HeaderNoteEntry from './HeaderNoteEntry.js';
@@ -288,7 +288,7 @@ const OrderPage = () => {
             } else {
                 console.error("Order line is not found in the orderInfo object.")
             }
-            const attachmentName = 'Attachment ORCH 3';//*********************************************************************PLACEHOLDER
+            const attachmentName = 'Line Level Attachment';//*********************************************************************PLACEHOLDER
             //console.log(attachmentName);
             const attachmentString = text;
             //console.log(orderSuffix);
@@ -315,7 +315,7 @@ const OrderPage = () => {
                     'Content-Type':'application/json',
                     'Access-Control-Allow-Credentials' : 'true',
                 },
-                body: attachmentData,
+                body: JSON.stringify(attachmentData),
             })
                 .then((response) => {
                     if (response != undefined) {
