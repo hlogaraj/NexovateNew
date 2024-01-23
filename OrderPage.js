@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Order from './Order.js';
 import HeaderNoteEntry from './HeaderNoteEntry.js';
 import ItemNoteEntry from './ItemNoteEntry.js';
+import {ApproveConfirmationModal, RejectConfirmationModal} from "./CustomModals";
 
 const OrderPage = () => {
 
@@ -27,6 +28,8 @@ const OrderPage = () => {
     const [noteConfirmationVisible, setNoteConfirmationVisible] = useState(false);
     const [inlineNoteConfVisible, setInlineNoteConfVisible] = useState(false);
     const [annotatedItemIndex, setAnnotatedItemIndex] = useState(-1);
+    const [approveConfirmationVisible, setApproveConfirmationVisible] = useState(false);
+    const [rejectConfirmationVisible, setRejectConfirmationVisible] = useState(false);
 
 
     const navigation = useNavigation();
@@ -332,13 +335,16 @@ const OrderPage = () => {
 
     }
 
-    async function approveOrder(orderNumber, orderType) {
+    async function approveOrder() {
         //setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
         //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
 
         //const orderNumber = order._OrderNumber;
         console.log(orderNumber);
         //const orderType = order._OrTy;
+
+        let orderNumber = order._OrderNumber;
+        let orderType = order._OrTy;
 
         console.log(orderType)
         const approvalData = {
@@ -377,10 +383,14 @@ const OrderPage = () => {
 
     }
 
-    async function rejectOrder(orderNumber, orderType) {
+    async function rejectOrder() {
         //setRejectModalVisible(true);
+
+        let orderNumber = order._OrderNumber;
+        let orderType = order._OrTy;
         console.log(orderNumber);
         console.log(orderType);
+
         const remark = 'Reject Header'
         const rejectionData = {
             'OrderNo' : orderNumber,
@@ -413,6 +423,58 @@ const OrderPage = () => {
             })
             .catch(error => {
             })
+    }
+
+    const toggleApproveConfirmation = () => {
+        setApproveConfirmationVisible(!approveConfirmationVisible);
+    }
+
+    const toggleRejectConfirmation = () => {
+        setRejectConfirmationVisible(!rejectConfirmationVisible);
+    }
+
+    const ApproveConfirmationContainer = () => {
+        return(
+            <Modal
+                animationType={'none'}
+                transparent={true}
+                visible={approveConfirmationVisible}
+                onRequestClose={() => {
+                    setApproveConfirmationVisible(!approveConfirmationVisible);
+                }}
+            >
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: '40%'}} onPress={toggleApproveConfirmation}/>
+                    <ApproveConfirmationModal
+                        onConfirm={() => approveOrder}
+                        onCancel={() => toggleApproveConfirmation}
+                    />
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleApproveConfirmation}/>
+                </View>
+            </Modal>
+        )
+    }
+
+    const RejectConfirmationContainer = () => {
+        return(
+            <Modal
+                animationType={'none'}
+                transparent={true}
+                visible={rejectConfirmationVisible}
+                onRequestClose={() => {
+                    setRejectConfirmationVisible(!rejectConfirmationVisible);
+                }}
+            >
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height:'40%'}} onPress={toggleRejectConfirmation}/>
+                    <RejectConfirmationModal
+                        onConfirm={() => rejectOrder()}
+                        onCancel={() => toggleRejectConfirmation()}
+                    />
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleRejectConfirmation}/>
+                </View>
+            </Modal>
+        )
     }
 
 
@@ -617,29 +679,37 @@ const OrderPage = () => {
     }
 
     const createApproveConfirmationModal = () => {
+        setApproveConfirmationVisible(true);
+        /*
         Alert.alert(null, 'Approve this order?', [
                 {
                     text: 'Cancel',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => approveOrder(order._OrderNumber, order._OrTy)},
+                {text: 'OK', onPress: () => approveOrder()},
 
             ], {cancelable: true},
         );
+
+         */
     };
 
     const createRejectConfirmationModal = () => {
+        setRejectConfirmationVisible(true);
+        /*
         Alert.alert(null, 'Reject this order?', [
                 {
                     text: 'Cancel',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => rejectOrder(order._OrderNumber, order._OrTy)},
+                {text: 'OK', onPress: () => rejectOrder()},
 
             ], {cancelable: true},
         );
+
+         */
     }
 
 
@@ -898,6 +968,8 @@ const OrderPage = () => {
                 <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                     <TabMenu/>
                     <ForeignDomesticToggle/>
+                    <ApproveConfirmationContainer/>
+                    <RejectConfirmationContainer/>
                     <ApproveModal/>
                     <RejectModal/>
                     {!isLoaded ? <LoadingMessage/> : currentTab === 'Order' ? <OrderInfo/> : (currentTab === 'Details' ? <OrderDetails/> :
