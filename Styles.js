@@ -495,7 +495,7 @@ const styles = StyleSheet.create({
         flexShrink: 1,
         //marginTop: 57,
         backgroundColor: 'rgba(0,0,0,.5)',
-        borderRadius: 5,
+        //borderRadius: 5,
     },
     failedLoginCenteredView: {
         flex: 1,
@@ -519,7 +519,7 @@ const styles = StyleSheet.create({
     modalView: {
         margin: 20,
         backgroundColor: 'rgba(0,0,0,.6)',
-        borderRadius: 5,
+        //borderRadius: 5,
         padding: 10,
         alignItems: 'center',
         flexShrink: 1,

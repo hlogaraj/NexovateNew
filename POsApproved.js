@@ -573,6 +573,7 @@ const POsApproved = ({route}) => {
                         allOrderType={allOrderType}
                         allCompanies={allCompanies}
                         allBranchPlants={allBranchPlants}
+                        onReset={getPOList}
                     />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 300}} onPress={toggleFilterModal}/>
                 </View>

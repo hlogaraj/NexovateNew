@@ -34,6 +34,10 @@ const POsAwaitingApproval = ({route}) => {
     const [allCompanies, setAllCompanies] = useState([]);
     const [allOrderType, setAllOrderType] = useState([]);
 
+    const [branchPlant, setBranchPlant] = useState('');
+    const [orderCompany, setOrderCompany] = useState('');
+    const [orderType, setOrderType] = useState('');
+
     const [toApproveNumber, setToApproveNumber] = useState(null);
     const [toApproveType, setToApproveType] = useState(null);
 
@@ -417,14 +421,17 @@ const POsAwaitingApproval = ({route}) => {
 
     const getOrdersByFilters = async (orderType, orderBranch, orderCompany ) => {
         try {
+            setOrderType(orderType);
+            setBranchPlant(orderBranch);
+            setOrderCompany(orderCompany);
             setFilterModalVisible(false);
             setIsLoaded(false);
             const token = retrieveData('Token');
 
             const body = {
-                'orderType' : orderType, //.replace(/ /g, ''),
-                'branchPlant': orderBranch, //.replace(/ /g, ''),
-                'orderCompany': orderCompany, //.replace(/ /g, ''),
+                'OrderType' : orderType, //.replace(/ /g, ''),
+                'BranchPlant': orderBranch, //.replace(/ /g, ''),
+                'OrderCompany': orderCompany, //.replace(/ /g, ''),
             }
 
             console.log(JSON.stringify(body));
@@ -622,8 +629,8 @@ const POsAwaitingApproval = ({route}) => {
                 <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: '40%'}} onPress={toggleApproveConfirmation}/>
                     <ApproveConfirmationModal
-                        onConfirm={() => approveOrder}
-                        onCancel={() => toggleApproveConfirmation}
+                        onConfirm={approveOrder}
+                        onCancel={toggleApproveConfirmation}
                     />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleApproveConfirmation}/>
                 </View>
@@ -644,8 +651,8 @@ const POsAwaitingApproval = ({route}) => {
                 <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height:'40%'}} onPress={toggleRejectConfirmation}/>
                     <RejectConfirmationModal
-                        onConfirm={() => rejectOrder()}
-                        onCancel={() => toggleRejectConfirmation()}
+                        onConfirm={rejectOrder}
+                        onCancel={toggleRejectConfirmation}
                     />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleRejectConfirmation}/>
                 </View>
@@ -697,7 +704,7 @@ const POsAwaitingApproval = ({route}) => {
         console.log(orders.length);
     }
 
-    const approveOrder = async() => {
+    async function approveOrder() {
         const approvalData = {
             'OrderNo' : toApproveNumber,
             'OrderType' : toApproveType,
@@ -732,7 +739,7 @@ const POsAwaitingApproval = ({route}) => {
             })
     }
 
-    const rejectOrder = async () => {
+    async function rejectOrder() {
 
         //setRejectModalVisible(true);
         const remark = 'Reject Header' //**********************************************grab from user
@@ -788,14 +795,14 @@ const POsAwaitingApproval = ({route}) => {
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
                 {isLoaded ?
                     <SafeAreaView style={{flex: 1}}>
-                        <ForeignDomesticToggle onToggle={toggleDomestic}/>
+                        {orders.length > 0 ? <ForeignDomesticToggle onToggle={toggleDomestic}/>: null}
 
-                        {isLoaded ? <FlatList
+                        {isLoaded && orders.length > 0 ? <FlatList
                                 data={orders}
                                 renderItem={renderOrderBox}
                                 keyExtractor={(item) => item._OrderNumber.toString()}
-                            /> :
-                            <ActivityIndicator size = 'large'/>}
+                            /> : isLoaded && orders.length ===0? <Text style={{alignSelf: 'center', paddingTop: '10%', fontSize: styles.h2Text.fontSize,}}>No orders found</Text>
+                            : <ActivityIndicator size = 'large'/>}
                     </SafeAreaView>
                     :
                     <SafeAreaView style={{flex: 1, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', alignContent: 'center'}}>

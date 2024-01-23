@@ -35,7 +35,7 @@ const HeaderNoteEntry = (props) => {
                     clearTextOnFocus={true}
                 />
             </View>
-            <Pressable style={[styles.attachNotesButton, styles.greenBackground, {}]} onPress={submitNote}>
+            <Pressable style={[styles.attachNotesButton, styles.greenBackground, notes.length!==0 ? styles.greenBackground : {backgroundColor: 'rgb(185, 185, 185)'}]} onPress={submitNote}>
                 <Animated.View>
                     <Text style={{color: 'white', fontWeight: 500,}}>ATTACH NOTES</Text>
                 </Animated.View>

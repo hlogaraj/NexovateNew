@@ -37,7 +37,7 @@ const ItemNoteEntry = (props) => {
                             clearTextOnFocus={true}
                         />
                     </View>
-                    <Pressable style={[styles.attachNotesButton, styles.greenBackground,
+                    <Pressable style={[styles.attachNotesButton,
                         {
                             shadowColor: '#000',
                             shadowOffset: {
@@ -47,7 +47,7 @@ const ItemNoteEntry = (props) => {
                             shadowOpacity: 1,
                             shadowRadius: 4,
                             elevation: 6,
-                        }]}
+                        }, notes.length!==0 ? styles.greenBackground : {backgroundColor: 'rgb(185, 185, 185)'}]}
                        onPress={submitNote}>
                         <Animated.View>
                             <Text style={{color: 'white', fontWeight: 500,}}>ATTACH NOTES</Text>

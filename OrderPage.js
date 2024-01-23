@@ -228,7 +228,7 @@ const OrderPage = () => {
 
             const token = retrieveData('Token');
 
-            const attachmentData = {
+            let attachmentData = {
                 'DocumentNo' : documentNo,
                 'OrderType' : orderType,
                 'OrderCompany' : orderCompany,
@@ -299,14 +299,17 @@ const OrderPage = () => {
 
             const token = retrieveData('Token');
 
-            const attachmentData = {
+            let attachmentData = {
                 'DocumentNo' : documentNo,
                 'OrderType' : orderType,
-                "LineNo" : orderLine,
+                'OrderCompany' : orderCompany,
+                'LineNo' : (orderLine / 1000 * 1000).toFixed(3),
                 'OrderSuffix' : orderSuffix,
                 'AttachmentName' : attachmentName,
                 'AttachmentString' : attachmentString,
             }
+
+            //console.log(orderLine);
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddItemAttachment_Text', {
                 method: 'POST',
                 headers: {
@@ -446,8 +449,8 @@ const OrderPage = () => {
                 <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: '40%'}} onPress={toggleApproveConfirmation}/>
                     <ApproveConfirmationModal
-                        onConfirm={() => approveOrder}
-                        onCancel={() => toggleApproveConfirmation}
+                        onConfirm={approveOrder}
+                        onCancel={toggleApproveConfirmation}
                     />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleApproveConfirmation}/>
                 </View>
@@ -468,8 +471,8 @@ const OrderPage = () => {
                 <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height:'40%'}} onPress={toggleRejectConfirmation}/>
                     <RejectConfirmationModal
-                        onConfirm={() => rejectOrder()}
-                        onCancel={() => toggleRejectConfirmation()}
+                        onConfirm={rejectOrder}
+                        onCancel={toggleRejectConfirmation}
                     />
                     <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleRejectConfirmation}/>
                 </View>
@@ -495,9 +498,9 @@ const OrderPage = () => {
                 onDismiss={() => {
                     setNoteConfirmationVisible(!noteConfirmationVisible);
                 }}>
-                <View style={styles.inLineNoteCenteredView}
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)', justifyContent: 'center',alignItems: 'center',}}
                       onTouchStart={() => {
-                          setNoteConfirmationVisible(!noteConfirmationVisible);
+                          setApproveModalVisible(!approveModalVisible);
                       }}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Attachment added</Text>
@@ -585,9 +588,9 @@ const OrderPage = () => {
 
                     setInlineNoteConfVisible(!inlineNoteConfVisible);
                 }}>
-                <View style={styles.inLineNoteCenteredView}
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)', justifyContent: 'center',alignItems: 'center',}}
                       onTouchStart={() => {
-                          setInlineNoteConfVisible(!inlineNoteConfVisible);
+                          setApproveModalVisible(!approveModalVisible);
                       }}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Line level attachment added</Text>
@@ -979,7 +982,7 @@ const OrderPage = () => {
                             <HeaderNoteEntry onSubmitNote={addHeaderAttachment}/>
                         </View>
                         )}
-                    {isLoaded ? <ApproveRejectBar/> : <Text/>}
+                    {isLoaded && currentTab !== 'Notes'? <ApproveRejectBar/> : <Text/>}
                 </View>
             </View>
         </SafeAreaView>

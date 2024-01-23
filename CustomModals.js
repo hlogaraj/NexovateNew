@@ -152,6 +152,7 @@ const submitButtonStyle = {
     borderWidth: 1,
     borderColor: styles.lightLightGrayColor.color,
     marginLeft: 20,
+    width: '40%',
 }
 
 const resetButtonStyle = {
@@ -167,6 +168,7 @@ const resetButtonStyle = {
     borderWidth: 1,
     borderColor: styles.lightGrayColor.color,
     marginRight: 20,
+    width: '40%',
 }
 
 const lightGray300 = {
@@ -197,10 +199,18 @@ export const FilterModal = (props) => {
 
 
     function submitFilters() {
-        console.log('OrderType: ' + orderType.Codes);
-        console.log('OrderBranch: ' + orderBranch.BranchPlant);
-        console.log('OrderCompany: ' + orderCompany.CompanyCode)
-        props.onSubmit(orderType.Codes, orderBranch.BranchPlant, orderCompany.CompanyCode );
+
+        let tempOrderType,tempOrderBranch, tempOrderCompany = '';
+        if (orderType !== null) {
+            tempOrderType = orderType.Codes;
+        }
+        if (orderBranch !== null) {
+            tempOrderBranch = orderBranch.BranchPlant;
+        }
+        if (orderCompany !== null) {
+            tempOrderCompany = orderCompany.CompanyCode;
+        }
+        props.onSubmit(tempOrderType, tempOrderBranch, tempOrderCompany);
     }
 
     function reset() {
@@ -324,21 +334,28 @@ export const FilterModal = (props) => {
                                 style={{borderWidth: 0,}}
                                 onPress={reset}
                             >
-                                <Text style={styles.lightGrayColor}>Reset</Text>
+                                <Text style={{}}>Reset Filters</Text>
                             </Pressable>
                         </View>
                         <View style={[
                             submitButtonStyle,
+                            /*
                             (orderCompany === null || orderBranch === null || orderType === null)
                                 ? {backgroundColor: 'rgb(185, 185, 185)',}
                                 : null,
+
+                             */
                         ]}>
                             <Pressable
                                 style={{borderWidth: 0}}
                                 onPress={() => {
+                                    submitFilters()
+                                    /*
                                     if (orderCompany !== null && orderBranch !== null && orderType !== null) {
                                         submitFilters();
                                     }
+
+                                     */
                                 }}
                             >
                                 <Text
