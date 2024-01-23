@@ -400,10 +400,10 @@ export const ApproveConfirmationModal = (props) => {
                         <Text style={standaloneDescriptionStyle}>Approve this order?</Text>
                     </View>
                     <View style={confirmButtonRowStyle}>
-                        <Pressable onPress={() => cancel()}>
+                        <Pressable onPress={cancel}>
                             <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>Cancel</Text>
                         </Pressable>
-                        <Pressable onPress={() => confirm()}>
+                        <Pressable onPress={confirm}>
                             <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>OK</Text>
                         </Pressable>
                     </View>
@@ -429,10 +429,10 @@ export const RejectConfirmationModal = (props) => {
                         <Text style={standaloneDescriptionStyle}>Reject this order?</Text>
                     </View>
                     <View style={confirmButtonRowStyle}>
-                        <Pressable onPress={() => cancel()}>
+                        <Pressable onPress={cancel}>
                             <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>Cancel</Text>
                         </Pressable>
-                        <Pressable onPress={() => confirm()}>
+                        <Pressable onPress={confirm}>
                             <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>OK</Text>
                         </Pressable>
                     </View>
