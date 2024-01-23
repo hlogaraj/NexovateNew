@@ -21,7 +21,7 @@ import Order from './Order.js';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
-import CustomModals from './CustomModals.js';
+import {FilterModal} from './CustomModals.js';
 
 const POsRejected = ({route}) => {
 
@@ -78,7 +78,7 @@ const POsRejected = ({route}) => {
             navigation.setOptions({
                 headerRight: () => (
                     <Pressable onPress={() => toggleFilterModal()}>
-                        <Ionicons name="funnel" size={24} color='white' style={styles.topRightIcon}/>
+                        <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
                     </Pressable>
                 )
             })
@@ -563,9 +563,9 @@ const POsRejected = ({route}) => {
                     setFilterModalVisible(!filterModalVisible);
                 }}
             >
-                <View>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 120}} onPress={toggleFilterModal}/>
-                    <CustomModals
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 100}} onPress={toggleFilterModal}/>
+                    <FilterModal
                         onSubmit={getOrdersByFilters}
                         allOrderType={allOrderType}
                         allCompanies={allCompanies}

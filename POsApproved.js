@@ -21,7 +21,7 @@ import Order from './Order.js';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
-import CustomModals from './CustomModals.js';
+import {FilterModal} from './CustomModals.js';
 
 const POsApproved = ({route}) => {
 
@@ -78,7 +78,7 @@ const POsApproved = ({route}) => {
             navigation.setOptions({
                 headerRight: () => (
                     <Pressable onPress={() => toggleFilterModal()}>
-                        <Ionicons name="funnel" size={24} color='white' style={styles.topRightIcon}/>
+                        <Ionicons name="funnel-outline" size={24} color='white' style={styles.topRightIcon}/>
                     </Pressable>
                 )
             })
@@ -310,6 +310,7 @@ const POsApproved = ({route}) => {
                         const companies = parsedResponse.CompanyMaster;
                         //console.log(companies);
                         setAllCompanies(companies);
+                        console.log('AllCompanies set');
                     } else {
                         console.log("CompanyMaster not found in the response");
                     }
@@ -350,6 +351,7 @@ const POsApproved = ({route}) => {
                         const orderTypes = parsedResponse.DocumentTypes;
                         //console.log(orderTypes);
                         setAllOrderType(orderTypes);
+                        console.log('AllOrderTypes set');
                     } else {
                         console.log("AllOrderType not found in the response");
                     }
@@ -390,6 +392,7 @@ const POsApproved = ({route}) => {
                         const branchPlants = parsedResponse.BranchPlantMaster;
                         //console.log(branchPlants);
                         setAllBranchPlants(branchPlants);
+                        console.log('AllBranchPlants set');
                     } else {
                         console.log("BranchPlantMaster not found in the response");
                     }
@@ -563,9 +566,9 @@ const POsApproved = ({route}) => {
                     setFilterModalVisible(!filterModalVisible);
                 }}
             >
-                <View>
-                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 120}} onPress={toggleFilterModal}/>
-                    <CustomModals
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 100}} onPress={toggleFilterModal}/>
+                    <FilterModal
                         onSubmit={getOrdersByFilters}
                         allOrderType={allOrderType}
                         allCompanies={allCompanies}

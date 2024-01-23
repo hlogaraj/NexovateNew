@@ -34,7 +34,7 @@ const OrderPage = () => {
     function navigateToPOListPage() {
         MMKVwithEncryption.removeItem('Orders');
         MMKVwithEncryption.setString('PendingOrder', '');
-        navigation.navigate('Queued for Approval');
+        navigation.navigate('POs Awaiting Approval');
     }
 
 
@@ -299,15 +299,11 @@ const OrderPage = () => {
             const attachmentData = {
                 'DocumentNo' : documentNo,
                 'OrderType' : orderType,
-                "LineNo" : orderLine / 1000 * 1000,
-                //'OrderCompany' : orderCompany,
+                "LineNo" : orderLine,
                 'OrderSuffix' : orderSuffix,
-
                 'AttachmentName' : attachmentName,
                 'AttachmentString' : attachmentString,
             }
-
-            console.log(attachmentData);
             await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_AddItemAttachment_Text', {
                 method: 'POST',
                 headers: {
@@ -608,7 +604,7 @@ const OrderPage = () => {
                     setApproveModalVisible(false);
                     navigateToPOListPage();
                 }}>
-                <View style={styles.inLineNoteCenteredView}
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)', justifyContent: 'center',alignItems: 'center',}}
                       onTouchStart={() => {
                           setApproveModalVisible(!approveModalVisible);
                       }}>
@@ -668,7 +664,7 @@ const OrderPage = () => {
                     setRejectModalVisible(false);
                     navigateToPOListPage();
                 }}>
-                <View style={styles.inLineNoteCenteredView}
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)', justifyContent: 'center',alignItems: 'center',}}
                       onTouchStart={() => {
                           setRejectModalVisible(!rejectModalVisible);
                       }}>
@@ -851,7 +847,7 @@ const OrderPage = () => {
 
 
     const OrderInfo = () => {
-        const boxStyle = [styles.orderDetailsBox, styles.standardBox];
+        const boxStyle = [styles.orderDetailsBox, styles.standardBox, {marginTop: 15}];
         const headerStyle = [styles.lightGrayColor, styles.extraLineHeight];
         const dataStyle = [styles.bold, styles.biggerFont];
 

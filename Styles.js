@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
         fontWeight: 600,
     },
     extraLineHeight: {
-        lineHeight: 25,
+        lineHeight: 20,
     },
     extraExtraLineHeight: {
         marginTop: 5,
@@ -458,8 +458,8 @@ const styles = StyleSheet.create({
         textDecorationColor: color_lightGray,
     },
     orderDetailLine: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
         borderBottomWidth: 1,
         borderBottomColor: color_lightLightGray,
     },
@@ -486,11 +486,14 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     inLineNoteCenteredView: {
+        Width: '100%',
         flex: 1,
+        flexGrow: 1,
+        padding: 15,
         justifyContent: 'center',
         alignItems: 'center',
         flexShrink: 1,
-        marginTop: 57,
+        //marginTop: 57,
         backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 5,
     },
@@ -653,7 +656,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     h3Text: {
-      fontSize: defaultFontSize + 8,
+      fontSize: defaultFontSize + 6,
     },
     h4Text: {
       fontSize: defaultFontSize + 4,

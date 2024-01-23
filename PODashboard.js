@@ -317,7 +317,7 @@ const PODashboard = () => {
         })();
 
          */
-        navigation.navigate('Queued for Approval');
+        navigation.navigate('POs Awaiting Approval');
     }
 
     function navigateToApprovedOrders() {

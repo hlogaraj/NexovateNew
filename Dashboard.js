@@ -54,6 +54,7 @@ const Dashboard = () => {
         setLogOutConfirmationVisible(false);
         navigation.goBack();
         dispatch({type: 'LOGOUT'});
+        MMKVwithEncryption.clearStore();
     }
 
     function stayLoggedIn() {

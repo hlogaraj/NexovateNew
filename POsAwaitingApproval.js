@@ -21,7 +21,7 @@ import Order from './Order.js';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
-import {FilterModal} from './CustomModals.js';
+import {FilterModal, ApproveConfirmationModal, RejectConfirmationModal} from './CustomModals.js';
 //import ForeignDomesticToggle from "./ForeignDomesticToggle";
 import {MMKV} from "react-native-mmkv";
 
@@ -34,11 +34,19 @@ const POsAwaitingApproval = ({route}) => {
     const [allCompanies, setAllCompanies] = useState([]);
     const [allOrderType, setAllOrderType] = useState([]);
 
+    const [toApproveNumber, setToApproveNumber] = useState(null);
+    const [toApproveType, setToApproveType] = useState(null);
+
+    const [toRejectNumber, setToRejectNumber] = useState(null);
+    const [toRejectType, setToRejectType] = useState(null);
+
     const navigation = useNavigation();
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [approveModalVisible, setApproveModalVisible] = useState(false);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [isDomestic, setIsDomestic] = useState(false);
+    const [approveConfirmationVisible, setApproveConfirmationVisible] = useState(false);
+    const [rejectConfirmationVisible, setRejectConfirmationVisible] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
 
@@ -480,7 +488,7 @@ const POsAwaitingApproval = ({route}) => {
                 onShow={() => {
                     setTimeout(() => {
                         setApproveModalVisible(false);
-                        navigation.navigate('Queued for Approval');
+                        navigation.navigate('POs Awaiting Approval');
                     }, 3000);
                 }}
                 onRequestClose={() => {
@@ -489,7 +497,7 @@ const POsAwaitingApproval = ({route}) => {
                 onDismiss={() => {
                     setApproveModalVisible(!approveModalVisible);
                 }}>
-                <View style={styles.inLineNoteCenteredView}
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)', justifyContent: 'center',alignItems: 'center',}}
                       onTouchStart={() => {
                           setApproveModalVisible(!approveModalVisible);
                       }}>
@@ -510,7 +518,7 @@ const POsAwaitingApproval = ({route}) => {
                 onShow={() => {
                     setTimeout(() => {
                         setRejectModalVisible(false);
-                        navigation.navigate('Queued for Approval');
+                        navigation.navigate('POs Awaiting Approval');
                     }, 3000);
                 }}
                 onRequestClose={() => {
@@ -519,7 +527,7 @@ const POsAwaitingApproval = ({route}) => {
                 onDismiss={() => {
                     setRejectModalVisible(!rejectModalVisible);
                 }}>
-                <View style={styles.inLineNoteCenteredView}
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)', justifyContent: 'center',alignItems: 'center',}}
                       onTouchStart={() => {
                           setRejectModalVisible(!rejectModalVisible);
                       }}>
@@ -535,6 +543,13 @@ const POsAwaitingApproval = ({route}) => {
         console.log(orderNumber);
         console.log(orderType);
         //console.log(orTy);//*************************************************************
+
+        setToApproveNumber(orderNumber);
+        setToApproveType(orderType);
+
+        setApproveConfirmationVisible(true);
+
+        /*
         Alert.alert(null, 'Approve this order?', [
                 {
                     text: 'Cancel',
@@ -545,9 +560,17 @@ const POsAwaitingApproval = ({route}) => {
 
             ], {cancelable: true},
         );
+
+         */
     };
 
     const createRejectConfirmationModal = (orderNumber, orderType) => {
+
+        setToRejectNumber(orderNumber);
+        setToRejectType(orderType);
+
+        setRejectConfirmationVisible(true);
+        /*
         Alert.alert(null, 'Reject this order?', [
                 {
                     text: 'Cancel',
@@ -558,6 +581,8 @@ const POsAwaitingApproval = ({route}) => {
 
             ], {cancelable: true},
         );
+
+         */
     }
 
     const FilterModalContainer = () => {
@@ -583,6 +608,51 @@ const POsAwaitingApproval = ({route}) => {
             </Modal>
         )
     }
+
+    const ApproveConfirmationContainer = () => {
+        return(
+            <Modal
+                animationType={'none'}
+                transparent={true}
+                visible={approveConfirmationVisible}
+                onRequestClose={() => {
+                    setApproveConfirmationVisible(!approveConfirmationVisible);
+                }}
+            >
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: '40%'}} onPress={toggleApproveConfirmation}/>
+                    <ApproveConfirmationModal
+                        onConfirm={() => approveOrder}
+                        onCancel={() => toggleApproveConfirmation}
+                    />
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleApproveConfirmation}/>
+                </View>
+            </Modal>
+        )
+    }
+
+    const RejectConfirmationContainer = () => {
+        return(
+            <Modal
+                animationType={'none'}
+                transparent={true}
+                visible={rejectConfirmationVisible}
+                onRequestClose={() => {
+                    setRejectConfirmationVisible(!rejectConfirmationVisible);
+                }}
+            >
+                <View style={{width: '100%', flexGrow: 1, padding: 15, backgroundColor: 'rgba(0,0,0,.5)',}}>
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height:'40%'}} onPress={toggleRejectConfirmation}/>
+                    <RejectConfirmationModal
+                        onConfirm={() => rejectOrder()}
+                        onCancel={() => toggleRejectConfirmation()}
+                    />
+                    <Pressable style={{backgroundColor: 'rgba(0,0,0,0)', height: 150}} onPress={toggleRejectConfirmation}/>
+                </View>
+            </Modal>
+        )
+    }
+
 
 
     const ForeignDomesticToggle = () => {
@@ -610,6 +680,15 @@ const POsAwaitingApproval = ({route}) => {
     const toggleFilterModal = () => {
         setFilterModalVisible(!filterModalVisible);
     }
+
+    const toggleApproveConfirmation = () => {
+        setApproveConfirmationVisible(!approveConfirmationVisible);
+    }
+
+    const toggleRejectConfirmation = () => {
+        setRejectConfirmationVisible(!rejectConfirmationVisible);
+    }
+
     function filterOrder(orNo, orTy) {
         console.log(orNo);
         console.log(orders.length);
@@ -618,19 +697,13 @@ const POsAwaitingApproval = ({route}) => {
         console.log(orders.length);
     }
 
-    async function approveOrder(orderNumber, orderType) {
-        //setApproveModalVisible(true);//*******************************************************************would move this to after successful API response
-        //setApproveModalVisible(true);//**********************temporarily bypassing API call for UI testing
-
-        //console.log(orderType)
+    const approveOrder = async() => {
         const approvalData = {
-            'OrderNo' : orderNumber,
-            'OrderType' : orderType,
-            'Remark' : '',
+            'OrderNo' : toApproveNumber,
+            'OrderType' : toApproveType,
+            'Remark' : '', //Prompt user to enter an optional remark
         }
-
         let token = retrieveData('Token');
-
         await fetch('https://jdeps.nexovate.com:7077/jderest/v3/orchestrator/ORCH_NX_ApprovePurchaseOrders', {
             method: 'POST',
             headers: {
@@ -648,7 +721,8 @@ const POsAwaitingApproval = ({route}) => {
                     }
                     if (response.ok) {
                         console.log('Order approved');
-                        filterOrder(orderNumber, orderType);
+                        filterOrder(toApproveNumber, toApproveType);
+                        setApproveConfirmationVisible(false);
                         setApproveModalVisible(true);
                     }
                 }
@@ -658,13 +732,14 @@ const POsAwaitingApproval = ({route}) => {
             })
     }
 
-    async function rejectOrder(orderNumber, orderType) {
+    const rejectOrder = async () => {
 
         //setRejectModalVisible(true);
         const remark = 'Reject Header' //**********************************************grab from user
+
         const rejectionData = {
-            'OrderNo' : orderNumber,
-            'OrderType' : orderType,
+            'OrderNo' : toRejectNumber,
+            'OrderType' : toRejectType,
             'Remark' : remark,
         }
 
@@ -687,7 +762,8 @@ const POsAwaitingApproval = ({route}) => {
                     }
                     if (response.ok) {
                         console.log('Order approved');
-                        filterOrder(orderNumber, orderType);
+                        filterOrder(toRejectNumber, toRejectType);
+                        setRejectConfirmationVisible(false);
                         setRejectModalVisible(true);
                     }
                 }
@@ -705,6 +781,8 @@ const POsAwaitingApproval = ({route}) => {
     return (
         <View style={[styles.pageContainer, styles.lightBackgroundColor]}>
             <FilterModalContainer/>
+            <ApproveConfirmationContainer/>
+            <RejectConfirmationContainer/>
             <ApproveModal/>
             <RejectModal/>
             <View style={[styles.standardPage, styles.lightBackgroundColor]}>
@@ -739,7 +817,7 @@ POsAwaitingApproval.options = ({navigation}) => {
         },
         headerTintColor: '#ffffff',
         headerTitleAlign: 'center',
-        headerTitle: 'Queued for Approval',
+        headerTitle: 'POs Awaiting Approval',
         //headerBackgroundContainerStyle: {backgroundColor: styles.darkBlueBackgroundColor.backgroundColor},
         headerLeft: () => (
             <Pressable onPress={() => navigation.goBack()}>

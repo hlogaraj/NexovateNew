@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 
 const subHeaderStyle = [styles.h4Text,{fontWeight: 300, paddingBottom: 15}];
 const headerStyle = [styles.h3Text, {paddingBottom: 10,fontWeight: 500,}];
+const standaloneDescriptionStyle =[styles.h3Text,{fontWeight: 300, padding: 30}];
 const whiteHeaderStyle = [{fontWeight: 300, color: 'white', fontSize: styles.h3Text.fontSize - 2}];
 const descriptionStyle = [styles.h4Text,{fontWeight: 300, paddingBottom: 25, paddingTop: 10}];
 
@@ -375,6 +376,64 @@ export const LogoutModal = (props) => {
                         </Pressable>
                         <Pressable onPress={confirmLogout}>
                             <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>Yes</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        </KeyboardAwareScrollView>
+    )
+}
+
+export const ApproveConfirmationModal = (props) => {
+    function cancel() {
+        props.onCancel();
+    }
+
+    function confirm() {
+        props.onConfirm();
+    }
+    return(
+        <KeyboardAwareScrollView>
+            <View style={outerBoxStyle}>
+                <View style={innerBoxStyle}>
+                    <View style={{width: '100%', alignItems: 'center', paddingLeft: 5,}}>
+                        <Text style={standaloneDescriptionStyle}>Approve this order?</Text>
+                    </View>
+                    <View style={confirmButtonRowStyle}>
+                        <Pressable onPress={() => cancel()}>
+                            <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>Cancel</Text>
+                        </Pressable>
+                        <Pressable onPress={() => confirm()}>
+                            <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>OK</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        </KeyboardAwareScrollView>
+    )
+}
+
+export const RejectConfirmationModal = (props) => {
+    function cancel() {
+        props.onCancel();
+    }
+
+    function confirm() {
+        props.onConfirm();
+    }
+    return(
+        <KeyboardAwareScrollView>
+            <View style={outerBoxStyle}>
+                <View style={innerBoxStyle}>
+                    <View style={{width: '100%', alignItems: 'center', paddingLeft: 5,}}>
+                        <Text style={standaloneDescriptionStyle}>Reject this order?</Text>
+                    </View>
+                    <View style={confirmButtonRowStyle}>
+                        <Pressable onPress={() => cancel()}>
+                            <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>Cancel</Text>
+                        </Pressable>
+                        <Pressable onPress={() => confirm()}>
+                            <Text style={[brightBlue400, {paddingLeft: 10, paddingRight:10,}]}>OK</Text>
                         </Pressable>
                     </View>
                 </View>

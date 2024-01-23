@@ -70,7 +70,7 @@ const App = () => {
                     <NavigationStack.Screen name="Login" component={LogInPage} options = {{headerShown: false}}/>
                     <NavigationStack.Screen name="Home" component={Dashboard} options = {Dashboard.options}/>
                     <NavigationStack.Screen name="PO Dashboard" component={PODashboard} options = {PODashboard.options} />
-                    <NavigationStack.Screen name="Queued for Approval" component={POsAwaitingApproval} options = {POsAwaitingApproval.options}/>
+                    <NavigationStack.Screen name="POs Awaiting Approval" component={POsAwaitingApproval} options = {POsAwaitingApproval.options}/>
                     <NavigationStack.Screen name="Approved Orders" component={POsApproved} options = {POsApproved.options}/>
                     <NavigationStack.Screen name="Rejected Orders" component = {POsRejected} options = {POsRejected.options}/>
                     <NavigationStack.Screen name="Order Page" component={OrderPage} />

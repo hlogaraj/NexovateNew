@@ -46,7 +46,9 @@ const LogInPage = () => {
         MMKVwithEncryption.clearStore();
     }
     useEffect(() => {
-        clearData();
+        if (MMKVwithEncryption.getString('Token') !== null) {
+
+        }
         dispatch({ type: 'LOGOUT' });
         dispatch({ type: 'CLOSESIDEMENU'});
     }, []);
@@ -64,7 +66,11 @@ const LogInPage = () => {
         const stringifiedToken = JSON.stringify(parsedToken);
 
         MMKVwithEncryption.setString('Response', stringifiedResponse);
+
+
         MMKVwithEncryption.setString('Token', parsedToken);
+
+
         navigateToDashboard();
         //console.log(MMKVwithEncryption.getString('Token'));
     }
